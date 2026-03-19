@@ -1,984 +1,1673 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-// ─── CSS-in-JS via injected <style> ──────────────────────────────────────────
-const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+/* ─── GLOBAL STYLES ─────────────────────────────────────────────────────────── */
+const GLOBAL_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-  --bg:#060810;--bg2:#0c0f1a;--bg3:#131729;
-  --fg:#ffffff;--fg2:rgba(255,255,255,0.55);--fg3:rgba(255,255,255,0.18);
-  --accent:#5dffb8;--accent2:#7b5fff;--accent3:#ff5d9e;
-  --border:rgba(255,255,255,0.07);--card-bg:#0d1120;--card-hover:#131829;
-  --nav-bg:rgba(6,8,16,0.82);--shadow:0 24px 80px rgba(0,0,0,0.6);
-  --transition:0.4s cubic-bezier(0.23,1,0.32,1);
-  --glow:0 0 40px rgba(93,255,184,0.2);
+  --bg: #04050a;
+  --bg2: #080a14;
+  --bg3: #0d1020;
+  --card: #0b0d1a;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --fg: #f0f0f8;
+  --fg2: rgba(240,240,248,0.55);
+  --fg3: rgba(240,240,248,0.22);
+  --accent: #00ffb2;
+  --accent2: #6e44ff;
+  --accent3: #ff3d6a;
+  --accent-soft: rgba(0,255,178,0.08);
+  --nav-h: 76px;
+  --radius: 14px;
+  --shadow: 0 32px 80px rgba(0,0,0,0.7);
+  --px: 60px;
 }
-.ds-light {
-  --bg:#f0f2f8;--bg2:#e8eaf4;--bg3:#dde0f0;
-  --fg:#050810;--fg2:rgba(5,8,16,0.55);--fg3:rgba(5,8,16,0.2);
-  --accent:#00a86b;--accent2:#6040e0;--accent3:#e0206e;
-  --border:rgba(0,0,0,0.09);--card-bg:#e8eaf4;--card-hover:#dde0f0;
-  --nav-bg:rgba(240,242,248,0.88);--shadow:0 24px 80px rgba(0,0,0,0.12);
-  --glow:0 0 40px rgba(0,168,107,0.15);
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-.ds-root{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--fg);overflow-x:hidden;transition:background .4s,color .4s;cursor:none}
-a{text-decoration:none;color:inherit}
-ul{list-style:none}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+button { font-family: inherit; }
+img { max-width: 100%; display: block; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(0,255,178,0.3); border-radius: 2px; }
 
 /* CURSOR */
-#dsCursorDot{position:fixed;top:0;left:0;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);mix-blend-mode:screen}
-#dsCursorDotInner{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent),0 0 24px rgba(93,255,184,.4);transition:width .2s,height .2s,background .2s}
-#dsCursorRing{position:fixed;top:0;left:0;width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(93,255,184,.5);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .35s cubic-bezier(.23,1,.32,1),height .35s cubic-bezier(.23,1,.32,1),border-color .3s,opacity .3s}
-#dsCursorRing2{position:fixed;top:0;left:0;width:70px;height:70px;border-radius:50%;border:1px solid rgba(93,255,184,.15);pointer-events:none;z-index:99997;transform:translate(-50%,-50%);transition:width .5s cubic-bezier(.23,1,.32,1),height .5s cubic-bezier(.23,1,.32,1)}
-.ds-root.cur-hover #dsCursorRing{width:56px;height:56px;border-color:var(--accent3);opacity:.7}
-.ds-root.cur-hover #dsCursorDotInner{width:6px;height:6px;background:var(--accent3)}
-.ds-root.cur-hover #dsCursorRing2{width:90px;height:90px}
-
-/* LOADER */
-.ds-loader{position:fixed;inset:0;background:var(--bg);z-index:99990;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;transition:opacity .7s,visibility .7s}
-.ds-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.loader-word{font-family:'Syne',sans-serif;font-size:clamp(48px,8vw,80px);font-weight:800;letter-spacing:12px;color:var(--fg);overflow:hidden}
-.loader-word span{display:inline-block;animation:wordIn .9s cubic-bezier(.23,1,.32,1) both}
-.loader-word span:nth-child(1){animation-delay:0s}.loader-word span:nth-child(2){animation-delay:.06s}.loader-word span:nth-child(3){animation-delay:.12s}.loader-word span:nth-child(4){animation-delay:.18s}.loader-word span:nth-child(5){animation-delay:.24s}.loader-word span:nth-child(6){animation-delay:.3s}.loader-word span:nth-child(7){animation-delay:.36s}
-@keyframes wordIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
-.loader-orb{width:60px;height:60px;border-radius:50%;border:1.5px solid var(--accent);position:relative;overflow:hidden}
-.loader-orb::before{content:'';position:absolute;inset:-20px;border-radius:50%;background:conic-gradient(from 0deg,transparent 0%,var(--accent) 30%,transparent 60%);animation:orbSpin 1.2s linear infinite}
-.loader-orb::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--bg)}
-@keyframes orbSpin{to{transform:rotate(360deg)}}
-.loader-pct{font-size:11px;letter-spacing:4px;color:var(--fg3);font-weight:300}
-
-/* SCROLL BAR */
-.ds-root ::-webkit-scrollbar{width:5px}
-.ds-root ::-webkit-scrollbar-track{background:var(--bg)}
-.ds-root ::-webkit-scrollbar-thumb{background:var(--fg3);border-radius:3px}
+#dsCursor {
+  position: fixed; top:0; left:0; pointer-events:none; z-index:99999;
+  width:14px; height:14px; border-radius:50%; background:var(--accent);
+  transform:translate(-50%,-50%);
+  transition:width .15s, height .15s, background .2s;
+  mix-blend-mode: difference;
+}
+#dsCursorRing {
+  position: fixed; top:0; left:0; pointer-events:none; z-index:99998;
+  width:42px; height:42px; border-radius:50%;
+  border:1px solid rgba(0,255,178,0.4);
+  transform:translate(-50%,-50%);
+  transition:width .4s cubic-bezier(.23,1,.32,1), height .4s cubic-bezier(.23,1,.32,1);
+}
+body.hov #dsCursor { width:8px; height:8px; background:var(--accent3); }
+body.hov #dsCursorRing { width:58px; height:58px; border-color:var(--accent3); }
 
 /* SCROLL PROGRESS */
-.scroll-prog{position:fixed;top:0;left:0;right:0;height:2px;z-index:1001}
-.scroll-prog-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));transition:width .1s}
-
-/* NAV */
-nav.ds-nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:0 52px;height:72px;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .4s,border-color .4s}
-.ds-logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:6px;color:var(--fg);display:flex;align-items:center;gap:10px;cursor:none}
-.logo-orb{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 16px rgba(93,255,184,.4);animation:orbPulse 3s ease-in-out infinite;flex-shrink:0}
-@keyframes orbPulse{0%,100%{box-shadow:0 0 16px rgba(93,255,184,.4)}50%{box-shadow:0 0 28px rgba(93,255,184,.7)}}
-.nav-links{display:flex;align-items:center;gap:36px}
-.nav-links a{font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--fg2);transition:color .2s;font-weight:500;cursor:none}
-.nav-links a:hover{color:var(--fg)}
-.nav-cta{border:1px solid var(--accent)!important;color:var(--accent)!important;padding:8px 22px;border-radius:100px;transition:background .2s,color .2s!important;cursor:none}
-.nav-cta:hover{background:var(--accent)!important;color:var(--bg)!important}
-.nav-right{display:flex;align-items:center;gap:16px}
-.theme-toggle{width:48px;height:26px;border-radius:13px;border:1.5px solid var(--border);background:var(--bg3);position:relative;cursor:none;transition:background .3s,border-color .3s}
-.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--fg);transition:transform .3s,background .3s}
-.ds-light .theme-toggle::after{transform:translateX(22px);background:var(--accent)}
-.t-icon{font-size:12px;position:absolute;top:50%;transform:translateY(-50%);pointer-events:none}
-.t-icon.sun{right:5px;opacity:0;transition:opacity .3s}.t-icon.moon{left:5px;opacity:1;transition:opacity .3s}
-.ds-light .t-icon.sun{opacity:1}.ds-light .t-icon.moon{opacity:0}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:none;padding:4px;background:none;border:none}
-.hamburger span{display:block;width:24px;height:2px;background:var(--fg);border-radius:2px;transition:.3s}
-.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.hamburger.open span:nth-child(2){opacity:0}
-.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.mobile-nav{display:none;position:fixed;top:72px;left:0;right:0;bottom:0;background:var(--bg);z-index:999;flex-direction:column;padding:48px;gap:32px}
-.mobile-nav.open{display:flex}
-.mobile-nav a{font-family:'Syne',sans-serif;font-size:36px;font-weight:700;letter-spacing:4px;color:var(--fg);cursor:none}
-
-/* HERO */
-.ds-hero{min-height:100vh;padding:120px 52px 80px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;pointer-events:none;z-index:0}
-.hero-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");opacity:.6}
-.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 65% 45%,rgba(93,255,184,.07) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 25% 75%,rgba(123,95,255,.06) 0%,transparent 55%),radial-gradient(ellipse 40% 40% at 80% 20%,rgba(255,93,158,.04) 0%,transparent 50%)}
-.ds-light .hero-glow{background:radial-gradient(ellipse 60% 70% at 65% 45%,rgba(0,168,107,.08) 0%,transparent 65%),radial-gradient(ellipse 50% 50% at 25% 75%,rgba(96,64,224,.06) 0%,transparent 55%)}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.25) 25%,rgba(0,0,0,.1) 70%,transparent)}
-.globe-wrap{position:absolute;top:50%;right:0;transform:translate(10%,-50%);width:min(680px,75vw);height:min(680px,75vw);z-index:1;pointer-events:none}
-.globe-wrap canvas{display:block;width:100%!important;height:100%!important}
-.fpills{position:absolute;inset:0;pointer-events:none}
-.fpill{position:absolute;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--fg2);border:1px solid var(--border);padding:6px 16px;border-radius:100px;background:rgba(13,17,32,.7);backdrop-filter:blur(12px);animation:fpFloat 7s ease-in-out infinite;white-space:nowrap}
-.ds-light .fpill{background:rgba(232,234,244,.8)}
-.fpill:nth-child(1){top:22%;right:8%;animation-delay:0s}.fpill:nth-child(2){top:42%;right:4%;animation-delay:2s}.fpill:nth-child(3){top:62%;right:10%;animation-delay:4s}.fpill:nth-child(4){top:32%;right:22%;animation-delay:1s}
-@keyframes fpFloat{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-14px) rotate(1deg)}}
-.hero-content{position:relative;z-index:2}
-.hero-eyebrow{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);font-weight:500;margin-bottom:28px;display:flex;align-items:center;gap:10px}
-.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:orbPulse 2s ease-in-out infinite}
-.hero-title{font-family:'Syne',sans-serif;font-size:clamp(68px,10vw,140px);line-height:.92;font-weight:800;letter-spacing:-2px;position:relative;z-index:1}
-.hero-title .tl{display:block;overflow:hidden}
-.hero-title .tl span{display:inline-block;animation:tlIn 1.1s cubic-bezier(.23,1,.32,1) both}
-.hero-title .tl:nth-child(1) span{animation-delay:.3s}.hero-title .tl:nth-child(2) span{animation-delay:.45s}.hero-title .tl:nth-child(3) span{animation-delay:.6s}
-@keyframes tlIn{from{transform:translateY(110%)}to{transform:translateY(0)}}
-.t-outline{-webkit-text-stroke:2px var(--fg);color:transparent}
-.t-accent{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-bottom{display:flex;align-items:flex-end;justify-content:space-between;position:relative;z-index:2;gap:40px;flex-wrap:wrap;padding-top:60px}
-.hero-desc{max-width:420px;font-size:16px;line-height:1.75;color:var(--fg2);font-weight:300}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:28px}
-.btn-primary{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;padding:14px 30px;border-radius:100px;font-size:13px;letter-spacing:1px;text-transform:uppercase;font-weight:600;cursor:none;transition:transform .2s,box-shadow .2s;border:none;box-shadow:0 4px 24px rgba(93,255,184,.3)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(93,255,184,.45)}
-.btn-ghost{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--border);color:var(--fg);padding:14px 30px;border-radius:100px;font-size:13px;letter-spacing:1px;text-transform:uppercase;font-weight:400;cursor:none;transition:border-color .2s,background .2s}
-.btn-ghost:hover{border-color:var(--fg2);background:var(--bg2)}
-.hero-stats{display:flex;gap:44px}
-.stat-n{font-family:'Syne',sans-serif;font-size:38px;font-weight:700;color:var(--fg);line-height:1}
-.stat-n span{color:var(--accent)}
-.stat-l{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--fg3);margin-top:5px}
-.scroll-ind{position:absolute;bottom:32px;left:52px;display:flex;align-items:center;gap:12px;color:var(--fg3);font-size:11px;letter-spacing:3px;text-transform:uppercase;z-index:2}
-.scroll-ln{width:36px;height:1px;background:var(--fg3);overflow:hidden;position:relative}
-.scroll-ln::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--accent);animation:sln 2s ease-in-out infinite}
-@keyframes sln{to{left:100%}}
-
-/* MARQUEE */
-.mq-strip{padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg2);overflow:hidden;white-space:nowrap}
-.mq-track{display:inline-flex;align-items:center;animation:mqAnim 32s linear infinite}
-.mq-strip:hover .mq-track{animation-play-state:paused}
-.mq-item{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--fg2);padding:0 22px}
-.mq-dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0;display:inline-block}
-@keyframes mqAnim{to{transform:translateX(-50%)}}
-
-/* COUNTER STRIP */
-.counter-strip{padding:60px 52px;background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center}
-.counter-n{font-family:'Syne',sans-serif;font-size:clamp(44px,5.5vw,68px);font-weight:700;color:var(--fg);letter-spacing:2px}
-.counter-n span{color:var(--accent)}
-.counter-l{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--fg2);margin-top:8px}
-
-/* REVEAL */
-.reveal{opacity:0;transform:translateY(36px);transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1)}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.rd1{transition-delay:.1s}.rd2{transition-delay:.2s}.rd3{transition-delay:.3s}
-
-/* SECTION */
-.ds-section{padding:120px 52px}
-.sec-label{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
-.sec-title{font-family:'Syne',sans-serif;font-size:clamp(44px,6.5vw,80px);font-weight:800;letter-spacing:-1px;line-height:.95;color:var(--fg)}
-
-/* SERVICES */
-.sv-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:64px;flex-wrap:wrap;gap:24px}
-.sv-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.sv-card{padding:40px 36px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:none;position:relative;overflow:hidden;transition:background var(--transition)}
-.sv-card:nth-child(3n){border-right:none}.sv-card:nth-child(4),.sv-card:nth-child(5),.sv-card:nth-child(6){border-bottom:none}
-.sv-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(93,255,184,.05) 0%,transparent 60%);opacity:0;transition:opacity .3s}
-.sv-card:hover::before{opacity:1}.sv-card:hover{background:var(--card-hover)}.sv-card:hover .sv-arrow{transform:translate(4px,-4px);color:var(--accent)}
-.sv-num{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:3px;color:var(--fg3);margin-bottom:20px;font-weight:600}
-.sv-icon{font-size:30px;margin-bottom:16px}
-.sv-title{font-size:19px;font-weight:600;margin-bottom:12px;color:var(--fg);font-family:'Syne',sans-serif}
-.sv-desc{font-size:14px;line-height:1.72;color:var(--fg2);font-weight:300}
-.sv-arrow{position:absolute;top:32px;right:32px;font-size:20px;color:var(--fg3);transition:transform .3s,color .3s}
-.sv-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
-.sv-tag{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border:1px solid var(--border);border-radius:100px;color:var(--fg3)}
-
-/* PORTFOLIO */
-.work-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px}
-.view-all{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--fg2);border-bottom:1px solid var(--fg3);padding-bottom:4px;transition:color .2s,border-color .2s;cursor:none}
-.view-all:hover{color:var(--accent);border-color:var(--accent)}
-.ftabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:32px}
-.ftab{font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:8px 20px;border-radius:100px;border:1px solid var(--border);color:var(--fg2);cursor:none;background:transparent;transition:background .2s,color .2s,border-color .2s;font-family:'DM Sans',sans-serif}
-.ftab.active,.ftab:hover{background:var(--accent);color:#050810;border-color:var(--accent)}
-.pf-grid{display:grid;grid-template-columns:2fr 1fr;grid-template-rows:auto auto;gap:16px}
-.pf-item{position:relative;overflow:hidden;border-radius:12px;cursor:none;background:var(--card-bg);border:1px solid var(--border);transition:opacity .3s,transform .3s}
-.pf-item.large{grid-row:span 2}
-.mock-img{width:100%;background:var(--bg3);transition:transform .6s cubic-bezier(.23,1,.32,1)}
-.mi-a{background:linear-gradient(135deg,#091a0f 0%,#030f07 100%)}
-.mi-b{background:linear-gradient(135deg,#0d0a1f 0%,#050215 100%)}
-.mi-c{background:linear-gradient(135deg,#1a0a14 0%,#0f0009 100%)}
-.ds-light .mi-a{background:linear-gradient(135deg,#b8f0d4 0%,#80e0b0 100%)}
-.ds-light .mi-b{background:linear-gradient(135deg,#c8c0f8 0%,#a090ec 100%)}
-.ds-light .mi-c{background:linear-gradient(135deg,#f8c0d8 0%,#ec90b4 100%)}
-.pf-item:hover .mock-img{transform:scale(1.04)}
-.pf-overlay{position:absolute;bottom:0;left:0;right:0;padding:24px 28px;background:linear-gradient(to top,rgba(6,8,16,.9) 0%,transparent 100%)}
-.ds-light .pf-overlay{background:linear-gradient(to top,rgba(240,242,248,.88) 0%,transparent 100%)}
-.pf-tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
-.pf-name{font-size:20px;font-weight:700;color:var(--fg);font-family:'Syne',sans-serif}
-.pf-meta{font-size:12px;color:var(--fg2);margin-top:4px}
-
-/* CLIENTS */
-.clients-strip{padding:48px 52px;overflow:hidden}
-.clients-lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--fg3);text-align:center;margin-bottom:32px}
-.clients-track{display:flex;gap:80px;animation:mqAnim2 28s linear infinite;align-items:center}
-@keyframes mqAnim2{to{transform:translateX(-50%)}}
-.cl-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;letter-spacing:4px;color:var(--fg3);white-space:nowrap;transition:color .3s;cursor:default}
-.cl-logo:hover{color:var(--fg2)}
-
-/* PROCESS */
-.proc-inner{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
-.proc-body{font-size:16px;line-height:1.75;color:var(--fg2);margin:24px 0 36px;font-weight:300}
-.steps-list{display:flex;flex-direction:column;gap:0}
-.step-item{display:flex;gap:24px;padding:32px 0;border-bottom:1px solid var(--border);cursor:none;transition:padding-left .3s;position:relative}
-.step-item:first-child{border-top:1px solid var(--border)}
-.step-item:hover{padding-left:14px}.step-item:hover .step-num{color:var(--accent)}
-.step-num{font-family:'Syne',sans-serif;font-size:13px;letter-spacing:3px;color:var(--fg3);padding-top:4px;flex-shrink:0;font-weight:700}
-.step-title{font-size:18px;font-weight:700;margin-bottom:8px;color:var(--fg);font-family:'Syne',sans-serif}
-.step-desc{font-size:14px;line-height:1.72;color:var(--fg2);font-weight:300}
-
-/* TESTIMONIALS */
-.ds-testimonials{padding:120px 52px;background:var(--bg2);transition:background var(--transition)}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
-.testi-card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:40px 32px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
-.testi-card:hover{transform:translateY(-6px);box-shadow:var(--shadow)}
-.testi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));opacity:0;transition:opacity .3s}
-.testi-card:hover::before{opacity:1}
-.testi-q{font-family:'Syne',sans-serif;font-size:72px;font-weight:800;color:var(--fg3);line-height:.7;margin-bottom:20px}
-.testi-text{font-size:15px;line-height:1.72;color:var(--fg2);font-weight:300;margin-bottom:32px}
-.testi-author{display:flex;align-items:center;gap:14px}
-.t-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.av-a{background:linear-gradient(135deg,#5dffb8,#00d080);color:#050810}
-.av-b{background:linear-gradient(135deg,#7b5fff,#4020cc);color:#fff}
-.av-c{background:linear-gradient(135deg,#ff5d9e,#cc003e);color:#fff}
-.t-name{font-size:14px;font-weight:700;color:var(--fg);font-family:'Syne',sans-serif}
-.t-role{font-size:12px;color:var(--fg2);margin-top:2px}
-.stars{color:var(--accent);font-size:12px;margin-bottom:10px;letter-spacing:2px}
-
-/* AI CHAT */
-.ai-btn-pulse{position:fixed;bottom:32px;right:32px;z-index:899;width:56px;height:56px;border-radius:50%;background:rgba(93,255,184,.2);pointer-events:none;animation:aiPulse 2.5s ease-in-out infinite}
-@keyframes aiPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.6);opacity:0}}
-.ai-btn{position:fixed;bottom:32px;right:32px;z-index:900;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;border:none;cursor:none;font-size:22px;box-shadow:0 4px 24px rgba(93,255,184,.4);display:flex;align-items:center;justify-content:center;transition:transform .3s,box-shadow .3s}
-.ai-btn:hover{transform:scale(1.1);box-shadow:0 8px 40px rgba(93,255,184,.55)}
-.ai-popup{position:fixed;bottom:100px;right:32px;z-index:900;width:380px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(93,255,184,.05);transform:scale(.88) translateY(24px);transform-origin:bottom right;opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.23,1,.32,1),opacity .35s}
-.ai-popup.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
-.ai-popup-header{padding:18px 20px;background:linear-gradient(135deg,rgba(93,255,184,.08),rgba(123,95,255,.08));border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.ai-header-left{display:flex;align-items:center;gap:10px}
-.ai-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;position:relative}
-.ai-avatar::after{content:'';position:absolute;bottom:1px;right:1px;width:9px;height:9px;border-radius:50%;background:#00e676;border:2px solid var(--bg2)}
-.ai-ttl{font-size:14px;font-weight:700;color:var(--fg);font-family:'Syne',sans-serif}
-.ai-status{font-size:11px;color:var(--accent);letter-spacing:1px}
-.ai-close-btn{width:28px;height:28px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--fg2);cursor:none;font-size:12px;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s}
-.ai-close-btn:hover{background:var(--fg3);color:var(--fg)}
-.ai-msgs{display:flex;flex-direction:column;gap:12px;padding:20px;height:280px;overflow-y:auto;scroll-behavior:smooth}
-.ai-msgs::-webkit-scrollbar{width:3px}.ai-msgs::-webkit-scrollbar-track{background:transparent}.ai-msgs::-webkit-scrollbar-thumb{background:var(--fg3);border-radius:2px}
-.ai-msg{font-size:13px;line-height:1.6;padding:11px 15px;border-radius:14px;max-width:88%;position:relative;animation:msgIn .3s cubic-bezier(.23,1,.32,1)}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.ai-msg.bot{background:var(--bg3);color:var(--fg);border-radius:4px 14px 14px 14px;border:1px solid var(--border)}
-.ai-msg.user{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#050810;align-self:flex-end;border-radius:14px 14px 4px 14px;font-weight:500}
-.ai-typing{display:flex;gap:5px;align-items:center;padding:12px 15px;background:var(--bg3);border:1px solid var(--border);border-radius:4px 14px 14px 14px;width:fit-content}
-.ai-typing span{width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:.5;animation:typingBounce 1.2s ease-in-out infinite}
-.ai-typing span:nth-child(2){animation-delay:.2s}.ai-typing span:nth-child(3){animation-delay:.4s}
-@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px);opacity:1}}
-.ai-footer{padding:14px 16px;background:var(--bg);border-top:1px solid var(--border)}
-.ai-quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
-.ai-quick-btn{font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:100px;border:1px solid var(--border);color:var(--fg3);cursor:none;background:transparent;transition:border-color .2s,color .2s;font-family:'DM Sans',sans-serif}
-.ai-quick-btn:hover{border-color:var(--accent);color:var(--accent)}
-.ai-irow{display:flex;gap:8px;align-items:flex-end}
-.ai-in{flex:1;background:var(--bg3);border:1px solid var(--border);color:var(--fg);border-radius:12px;padding:10px 14px;font-size:13px;font-family:inherit;outline:none;resize:none;height:42px;max-height:100px;transition:border-color .2s;line-height:1.5}
-.ai-in:focus{border-color:rgba(93,255,184,.3)}.ai-in::placeholder{color:var(--fg3)}
-.ai-send{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;cursor:none;color:#050810;font-size:16px;display:flex;align-items:center;justify-content:center;transition:transform .2s,opacity .2s;flex-shrink:0}
-.ai-send:hover{transform:scale(1.07)}.ai-send:disabled{opacity:.4;transform:none}
-.ai-powered{text-align:center;font-size:10px;color:var(--fg3);padding-top:10px;letter-spacing:1px;text-transform:uppercase}
-
-/* CTA */
-.cta-section{padding:140px 52px;text-align:center;position:relative;overflow:hidden}
-.cta-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 50%,rgba(93,255,184,.06) 0%,transparent 70%);pointer-events:none}
-.cta-lbl{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
-.cta-title{font-family:'Syne',sans-serif;font-size:clamp(72px,13vw,180px);font-weight:800;letter-spacing:-2px;line-height:.9;color:var(--fg);margin-bottom:48px}
-.cta-title span{-webkit-text-stroke:2px var(--fg);color:transparent}
-.btn-dark{display:inline-flex;align-items:center;gap:12px;background:var(--fg);color:var(--bg);padding:18px 44px;border-radius:100px;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:none;transition:transform .2s,box-shadow .2s;border:none}
-.btn-dark:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.3)}
-
-/* FOOTER */
-.ds-footer{padding:80px 52px 40px;border-top:1px solid var(--border);background:var(--bg2);transition:background var(--transition)}
-.ft-top{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-bottom:60px}
-.ft-tl{font-size:14px;line-height:1.75;color:var(--fg2);margin-top:16px;max-width:280px;font-weight:300}
-.ft-links{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
-.ft-col h4{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--fg);margin-bottom:20px;font-family:'Syne',sans-serif}
-.ft-col ul{display:flex;flex-direction:column;gap:12px}
-.ft-col a{font-size:14px;color:var(--fg2);transition:color .2s;font-weight:300;cursor:none}
-.ft-col a:hover{color:var(--fg)}
-.ft-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding-top:40px;border-top:1px solid var(--border)}
-.ft-copy{font-size:13px;color:var(--fg3)}
-.social-links{display:flex;gap:16px}
-.social-links a{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--fg2);transition:border-color .2s,color .2s;cursor:none}
-.social-links a:hover{border-color:var(--accent);color:var(--accent)}
-
-/* RESPONSIVE */
-@media(max-width:1024px){
-  .sv-grid{grid-template-columns:repeat(2,1fr)}
-  .sv-card:nth-child(3n){border-right:1px solid var(--border)}.sv-card:nth-child(2n){border-right:none}
-  .testi-grid{grid-template-columns:repeat(2,1fr)}.counter-strip{grid-template-columns:repeat(2,1fr)}
-  .proc-inner{grid-template-columns:1fr;gap:48px}.ft-links{grid-template-columns:repeat(2,1fr)}
+#scrollBar {
+  position: fixed; top:0; left:0; height:2px; z-index:1002;
+  background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  transition: width .08s;
 }
-@media(max-width:768px){
-  nav.ds-nav{padding:0 24px}.nav-links{display:none}.hamburger{display:flex}
-  .ds-hero{padding:112px 24px 60px}.ds-section,.ds-testimonials,.cta-section{padding:80px 24px}
-  .counter-strip{padding:48px 24px}.clients-strip{padding:40px 24px}
-  .ds-footer{padding:60px 24px 32px}.sv-grid{grid-template-columns:1fr}
-  .sv-card{border-right:none!important}.pf-grid{grid-template-columns:1fr}.pf-item.large{grid-row:auto}
-  .testi-grid{grid-template-columns:1fr}.counter-strip{grid-template-columns:repeat(2,1fr)}
-  .ft-top{grid-template-columns:1fr}.ft-links{grid-template-columns:1fr 1fr}
-  .hero-stats{flex-direction:column;gap:20px}
-  .globe-wrap{opacity:.3;right:-10%;width:min(500px,100vw);height:min(500px,100vw)}
-  .ai-popup{width:calc(100vw - 32px);right:16px;bottom:90px}
-  #dsCursorDot,#dsCursorRing,#dsCursorRing2{display:none}.ds-root{cursor:auto}
-  .ai-btn,.ai-btn-pulse{bottom:24px;right:16px}
+
+/* ─── NAV ─────────────────────────────────────────────────────────────────── */
+.nav {
+  position: fixed; top:0; left:0; right:0; z-index:1000;
+  height: var(--nav-h);
+  display: flex; align-items:center; justify-content:space-between;
+  padding: 0 var(--px);
+  background: rgba(4,5,10,0.85);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px; letter-spacing:5px; color:var(--fg);
+  display:flex; align-items:center; gap:10px; cursor:pointer;
+  flex-shrink: 0;
+}
+.logo-gem {
+  width:28px; height:28px; flex-shrink:0;
+  background:conic-gradient(var(--accent) 0deg, var(--accent2) 180deg, var(--accent3) 360deg);
+  clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%);
+  animation:gemSpin 8s linear infinite;
+}
+@keyframes gemSpin { to { filter:hue-rotate(360deg); } }
+.nav-links { display:flex; align-items:center; gap:36px; }
+.nav-links a {
+  font-size:12px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--fg2); transition:color .2s; font-weight:500;
+  white-space: nowrap;
+}
+.nav-links a:hover, .nav-links a.active { color:var(--fg); }
+.nav-links a.active { position:relative; }
+.nav-links a.active::after {
+  content:''; position:absolute; bottom:-4px; left:0; right:0; height:1px; background:var(--accent);
+}
+.nav-cta {
+  font-size:11px; letter-spacing:2px; text-transform:uppercase; font-weight:600;
+  padding:10px 24px; border-radius:100px;
+  background:var(--accent); color:#04050a; border:none; cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+  flex-shrink: 0; white-space: nowrap;
+}
+.nav-cta:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,255,178,0.4); }
+.nav-mobile-btn {
+  display:none; flex-direction:column; gap:5px;
+  background:none; border:none; cursor:pointer; padding:4px;
+}
+.nav-mobile-btn span { display:block; width:22px; height:2px; background:var(--fg); border-radius:2px; transition:.3s; }
+.nav-mobile-btn.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+.nav-mobile-btn.open span:nth-child(2) { opacity:0; }
+.nav-mobile-btn.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+.mobile-menu {
+  display:none; position:fixed; top:var(--nav-h); left:0; right:0; bottom:0;
+  background:var(--bg); z-index:999; flex-direction:column; padding:48px 32px; gap:28px;
+}
+.mobile-menu.open { display:flex; }
+.mobile-menu a { font-family:'Bebas Neue',sans-serif; font-size:42px; letter-spacing:4px; color:var(--fg); }
+
+/* PAGE */
+.page { padding-top: var(--nav-h); min-height:100vh; }
+
+/* ─── BUTTONS ──────────────────────────────────────────────────────────────── */
+.btn-primary {
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  background:var(--accent); color:#04050a;
+  padding:14px 32px; border-radius:100px;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase; font-weight:700;
+  border:none; cursor:pointer;
+  transition:transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 24px rgba(0,255,178,0.25);
+  white-space: nowrap;
+}
+.btn-primary:hover { transform:translateY(-3px); box-shadow:0 10px 40px rgba(0,255,178,0.45); }
+.btn-outline {
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  background:transparent; color:var(--fg);
+  padding:14px 32px; border-radius:100px;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase; font-weight:500;
+  border:1px solid var(--border2); cursor:pointer;
+  transition:border-color .2s, background .2s;
+  white-space: nowrap;
+}
+.btn-outline:hover { border-color:var(--accent); background:var(--accent-soft); }
+.btn-ghost {
+  background:none; border:none; cursor:pointer;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2);
+  font-family:inherit; transition:color .2s;
+}
+.btn-ghost:hover { color:var(--accent); }
+
+/* ─── LABELS ───────────────────────────────────────────────────────────────── */
+.label {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:10px; letter-spacing:4px; text-transform:uppercase;
+  color:var(--accent); font-weight:600; font-family:'Space Mono',monospace;
+}
+.label::before {
+  content:''; width:20px; height:1px; background:var(--accent); flex-shrink:0;
+}
+
+/* ─── SECTION TITLE ────────────────────────────────────────────────────────── */
+.section-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(52px,8vw,100px);
+  line-height:0.9; letter-spacing:2px;
+  color:var(--fg);
+}
+.section-title .outline { -webkit-text-stroke:1.5px var(--fg); color:transparent; }
+.section-title .accent { color:var(--accent); }
+
+/* FADE IN */
+.fade-in { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+.fade-in.visible { opacity:1; transform:translateY(0); }
+.fade-d1 { transition-delay:.1s; }
+.fade-d2 { transition-delay:.2s; }
+.fade-d3 { transition-delay:.3s; }
+.fade-d4 { transition-delay:.4s; }
+
+/* ─── MARQUEE ──────────────────────────────────────────────────────────────── */
+.marquee-wrap { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--bg2); }
+.marquee-track { display:inline-flex; white-space:nowrap; animation:marqueeAnim 30s linear infinite; }
+.marquee-wrap:hover .marquee-track { animation-play-state:paused; }
+.marquee-item { padding:14px 28px; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--fg3); font-family:'Space Mono',monospace; }
+.marquee-dot { width:4px; height:4px; border-radius:50%; background:var(--accent); display:inline-block; vertical-align:middle; margin:0 4px; }
+@keyframes marqueeAnim { to { transform:translateX(-50%); } }
+
+/* ─── FOOTER ───────────────────────────────────────────────────────────────── */
+.footer {
+  background:var(--bg2); border-top:1px solid var(--border);
+  padding:80px var(--px) 40px;
+}
+.footer-top {
+  display:grid; grid-template-columns:1.2fr repeat(3,1fr);
+  gap:60px; margin-bottom:60px;
+}
+.footer-brand p { font-size:14px; color:var(--fg2); line-height:1.7; margin-top:16px; max-width:260px; font-weight:300; }
+.footer-col h5 { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--fg3); font-family:'Space Mono',monospace; margin-bottom:20px; }
+.footer-col ul { display:flex; flex-direction:column; gap:12px; }
+.footer-col a { font-size:14px; color:var(--fg2); transition:color .2s; font-weight:300; }
+.footer-col a:hover { color:var(--fg); }
+.footer-bottom {
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:40px; border-top:1px solid var(--border); flex-wrap:wrap; gap:12px;
+}
+.footer-bottom p { font-size:12px; color:var(--fg3); font-family:'Space Mono',monospace; }
+.social-row { display:flex; gap:12px; }
+.social-row a {
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; font-size:14px;
+  color:var(--fg3); transition:border-color .2s, color .2s;
+}
+.social-row a:hover { border-color:var(--accent); color:var(--accent); }
+
+/* ─── AI CHAT ──────────────────────────────────────────────────────────────── */
+.ai-fab { position:fixed; bottom:32px; right:32px; z-index:800; }
+.ai-fab-btn {
+  width:56px; height:56px; border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none; cursor:pointer; font-size:20px;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 24px rgba(0,255,178,0.4);
+  transition:transform .3s;
+}
+.ai-fab-btn:hover { transform:scale(1.08); }
+.ai-bubble {
+  position:fixed; bottom:100px; right:32px; z-index:800;
+  width:360px; background:var(--bg2);
+  border:1px solid var(--border2); border-radius:20px;
+  box-shadow: var(--shadow);
+  transform:scale(0.9) translateY(16px); transform-origin:bottom right;
+  opacity:0; pointer-events:none;
+  transition:transform .3s cubic-bezier(.23,1,.32,1), opacity .3s;
+  overflow:hidden;
+}
+.ai-bubble.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
+.ai-bubble-head {
+  padding:16px 18px; background:linear-gradient(135deg,rgba(0,255,178,0.07),rgba(110,68,255,0.07));
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+}
+.ai-head-info { display:flex; align-items:center; gap:10px; }
+.ai-dot-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--accent),var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:16px; position:relative; flex-shrink:0; }
+.ai-dot-avatar::after { content:''; position:absolute; bottom:1px; right:1px; width:9px; height:9px; border-radius:50%; background:#00e676; border:2px solid var(--bg2); }
+.ai-head-name { font-size:14px; font-weight:700; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; }
+.ai-head-status { font-size:11px; color:var(--accent); font-family:'Space Mono',monospace; }
+.ai-close { background:none; border:1px solid var(--border); border-radius:50%; width:28px; height:28px; cursor:pointer; color:var(--fg2); font-size:12px; display:flex; align-items:center; justify-content:center; transition:background .2s; flex-shrink:0; }
+.ai-close:hover { background:var(--bg3); color:var(--fg); }
+.ai-msgs { padding:16px; height:260px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; }
+.ai-msgs::-webkit-scrollbar { width:3px; }
+.ai-msg { font-size:13px; line-height:1.5; padding:10px 14px; border-radius:12px; max-width:87%; animation:msgIn .25s ease; }
+@keyframes msgIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+.ai-msg.bot { background:var(--bg3); border:1px solid var(--border); border-radius:4px 12px 12px 12px; align-self:flex-start; }
+.ai-msg.user { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#04050a; align-self:flex-end; border-radius:12px 12px 4px 12px; font-weight:500; }
+.ai-typing { display:flex; gap:4px; padding:10px 14px; background:var(--bg3); border:1px solid var(--border); border-radius:4px 12px 12px 12px; width:fit-content; align-self:flex-start; }
+.ai-typing span { width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:.5; animation:typBounce 1.2s ease-in-out infinite; }
+.ai-typing span:nth-child(2) { animation-delay:.2s; }
+.ai-typing span:nth-child(3) { animation-delay:.4s; }
+@keyframes typBounce { 0%,60%,100% { transform:translateY(0); } 30% { transform:translateY(-5px); opacity:1; } }
+.ai-footer { padding:12px 14px; border-top:1px solid var(--border); background:var(--bg); }
+.ai-quick { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
+.ai-qbtn { font-size:10px; letter-spacing:1px; text-transform:uppercase; padding:4px 11px; border-radius:100px; border:1px solid var(--border); color:var(--fg3); background:none; cursor:pointer; transition:border-color .2s, color .2s; font-family:inherit; }
+.ai-qbtn:hover { border-color:var(--accent); color:var(--accent); }
+.ai-input-row { display:flex; gap:8px; align-items:center; }
+.ai-input { flex:1; background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:9px 12px; font-size:13px; color:var(--fg); font-family:inherit; outline:none; resize:none; height:40px; transition:border-color .2s; line-height:1.4; }
+.ai-input:focus { border-color:rgba(0,255,178,0.3); }
+.ai-input::placeholder { color:var(--fg3); }
+.ai-send { width:40px; height:40px; border-radius:10px; background:var(--accent); border:none; cursor:pointer; color:#04050a; font-size:15px; display:flex; align-items:center; justify-content:center; transition:transform .2s, opacity .2s; flex-shrink:0; }
+.ai-send:hover { transform:scale(1.05); }
+.ai-send:disabled { opacity:.4; cursor:default; }
+.ai-powered { text-align:center; font-size:9px; color:var(--fg3); letter-spacing:2px; text-transform:uppercase; padding-top:10px; font-family:'Space Mono',monospace; }
+
+/* ═══════ HOME PAGE ══════════════════════════════════════════════════════════ */
+.hero {
+  min-height:100vh; padding:0 var(--px); display:flex; align-items:center;
+  position:relative; overflow:hidden;
+}
+.hero-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(ellipse 70% 80% at 75% 50%, rgba(0,255,178,.06) 0%, transparent 60%),
+             radial-gradient(ellipse 50% 50% at 20% 70%, rgba(110,68,255,.05) 0%, transparent 55%);
+}
+.hero-grid-bg {
+  position:absolute; inset:0;
+  background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:linear-gradient(to bottom,transparent,rgba(0,0,0,.2) 20%,rgba(0,0,0,.1) 70%,transparent);
+}
+.hero-inner { position:relative; z-index:2; max-width:800px; }
+.hero-eyebrow { display:flex; align-items:center; gap:12px; margin-bottom:32px; }
+.hero-badge {
+  background:var(--accent-soft); border:1px solid rgba(0,255,178,0.2);
+  padding:6px 16px; border-radius:100px;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--accent); font-family:'Space Mono',monospace;
+}
+.hero-h1 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(80px,14vw,180px);
+  line-height:.88; letter-spacing:3px; margin-bottom:32px;
+}
+.hero-h1 .line { display:block; overflow:hidden; }
+.hero-h1 .line span { display:inline-block; animation:heroIn 1s cubic-bezier(.23,1,.32,1) both; }
+.hero-h1 .line:nth-child(1) span { animation-delay:.3s; }
+.hero-h1 .line:nth-child(2) span { animation-delay:.45s; }
+.hero-h1 .line:nth-child(3) span { animation-delay:.6s; }
+@keyframes heroIn { from { transform:translateY(110%); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.hero-h1 .stroke { -webkit-text-stroke:2px var(--fg); color:transparent; }
+.hero-h1 .hi { color:var(--accent); }
+.hero-desc { font-size:17px; line-height:1.72; color:var(--fg2); max-width:480px; font-weight:300; margin-bottom:40px; }
+.hero-ctas { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:72px; align-items:center; }
+.hero-stats { display:flex; gap:52px; flex-wrap:wrap; align-items:flex-start; }
+.stat-item { display:flex; flex-direction:column; }
+.stat-num { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:2px; line-height:1; color:var(--fg); }
+.stat-num em { color:var(--accent); font-style:normal; }
+.stat-lbl { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--fg3); margin-top:4px; font-family:'Space Mono',monospace; }
+.hero-visual {
+  position:absolute; right:0; top:50%; transform:translateY(-50%);
+  width:min(640px,50vw); height:min(640px,50vw); pointer-events:none; z-index:1;
+}
+.hero-visual canvas { width:100%!important; height:100%!important; }
+.scroll-hint {
+  position:absolute; bottom:36px; left:var(--px); z-index:2;
+  display:flex; align-items:center; gap:12px;
+  font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--fg3); font-family:'Space Mono',monospace;
+}
+.scroll-line { width:40px; height:1px; background:var(--fg3); position:relative; overflow:hidden; }
+.scroll-line::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:var(--accent); animation:scrollLine 2s ease-in-out infinite; }
+@keyframes scrollLine { to { left:100%; } }
+
+/* ─── BENTO STATS ──────────────────────────────────────────────────────────── */
+.bento { padding:80px var(--px) 100px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.bento-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--radius); padding:32px 28px;
+  position:relative; overflow:hidden;
+  transition:border-color .3s, transform .3s;
+}
+.bento-card:hover { border-color:rgba(0,255,178,.25); transform:translateY(-4px); }
+.bento-card::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); opacity:0; transition:opacity .3s; }
+.bento-card:hover::after { opacity:1; }
+.bento-num { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:2px; color:var(--fg); line-height:1; }
+.bento-num em { color:var(--accent); font-style:normal; }
+.bento-lbl { font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--fg3); margin-top:8px; font-family:'Space Mono',monospace; }
+.bento-desc { font-size:13px; color:var(--fg2); margin-top:10px; line-height:1.6; font-weight:300; }
+
+/* ─── CLIENTS ──────────────────────────────────────────────────────────────── */
+.clients-section { padding:60px 0; overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--bg2); }
+.clients-label { text-align:center; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--fg3); margin-bottom:36px; font-family:'Space Mono',monospace; }
+.clients-track { display:flex; gap:72px; animation:mqAnim 24s linear infinite; align-items:center; }
+@keyframes mqAnim { to { transform:translateX(-50%); } }
+.client-name { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:5px; color:var(--fg3); white-space:nowrap; transition:color .3s; }
+.client-name:hover { color:var(--fg2); }
+
+/* ─── HOME FEATURES ────────────────────────────────────────────────────────── */
+.features-section {
+  padding:100px var(--px);
+  display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start;
+}
+.features-left { display:flex; flex-direction:column; }
+.features-list { display:flex; flex-direction:column; gap:0; margin-top:0; }
+.feature-item { display:flex; gap:24px; padding:28px 0; border-bottom:1px solid var(--border); cursor:pointer; transition:padding-left .3s; }
+.feature-item:first-child { border-top:1px solid var(--border); }
+.feature-item:hover { padding-left:12px; }
+.feature-item:hover .fi-num { color:var(--accent); }
+.fi-num { font-family:'Space Mono',monospace; font-size:12px; color:var(--fg3); flex-shrink:0; padding-top:3px; }
+.fi-title { font-size:18px; font-weight:600; margin-bottom:8px; }
+.fi-desc { font-size:13px; color:var(--fg2); line-height:1.65; font-weight:300; }
+
+/* Features visual card */
+.features-visual { position:relative; top:0; }
+.fv-card {
+  background:var(--card); border:1px solid var(--border); border-radius:20px;
+  padding:40px; position:relative; overflow:hidden;
+}
+.fv-card::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at top right, rgba(0,255,178,.05) 0%, transparent 60%);
+  pointer-events:none;
+}
+.fv-metric { margin-bottom:28px; }
+.fv-label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--fg3); font-family:'Space Mono',monospace; margin-bottom:8px; }
+.fv-value { font-family:'Bebas Neue',sans-serif; font-size:64px; letter-spacing:2px; color:var(--accent); line-height:1; }
+.fv-bars { display:flex; flex-direction:column; gap:14px; }
+.fv-bar-row { display:flex; align-items:center; gap:12px; }
+.fv-bar-label { font-size:11px; color:var(--fg2); width:72px; font-weight:500; flex-shrink:0; }
+.fv-bar-bg { flex:1; height:6px; background:rgba(255,255,255,.06); border-radius:3px; overflow:hidden; }
+.fv-bar-fill { height:100%; border-radius:3px; transition:width .8s ease; }
+.fv-bar-pct { font-size:11px; color:var(--fg3); font-family:'Space Mono',monospace; width:36px; text-align:right; flex-shrink:0; }
+
+/* ─── TESTIMONIAL TEASE ────────────────────────────────────────────────────── */
+.tease-section { padding:100px var(--px); background:var(--bg2); }
+.tease-inner { display:grid; grid-template-columns:1fr 2fr; gap:80px; align-items:start; }
+.tease-cards { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.tease-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:28px; transition:transform .3s, box-shadow .3s;
+}
+.tease-card:hover { transform:translateY(-4px); box-shadow:0 16px 48px rgba(0,0,0,.4); }
+.tease-stars { color:var(--accent); font-size:11px; letter-spacing:2px; margin-bottom:14px; }
+.tease-text { font-size:13px; line-height:1.65; color:var(--fg2); font-weight:300; margin-bottom:20px; }
+.tease-author { display:flex; align-items:center; gap:10px; }
+.ta-av { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; flex-shrink:0; }
+.ta-name { font-size:13px; font-weight:600; }
+.ta-role { font-size:11px; color:var(--fg3); margin-top:2px; }
+
+/* ═══════ SERVICES PAGE ═══════════════════════════════════════════════════════ */
+.services-hero { padding:100px var(--px) 80px; }
+.services-hero-inner { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.services-intro { font-size:16px; line-height:1.75; color:var(--fg2); font-weight:300; margin-top:24px; }
+.services-grid {
+  padding:0 var(--px) 100px;
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:2px; background:var(--border); border-radius:20px; overflow:hidden;
+  margin:0 var(--px);
+}
+.svc-card {
+  background:var(--card); padding:44px 36px;
+  position:relative; overflow:hidden; cursor:pointer;
+  transition:background .3s;
+}
+.svc-card:hover { background:var(--bg3); }
+.svc-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; opacity:0; transition:opacity .3s; }
+.svc-card:nth-child(1)::before { background:var(--accent); }
+.svc-card:nth-child(2)::before { background:var(--accent2); }
+.svc-card:nth-child(3)::before { background:var(--accent3); }
+.svc-card:nth-child(4)::before { background:var(--accent); }
+.svc-card:nth-child(5)::before { background:var(--accent2); }
+.svc-card:nth-child(6)::before { background:var(--accent3); }
+.svc-card:hover::before { opacity:1; }
+.svc-icon { font-size:36px; margin-bottom:20px; display:block; }
+.svc-num { font-family:'Space Mono',monospace; font-size:11px; letter-spacing:3px; color:var(--fg3); margin-bottom:14px; }
+.svc-title { font-size:20px; font-weight:700; margin-bottom:12px; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; }
+.svc-desc { font-size:14px; line-height:1.7; color:var(--fg2); font-weight:300; margin-bottom:20px; }
+.svc-tags { display:flex; flex-wrap:wrap; gap:6px; }
+.svc-tag { font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:3px 10px; border:1px solid var(--border); border-radius:100px; color:var(--fg3); }
+.svc-arrow { position:absolute; top:28px; right:28px; font-size:18px; color:var(--fg3); transition:transform .3s, color .3s; }
+.svc-card:hover .svc-arrow { transform:translate(4px,-4px); color:var(--accent); }
+
+/* ─── PROCESS STEPS ────────────────────────────────────────────────────────── */
+.process-section { padding:100px var(--px); background:var(--bg2); }
+.process-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border-radius:16px; overflow:hidden; margin-top:64px; }
+.proc-step { background:var(--card); padding:36px 28px; position:relative; }
+.proc-step-num { font-family:'Bebas Neue',sans-serif; font-size:48px; letter-spacing:2px; color:rgba(0,255,178,.12); line-height:1; margin-bottom:16px; }
+.proc-step-title { font-size:16px; font-weight:600; margin-bottom:10px; }
+.proc-step-desc { font-size:13px; line-height:1.65; color:var(--fg2); font-weight:300; }
+.proc-connector { position:absolute; top:40px; right:-12px; width:24px; height:24px; background:var(--bg2); border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; color:var(--accent); z-index:1; }
+
+/* ═══════ PORTFOLIO PAGE ═══════════════════════════════════════════════════════ */
+.portfolio-hero { padding:100px var(--px) 60px; }
+.portfolio-filters { display:flex; gap:8px; flex-wrap:wrap; margin-top:48px; align-items:center; }
+.pf-btn {
+  font-size:10px; letter-spacing:2px; text-transform:uppercase;
+  padding:9px 22px; border-radius:100px; border:1px solid var(--border);
+  color:var(--fg2); background:none; cursor:pointer; font-family:inherit;
+  transition:background .2s, color .2s, border-color .2s;
+}
+.pf-btn.active, .pf-btn:hover { background:var(--accent); color:#04050a; border-color:var(--accent); font-weight:600; }
+.portfolio-grid { padding:0 var(--px) 100px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.portfolio-item {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; cursor:pointer; transition:transform .3s, box-shadow .3s, opacity .4s;
+  position:relative;
+}
+.portfolio-item:hover { transform:translateY(-6px); box-shadow:0 20px 60px rgba(0,0,0,.5); }
+.portfolio-item.hidden { opacity:0.12; transform:scale(.97); pointer-events:none; }
+.pi-img { height:260px; position:relative; overflow:hidden; }
+.pi-img-inner { width:100%; height:100%; transition:transform .6s cubic-bezier(.23,1,.32,1); }
+.portfolio-item:hover .pi-img-inner { transform:scale(1.05); }
+.pi-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top,rgba(4,5,10,.85) 0%,transparent 50%);
+  display:flex; align-items:flex-end; padding:24px;
+  opacity:0; transition:opacity .3s;
+}
+.portfolio-item:hover .pi-overlay { opacity:1; }
+.pi-overlay-btn { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:6px 16px; border-radius:100px; }
+.pi-content { padding:24px; }
+.pi-tag { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--accent); font-family:'Space Mono',monospace; margin-bottom:8px; }
+.pi-title { font-size:18px; font-weight:700; margin-bottom:6px; font-family:'Bebas Neue',sans-serif; letter-spacing:1px; }
+.pi-meta { font-size:12px; color:var(--fg2); }
+.pi-result { margin-top:12px; padding-top:12px; border-top:1px solid var(--border); font-size:12px; color:var(--accent); font-family:'Space Mono',monospace; }
+
+/* ═══════ ABOUT PAGE ═══════════════════════════════════════════════════════════ */
+.about-hero { padding:100px var(--px) 80px; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.about-visual { position:relative; }
+.about-img-wrap {
+  border-radius:20px; overflow:visible; aspect-ratio:1/1;
+  background:var(--card); border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:80px; position:relative; border-radius:20px;
+}
+.about-img-wrap::before {
+  content:''; position:absolute; inset:0; border-radius:20px;
+  background:radial-gradient(ellipse at center, rgba(0,255,178,.06) 0%, transparent 70%);
+}
+.about-float {
+  position:absolute; background:var(--card); border:1px solid var(--border2);
+  border-radius:12px; padding:16px 20px; backdrop-filter:blur(12px);
+  z-index:2;
+}
+.about-float-1 { top:-20px; right:-20px; }
+.about-float-2 { bottom:-20px; left:-20px; }
+.af-num { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; color:var(--accent); line-height:1; }
+.af-lbl { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--fg3); font-family:'Space Mono',monospace; margin-top:4px; }
+.about-content-text { font-size:16px; line-height:1.75; color:var(--fg2); font-weight:300; margin-top:24px; margin-bottom:24px; }
+
+/* Values */
+.values-section { padding:80px var(--px) 100px; }
+.values-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:64px; }
+.value-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  padding:36px 28px; transition:border-color .3s, transform .3s;
+}
+.value-card:hover { border-color:rgba(0,255,178,.25); transform:translateY(-4px); }
+.value-icon { font-size:32px; margin-bottom:16px; display:block; }
+.value-title { font-size:18px; font-weight:600; margin-bottom:10px; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; }
+.value-desc { font-size:14px; color:var(--fg2); line-height:1.65; font-weight:300; }
+
+/* Team */
+.team-section { padding:100px var(--px); background:var(--bg2); }
+.team-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:64px; }
+.team-card {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+  overflow:hidden; transition:transform .3s;
+}
+.team-card:hover { transform:translateY(-4px); }
+.team-photo { height:200px; display:flex; align-items:center; justify-content:center; font-size:56px; position:relative; overflow:hidden; }
+.team-info { padding:20px; }
+.team-name { font-size:16px; font-weight:700; font-family:'Bebas Neue',sans-serif; letter-spacing:2px; }
+.team-role { font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-top:4px; font-family:'Space Mono',monospace; }
+.team-bio { font-size:13px; color:var(--fg2); margin-top:10px; line-height:1.55; font-weight:300; }
+
+/* ═══════ PRICING PAGE ═══════════════════════════════════════════════════════ */
+.pricing-hero { padding:100px var(--px) 60px; text-align:center; }
+.pricing-subtitle { font-size:16px; color:var(--fg2); margin-top:20px; font-weight:300; max-width:500px; margin-inline:auto; line-height:1.65; }
+.pricing-toggle { display:flex; align-items:center; gap:14px; justify-content:center; margin-top:36px; flex-wrap:wrap; }
+.toggle-label { font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--fg2); }
+.toggle-track {
+  width:52px; height:28px; border-radius:14px; border:1px solid var(--border2);
+  background:var(--bg3); position:relative; cursor:pointer; flex-shrink:0;
+}
+.toggle-thumb { position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%; background:var(--fg); transition:transform .3s; }
+.toggle-track.active .toggle-thumb { transform:translateX(24px); background:var(--accent); }
+.toggle-save { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--accent); font-family:'Space Mono',monospace; }
+
+.pricing-cards { padding:0 var(--px) 80px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.pricing-card {
+  background:var(--card); border:1px solid var(--border); border-radius:20px;
+  padding:44px 36px; position:relative; overflow:hidden;
+  transition:transform .3s, box-shadow .3s;
+  display:flex; flex-direction:column;
+}
+.pricing-card:hover { transform:translateY(-6px); box-shadow:0 24px 64px rgba(0,0,0,.5); }
+.pricing-card.featured {
+  border-color:rgba(0,255,178,.3);
+  background:linear-gradient(160deg,rgba(0,255,178,.04) 0%,var(--card) 50%);
+}
+.pricing-card.featured::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+.pricing-badge { position:absolute; top:24px; right:24px; background:var(--accent); color:#04050a; font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; border-radius:100px; font-weight:700; }
+.pricing-tier { font-size:11px; letter-spacing:4px; text-transform:uppercase; color:var(--fg3); font-family:'Space Mono',monospace; margin-bottom:16px; }
+.pricing-name { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:3px; margin-bottom:8px; }
+.pricing-price { font-family:'Bebas Neue',sans-serif; font-size:68px; letter-spacing:2px; line-height:1; color:var(--fg); margin:24px 0 4px; display:flex; align-items:flex-start; gap:2px; }
+.pricing-price em { font-size:28px; font-style:normal; color:var(--fg3); margin-top:8px; }
+.pricing-period { font-size:12px; color:var(--fg3); margin-bottom:28px; font-family:'Space Mono',monospace; }
+.pricing-divider { height:1px; background:var(--border); margin:28px 0; }
+.pricing-features { display:flex; flex-direction:column; gap:12px; margin-bottom:32px; flex:1; }
+.pf-feature { display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--fg2); font-weight:300; line-height:1.5; }
+.pf-check { color:var(--accent); flex-shrink:0; margin-top:2px; font-size:12px; }
+.pf-cross { color:var(--fg3); flex-shrink:0; margin-top:2px; font-size:12px; }
+
+/* FAQ */
+.pricing-faq { padding:0 var(--px) 100px; }
+.faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:64px; }
+.faq-item { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; cursor:pointer; transition:border-color .3s; }
+.faq-item:hover { border-color:rgba(0,255,178,.2); }
+.faq-q { font-size:15px; font-weight:600; display:flex; justify-content:space-between; align-items:flex-start; gap:16px; }
+.faq-icon { flex-shrink:0; color:var(--accent); font-size:20px; transition:transform .3s; line-height:1; margin-top:1px; }
+.faq-item.open .faq-icon { transform:rotate(45deg); }
+.faq-a { font-size:13px; color:var(--fg2); line-height:1.65; margin-top:14px; font-weight:300; display:none; }
+.faq-item.open .faq-a { display:block; }
+
+/* ═══════ CTA SECTION ═══════════════════════════════════════════════════════ */
+.cta-section { padding:120px var(--px); text-align:center; position:relative; overflow:hidden; }
+.cta-bg { position:absolute; inset:0; background:radial-gradient(ellipse 60% 60% at 50% 50%,rgba(0,255,178,.05) 0%,transparent 65%); pointer-events:none; }
+.cta-eyebrow { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--accent); font-family:'Space Mono',monospace; margin-bottom:20px; }
+.cta-h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,12vw,160px); letter-spacing:4px; line-height:.9; color:var(--fg); margin-bottom:40px; }
+.cta-h2 span { -webkit-text-stroke:2px var(--fg); color:transparent; }
+.cta-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; align-items:center; }
+
+/* ─── SECTION HEADER UTILITY ───────────────────────────────────────────────── */
+.section-header-center { text-align:center; margin-bottom:0; }
+.section-header-center .label { justify-content:center; }
+
+/* ═══════ RESPONSIVE ═══════════════════════════════════════════════════════ */
+@media (max-width:1200px) {
+  :root { --px: 40px; }
+}
+@media (max-width:1024px) {
+  .services-grid { grid-template-columns:repeat(2,1fr); margin:0 var(--px); }
+  .portfolio-grid { grid-template-columns:repeat(2,1fr); }
+  .team-grid { grid-template-columns:repeat(2,1fr); }
+  .pricing-cards { grid-template-columns:1fr; max-width:480px; margin-inline:auto; padding-bottom:80px; }
+  .features-section { grid-template-columns:1fr; gap:60px; }
+  .tease-inner { grid-template-columns:1fr; gap:48px; }
+  .process-grid { grid-template-columns:repeat(2,1fr); }
+  .footer-top { grid-template-columns:1fr 1fr; }
+  .bento { grid-template-columns:repeat(2,1fr); }
+  .about-hero { grid-template-columns:1fr; }
+}
+@media (max-width:768px) {
+  :root { --nav-h:64px; --px: 24px; }
+  .nav { padding:0 24px; }
+  .nav-links { display:none; }
+  .nav-mobile-btn { display:flex; }
+  .hero { padding:0 24px; }
+  .hero-h1 { font-size:clamp(64px,18vw,100px); }
+  .hero-visual { display:none; }
+  .scroll-hint { left:24px; }
+  .bento { padding:60px 24px; grid-template-columns:1fr 1fr; }
+  .clients-section { padding:48px 0; }
+  .features-section { padding:60px 24px; }
+  .tease-section { padding:60px 24px; }
+  .tease-cards { grid-template-columns:1fr; }
+  .services-hero { padding:60px 24px 40px; }
+  .services-hero-inner { grid-template-columns:1fr; gap:40px; }
+  .services-grid { padding:0; margin:0 24px; grid-template-columns:1fr; }
+  .process-section { padding:60px 24px; }
+  .process-grid { grid-template-columns:1fr; }
+  .portfolio-hero { padding:60px 24px 40px; }
+  .portfolio-grid { padding:0 24px 60px; grid-template-columns:1fr; }
+  .about-hero { padding:60px 24px; grid-template-columns:1fr; }
+  .about-visual { display:none; }
+  .values-section { padding:60px 24px; }
+  .values-grid { grid-template-columns:1fr; }
+  .team-section { padding:60px 24px; }
+  .team-grid { grid-template-columns:1fr 1fr; }
+  .pricing-hero { padding:60px 24px 40px; }
+  .pricing-cards { padding:0 24px 60px; max-width:100%; }
+  .pricing-faq { padding:0 24px 60px; }
+  .faq-grid { grid-template-columns:1fr; }
+  .cta-section { padding:80px 24px; }
+  .footer { padding:60px 24px 32px; }
+  .footer-top { grid-template-columns:1fr; gap:40px; }
+  .ai-bubble { width:calc(100vw - 32px); right:16px; }
+  #dsCursor, #dsCursorRing { display:none; }
+  body { cursor:auto; }
+  .ai-fab { bottom:24px; right:16px; }
+  .hero-stats { gap:32px; }
+  .hero-ctas { gap:12px; }
+}
+@media (max-width:480px) {
+  .bento { grid-template-columns:1fr; }
+  .team-grid { grid-template-columns:1fr; }
+  .tease-cards { grid-template-columns:1fr; }
+  .hero-stats { gap:24px; }
 }
 `;
 
-// ─── Globe seed helper ────────────────────────────────────────────────────────
-const seed = (n) => { let x = Math.sin(n) * 43758.5453; return x - Math.floor(x); };
-
-const LAND_DOTS = Array.from({ length: 400 }, (_, i) => ({
-  phi: Math.acos(1 - 2 * seed(i * 7 + 1)),
-  theta: seed(i * 13 + 3) * Math.PI * 2,
-  size: seed(i * 17 + 5) * 2.0 + 0.5,
-  bright: seed(i * 11 + 7),
+// ─── Globe ──────────────────────────────────────────────────────────────────
+const seedRng = (n) => { const x = Math.sin(n) * 43758.5453; return x - Math.floor(x); };
+const DOTS = Array.from({length:380}, (_,i) => ({
+  phi: Math.acos(1 - 2*seedRng(i*7+1)),
+  theta: seedRng(i*13+3) * Math.PI*2,
+  size: seedRng(i*17+5)*1.8+0.4,
+  bright: seedRng(i*11+7),
+}));
+const ARCS = Array.from({length:18}, (_,i) => ({
+  a: DOTS[Math.floor(seedRng(i*3)*DOTS.length)],
+  b: DOTS[Math.floor(seedRng(i*7+50)*DOTS.length)],
+  progress: seedRng(i*11),
+  speed: 0.0018+seedRng(i*5)*0.0025,
+  alpha: 0.3+seedRng(i*9)*0.5,
 }));
 
-const ARCS_INIT = Array.from({ length: 22 }, (_, i) => ({
-  a: LAND_DOTS[Math.floor(seed(i * 3) * LAND_DOTS.length)],
-  b: LAND_DOTS[Math.floor(seed(i * 7 + 50) * LAND_DOTS.length)],
-  progress: seed(i * 11),
-  speed: 0.002 + seed(i * 5) * 0.003,
-  alpha: 0.3 + seed(i * 9) * 0.5,
-}));
-
-// ─── Globe Canvas Component ───────────────────────────────────────────────────
 function Globe() {
   const canvasRef = useRef(null);
-  const arcsRef = useRef(ARCS_INIT.map(a => ({ ...a })));
   const rotRef = useRef(0);
-  const tiltRef = useRef({ tx: 0, ty: 0, cx: 0, cy: 0 });
+  const tiltRef = useRef({tx:0,ty:0,cx:0,cy:0});
+  const arcsRef = useRef(ARCS.map(a=>({...a})));
   const rafRef = useRef(null);
-
-  useEffect(() => {
+  useEffect(()=>{
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-
-    const handleMouse = (e) => {
-      tiltRef.current.tx = (e.clientY / window.innerHeight - 0.5) * 0.4;
-      tiltRef.current.ty = (e.clientX / window.innerWidth - 0.5) * 0.25;
-    };
-    window.addEventListener('mousemove', handleMouse);
-
-    let dpr = window.devicePixelRatio || 1;
+    const handleMouse = e => { tiltRef.current.tx=(e.clientY/window.innerHeight-.5)*.35; tiltRef.current.ty=(e.clientX/window.innerWidth-.5)*.2; };
+    window.addEventListener('mousemove',handleMouse);
+    let dpr = window.devicePixelRatio||1;
     const resize = () => {
-      dpr = window.devicePixelRatio || 1;
-      const wrap = canvas.parentElement;
-      canvas.width = wrap.clientWidth * dpr;
-      canvas.height = wrap.clientHeight * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dpr=window.devicePixelRatio||1;
+      const w=canvas.parentElement;
+      canvas.width=w.clientWidth*dpr;
+      canvas.height=w.clientHeight*dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
     };
-    resize();
-    window.addEventListener('resize', resize);
-
-    const project = (phi, theta, rot, tx, ty, cx, cy, R) => {
-      let x = Math.sin(phi) * Math.cos(theta + rot);
-      let y = Math.cos(phi);
-      let z = Math.sin(phi) * Math.sin(theta + rot);
-      const cosX = Math.cos(tx), sinX = Math.sin(tx);
-      const y1 = y * cosX - z * sinX;
-      const z1 = y * sinX + z * cosX;
-      const cosY = Math.cos(ty), sinY = Math.sin(ty);
-      const x2 = x * cosY + z1 * sinY;
-      const z2 = -x * sinY + z1 * cosY;
-      return { sx: cx + x2 * R, sy: cy - y1 * R, depth: z2, visible: z2 > -0.05 };
+    resize(); window.addEventListener('resize',resize);
+    const proj = (phi,theta,rot,tx,ty,cx,cy,R) => {
+      let x=Math.sin(phi)*Math.cos(theta+rot), y=Math.cos(phi), z=Math.sin(phi)*Math.sin(theta+rot);
+      const cX=Math.cos(tx),sX=Math.sin(tx), y1=y*cX-z*sX, z1=y*sX+z*cX;
+      const cY=Math.cos(ty),sY=Math.sin(ty), x2=x*cY+z1*sY, z2=-x*sY+z1*cY;
+      return {sx:cx+x2*R,sy:cy-y1*R,depth:z2,vis:z2>-0.05};
     };
-
     const draw = () => {
-      const W = canvas.width / dpr, H = canvas.height / dpr;
-      ctx.clearRect(0, 0, W, H);
-      const cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.43;
-
-      tiltRef.current.cx += (tiltRef.current.tx - tiltRef.current.cx) * 0.03;
-      tiltRef.current.cy += (tiltRef.current.ty - tiltRef.current.cy) * 0.03;
-      const { cx: ctX, cy: ctY } = tiltRef.current;
-
-      // Atmosphere
-      const atmo = ctx.createRadialGradient(cx - R * 0.1, cy - R * 0.1, R * 0.65, cx, cy, R * 1.3);
-      atmo.addColorStop(0, 'rgba(93,255,184,0.0)');
-      atmo.addColorStop(0.5, 'rgba(93,255,184,0.03)');
-      atmo.addColorStop(0.8, 'rgba(123,95,255,0.07)');
-      atmo.addColorStop(1, 'rgba(93,255,184,0.12)');
-      ctx.beginPath(); ctx.arc(cx, cy, R * 1.3, 0, Math.PI * 2); ctx.fillStyle = atmo; ctx.fill();
-
-      const inner = ctx.createRadialGradient(cx, cy, R * 0.85, cx, cy, R * 1.08);
-      inner.addColorStop(0, 'transparent'); inner.addColorStop(0.6, 'rgba(93,255,184,0.04)'); inner.addColorStop(1, 'rgba(93,255,184,0.15)');
-      ctx.beginPath(); ctx.arc(cx, cy, R * 1.08, 0, Math.PI * 2); ctx.fillStyle = inner; ctx.fill();
-
-      // Sphere
-      const sg = ctx.createRadialGradient(cx - R * .25, cy - R * .3, R * .02, cx, cy, R);
-      sg.addColorStop(0, 'rgba(20,35,65,0.95)'); sg.addColorStop(0.4, 'rgba(8,12,28,0.92)'); sg.addColorStop(0.8, 'rgba(4,6,16,0.88)'); sg.addColorStop(1, 'rgba(2,4,12,0.95)');
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fillStyle = sg; ctx.fill();
-
-      // Grid
-      ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
-      for (let ld = -75; ld <= 75; ld += 15) {
-        const lr = ld * Math.PI / 180, slR = R * Math.cos(lr), slY = cy - R * Math.sin(lr);
-        const tY = slY + ctX * R * 0.3, ry = slR * (0.18 + Math.abs(ctX) * 0.05);
-        ctx.beginPath(); ctx.ellipse(cx + ctY * R * 0.1, tY, slR, ry, 0, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(93,255,184,0.055)'; ctx.lineWidth = 0.8; ctx.stroke();
+      const W=canvas.width/dpr, H=canvas.height/dpr;
+      ctx.clearRect(0,0,W,H);
+      const cx=W/2,cy=H/2,R=Math.min(W,H)*.44;
+      const t=tiltRef.current;
+      t.cx+=(t.tx-t.cx)*.03; t.cy+=(t.ty-t.cy)*.03;
+      // atmosphere
+      const atmo=ctx.createRadialGradient(cx,cy,R*.6,cx,cy,R*1.3);
+      atmo.addColorStop(0,'rgba(0,255,178,0)'); atmo.addColorStop(.6,'rgba(0,255,178,.02)'); atmo.addColorStop(1,'rgba(0,255,178,.12)');
+      ctx.beginPath(); ctx.arc(cx,cy,R*1.3,0,Math.PI*2); ctx.fillStyle=atmo; ctx.fill();
+      // sphere
+      const sg=ctx.createRadialGradient(cx-R*.2,cy-R*.25,R*.02,cx,cy,R);
+      sg.addColorStop(0,'rgba(18,30,55,.95)'); sg.addColorStop(.5,'rgba(6,10,22,.9)'); sg.addColorStop(1,'rgba(2,4,12,.95)');
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+      // grid
+      ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.clip();
+      for(let ld=-75;ld<=75;ld+=15){
+        const lr=ld*Math.PI/180,slR=R*Math.cos(lr),slY=cy-R*Math.sin(lr);
+        ctx.beginPath();ctx.ellipse(cx,slY,slR,slR*.18,0,0,Math.PI*2);
+        ctx.strokeStyle='rgba(0,255,178,.05)';ctx.lineWidth=.7;ctx.stroke();
       }
-      for (let lo = 0; lo < 180; lo += 20) {
-        const angle = lo * Math.PI / 180 + rotRef.current, rxE = R * Math.abs(Math.cos(angle));
-        ctx.beginPath(); ctx.ellipse(cx, cy, rxE, R, ctX * 0.15, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(93,255,184,0.04)'; ctx.lineWidth = 0.8; ctx.stroke();
+      for(let lo=0;lo<180;lo+=20){
+        const angle=lo*Math.PI/180+rotRef.current,rxE=R*Math.abs(Math.cos(angle));
+        ctx.beginPath();ctx.ellipse(cx,cy,rxE,R,0,0,Math.PI*2);
+        ctx.strokeStyle='rgba(0,255,178,.04)';ctx.lineWidth=.7;ctx.stroke();
       }
       ctx.restore();
-
-      // Arcs
-      arcsRef.current.forEach(arc => {
-        arc.progress += arc.speed;
-        if (arc.progress > 1.2) arc.progress = -0.1;
-        const pA = project(arc.a.phi, arc.a.theta, rotRef.current, ctX, ctY, cx, cy, R);
-        const pB = project(arc.b.phi, arc.b.theta, rotRef.current, ctX, ctY, cx, cy, R);
-        if (!pA.visible || !pB.visible) return;
-        const dist = Math.hypot(pB.sx - pA.sx, pB.sy - pA.sy);
-        if (dist > R * 0.9) return;
-        const mcx = (pA.sx + pB.sx) / 2, mcy = (pA.sy + pB.sy) / 2 - dist * 0.28;
-        const t0 = Math.max(0, arc.progress - 0.25), t1 = Math.min(1, arc.progress);
-        if (t0 >= t1) return;
-        ctx.beginPath(); let first = true;
-        for (let s = 0; s <= 20; s++) {
-          const t = t0 + (t1 - t0) * (s / 20);
-          const bx = (1-t)*(1-t)*pA.sx + 2*(1-t)*t*mcx + t*t*pB.sx;
-          const by = (1-t)*(1-t)*pA.sy + 2*(1-t)*t*mcy + t*t*pB.sy;
-          if (first) { ctx.moveTo(bx, by); first = false; } else ctx.lineTo(bx, by);
+      // arcs
+      arcsRef.current.forEach(arc=>{
+        arc.progress+=arc.speed; if(arc.progress>1.2) arc.progress=-0.1;
+        const pA=proj(arc.a.phi,arc.a.theta,rotRef.current,t.cx,t.cy,cx,cy,R);
+        const pB=proj(arc.b.phi,arc.b.theta,rotRef.current,t.cx,t.cy,cx,cy,R);
+        if(!pA.vis||!pB.vis) return;
+        const dist=Math.hypot(pB.sx-pA.sx,pB.sy-pA.sy);
+        if(dist>R*.9) return;
+        const mcx=(pA.sx+pB.sx)/2,mcy=(pA.sy+pB.sy)/2-dist*.28;
+        const t0=Math.max(0,arc.progress-.25),t1=Math.min(1,arc.progress);
+        if(t0>=t1) return;
+        ctx.beginPath(); let first=true;
+        for(let s=0;s<=20;s++){
+          const tt=t0+(t1-t0)*(s/20);
+          const bx=(1-tt)*(1-tt)*pA.sx+2*(1-tt)*tt*mcx+tt*tt*pB.sx;
+          const by=(1-tt)*(1-tt)*pA.sy+2*(1-tt)*tt*mcy+tt*tt*pB.sy;
+          if(first){ctx.moveTo(bx,by);first=false;}else ctx.lineTo(bx,by);
         }
-        const al = arc.alpha * Math.min(arc.progress, 1 - arc.progress + 0.5) * 0.8;
-        ctx.strokeStyle = `rgba(93,255,184,${Math.max(0, al)})`; ctx.lineWidth = 1.2; ctx.stroke();
-        if (arc.progress > 0 && arc.progress < 1) {
-          const t = arc.progress, hx = (1-t)*(1-t)*pA.sx + 2*(1-t)*t*mcx + t*t*pB.sx, hy = (1-t)*(1-t)*pA.sy + 2*(1-t)*t*mcy + t*t*pB.sy;
-          ctx.beginPath(); ctx.arc(hx, hy, 2.5, 0, Math.PI * 2); ctx.fillStyle = `rgba(255,255,255,${arc.alpha * 0.9})`; ctx.fill();
-          const hg = ctx.createRadialGradient(hx, hy, 0, hx, hy, 8); hg.addColorStop(0, `rgba(93,255,184,${arc.alpha * .5})`); hg.addColorStop(1, 'transparent');
-          ctx.beginPath(); ctx.arc(hx, hy, 8, 0, Math.PI * 2); ctx.fillStyle = hg; ctx.fill();
-        }
-      });
-
-      // Dots
-      LAND_DOTS.forEach(pt => {
-        const p = project(pt.phi, pt.theta, rotRef.current, ctX, ctY, cx, cy, R);
-        if (!p.visible) return;
-        const df = (p.depth + 1) / 2, al = pt.bright * df * 0.85, sz = pt.size * (0.4 + df * 0.6);
-        ctx.beginPath(); ctx.arc(p.sx, p.sy, sz, 0, Math.PI * 2); ctx.fillStyle = `rgba(93,255,184,${al})`; ctx.fill();
-        if (pt.bright > 0.75 && df > 0.65) {
-          const gr = sz * 4, glo = ctx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, gr);
-          glo.addColorStop(0, `rgba(93,255,184,${al * .35})`); glo.addColorStop(0.5, `rgba(93,255,184,${al * .08})`); glo.addColorStop(1, 'transparent');
-          ctx.beginPath(); ctx.arc(p.sx, p.sy, gr, 0, Math.PI * 2); ctx.fillStyle = glo; ctx.fill();
+        const al=arc.alpha*Math.min(arc.progress,1-arc.progress+.5)*.7;
+        ctx.strokeStyle=`rgba(0,255,178,${Math.max(0,al)})`;ctx.lineWidth=1;ctx.stroke();
+        if(arc.progress>0&&arc.progress<1){
+          const tt=arc.progress;
+          const hx=(1-tt)*(1-tt)*pA.sx+2*(1-tt)*tt*mcx+tt*tt*pB.sx;
+          const hy=(1-tt)*(1-tt)*pA.sy+2*(1-tt)*tt*mcy+tt*tt*pB.sy;
+          ctx.beginPath();ctx.arc(hx,hy,2.2,0,Math.PI*2);
+          ctx.fillStyle=`rgba(255,255,255,${arc.alpha*.8})`;ctx.fill();
         }
       });
-
-      // Specular
-      const spec = ctx.createRadialGradient(cx - R * .32, cy - R * .38, 0, cx - R * .2, cy - R * .22, R * .6);
-      spec.addColorStop(0, 'rgba(255,255,255,0.10)'); spec.addColorStop(0.4, 'rgba(255,255,255,0.03)'); spec.addColorStop(1, 'transparent');
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fillStyle = spec; ctx.fill();
-
-      // Rim
-      const rim = ctx.createRadialGradient(cx, cy, R * .7, cx, cy, R);
-      rim.addColorStop(0, 'transparent'); rim.addColorStop(0.75, 'rgba(93,255,184,0.03)'); rim.addColorStop(1, 'rgba(93,255,184,0.22)');
-      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fillStyle = rim; ctx.fill();
-
-      rotRef.current += 0.0008;
-      rafRef.current = requestAnimationFrame(draw);
+      // dots
+      DOTS.forEach(pt=>{
+        const p=proj(pt.phi,pt.theta,rotRef.current,t.cx,t.cy,cx,cy,R);
+        if(!p.vis) return;
+        const df=(p.depth+1)/2,al=pt.bright*df*.8,sz=pt.size*(0.4+df*.6);
+        ctx.beginPath();ctx.arc(p.sx,p.sy,sz,0,Math.PI*2);ctx.fillStyle=`rgba(0,255,178,${al})`;ctx.fill();
+      });
+      // specular
+      const spec=ctx.createRadialGradient(cx-R*.3,cy-R*.35,0,cx-R*.15,cy-R*.2,R*.55);
+      spec.addColorStop(0,'rgba(255,255,255,.09)');spec.addColorStop(1,'transparent');
+      ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=spec;ctx.fill();
+      const rim=ctx.createRadialGradient(cx,cy,R*.7,cx,cy,R);
+      rim.addColorStop(0,'transparent');rim.addColorStop(1,'rgba(0,255,178,.2)');
+      ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=rim;ctx.fill();
+      rotRef.current+=.0007;
+      rafRef.current=requestAnimationFrame(draw);
     };
-    rafRef.current = requestAnimationFrame(draw);
-
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener('mousemove', handleMouse);
-      window.removeEventListener('resize', resize);
-    };
-  }, []);
-
-  return (
-    <div className="globe-wrap">
-      <canvas ref={canvasRef} id="heroGlobe" />
-    </div>
-  );
+    rafRef.current=requestAnimationFrame(draw);
+    return ()=>{cancelAnimationFrame(rafRef.current);window.removeEventListener('mousemove',handleMouse);window.removeEventListener('resize',resize);};
+  },[]);
+  return <canvas ref={canvasRef} style={{display:'block',width:'100%',height:'100%'}} />;
 }
 
-// ─── useReveal hook ───────────────────────────────────────────────────────────
-function useReveal() {
-  useEffect(() => {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
+// ─── useIntersect ────────────────────────────────────────────────────────────
+function useIntersect() {
+  useEffect(()=>{
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible');});
+    },{threshold:0.1});
+    document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+    return ()=>obs.disconnect();
+  });
 }
 
-// ─── CounterStrip ─────────────────────────────────────────────────────────────
-function CounterStrip() {
-  const ref = useRef(null);
-  const [counts, setCounts] = useState([0, 0, 0, 0]);
-  const targets = [240, 4, 97, 8];
-  const suffixes = ['+', '.2B', '%', '+'];
-  const prefixes = ['', '$', '', ''];
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
-        targets.forEach((target, i) => {
-          let cur = 0;
-          const step = target / 60;
-          const timer = setInterval(() => {
-            cur = Math.min(cur + step, target);
-            setCounts(prev => { const n = [...prev]; n[i] = cur; return n; });
-            if (cur >= target) clearInterval(timer);
-          }, 20);
-        });
-        obs.disconnect();
-      }
-    }, { threshold: 0.3 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-
-  const labels = ['Clients Served', 'Revenue Generated', 'Client Retention', 'Years in Business'];
-  return (
-    <div className="counter-strip" ref={ref}>
-      {targets.map((_, i) => (
-        <div key={i} className="counter-item reveal">
-          <div className="counter-n">
-            {prefixes[i]}{i === 1 ? counts[i].toFixed(1) : Math.floor(counts[i])}<span>{suffixes[i]}</span>
-          </div>
-          <div className="counter-l">{labels[i]}</div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ─── AI Chat ──────────────────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `You are DSPHERY's AI marketing expert assistant — a sharp, knowledgeable, and friendly digital marketing specialist representing DSPHERY, a premium digital marketing agency founded in 2018.
-
-DSPHERY's services: SEO, Paid Media & PPC, Brand Strategy, Social Media Management, Content Marketing, Analytics & Growth.
-Key facts: 240+ clients served, $4.2B in client revenue, 97% retention, 8+ years, New York NY, hello@dsphery.com.
-
-Keep responses concise (2-4 sentences). Be enthusiastic, expert, helpful. Never say you are Claude or mention Anthropic. You are DSPHERY's AI assistant.`;
+// ─── AI Chat ─────────────────────────────────────────────────────────────────
+const SYS = `You are DSPHERY's AI marketing expert. You represent DSPHERY, a premium digital marketing agency founded in 2018. Services: SEO, Paid Media & PPC, Brand Strategy, Social Media, Content Marketing, Analytics. Stats: 240+ clients, $4.2B revenue, 97% retention, 8+ years. Located in New York. Email: hello@dsphery.com. Keep answers concise (2-4 sentences). Be enthusiastic and expert. Never say you're Claude or mention Anthropic.`;
 
 function AIChat() {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState([{ role: 'bot', text: "Hey! 👋 I'm DSPHERY's AI marketing expert. Ask me anything about SEO, paid ads, brand strategy, or how we can help grow your business." }]);
+  const [msgs, setMsgs] = useState([{role:'bot',text:"Hey! 👋 I'm DSPHERY's AI expert. Ask me anything about growing your digital presence."}]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
   const msgsRef = useRef(null);
   const inputRef = useRef(null);
 
-  useEffect(() => {
-    if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
-  }, [msgs, loading]);
+  useEffect(()=>{ if(msgsRef.current) msgsRef.current.scrollTop=msgsRef.current.scrollHeight; },[msgs,loading]);
 
-  const send = useCallback(async (text) => {
-    const msg = text || input.trim();
-    if (!msg || loading) return;
+  const send = useCallback(async(text)=>{
+    const msg = text||input.trim();
+    if(!msg||loading) return;
     setInput('');
-    setMsgs(p => [...p, { role: 'user', text: msg }]);
-    const newHistory = [...history, { role: 'user', content: msg }];
-    setHistory(newHistory);
+    setMsgs(p=>[...p,{role:'user',text:msg}]);
+    const nh=[...history,{role:'user',content:msg}];
+    setHistory(nh);
     setLoading(true);
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: SYSTEM_PROMPT, messages: newHistory }),
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:SYS,messages:nh})
       });
-      const data = await res.json();
-      const reply = data.content?.[0]?.text || "I'm having a moment — try again or email hello@dsphery.com! 🙂";
-      setMsgs(p => [...p, { role: 'bot', text: reply }]);
-      setHistory(h => [...h, { role: 'assistant', content: reply }].slice(-20));
+      const data=await res.json();
+      const reply=data.content?.[0]?.text||"Reach out at hello@dsphery.com!";
+      setMsgs(p=>[...p,{role:'bot',text:reply}]);
+      setHistory(h=>[...h,{role:'assistant',content:reply}].slice(-20));
     } catch {
-      setMsgs(p => [...p, { role: 'bot', text: "Connection hiccup! Reach out at hello@dsphery.com for immediate help." }]);
+      setMsgs(p=>[...p,{role:'bot',text:"Connection issue! Email hello@dsphery.com for help."}]);
     }
     setLoading(false);
-  }, [input, loading, history]);
+  },[input,loading,history]);
+
+  const quickPrompts = [
+    {label:'SEO Tips', prompt:'How can you improve my SEO?'},
+    {label:'Brand Strategy', prompt:'What does a brand strategy include?'},
+    {label:'Paid Ads', prompt:'How do paid ads work?'},
+  ];
 
   return (
-    <>
-      <div className="ai-btn-pulse" />
-      <button className="ai-btn" onClick={() => { setOpen(o => !o); setTimeout(() => inputRef.current?.focus(), 300); }}>💬</button>
-      <div className={`ai-popup ${open ? 'open' : ''}`}>
-        <div className="ai-popup-header">
-          <div className="ai-header-left">
-            <div className="ai-avatar">🤖</div>
-            <div><div className="ai-ttl">DSPHERY AI</div><div className="ai-status">● Online — Marketing Expert</div></div>
+    <div className="ai-fab">
+      <button className="ai-fab-btn" onClick={()=>{setOpen(o=>!o);setTimeout(()=>inputRef.current?.focus(),300);}}>💬</button>
+      <div className={`ai-bubble${open?' open':''}`}>
+        <div className="ai-bubble-head">
+          <div className="ai-head-info">
+            <div className="ai-dot-avatar">🤖</div>
+            <div>
+              <div className="ai-head-name">DSPHERY AI</div>
+              <div className="ai-head-status">● Online — Marketing Expert</div>
+            </div>
           </div>
-          <button className="ai-close-btn" onClick={() => setOpen(false)}>✕</button>
+          <button className="ai-close" onClick={()=>setOpen(false)}>✕</button>
         </div>
         <div className="ai-msgs" ref={msgsRef}>
-          {msgs.map((m, i) => <div key={i} className={`ai-msg ${m.role}`}>{m.text}</div>)}
-          {loading && <div className="ai-typing"><span /><span /><span /></div>}
+          {msgs.map((m,i)=><div key={i} className={`ai-msg ${m.role}`}>{m.text}</div>)}
+          {loading&&<div className="ai-typing"><span/><span/><span/></div>}
         </div>
         <div className="ai-footer">
-          <div className="ai-quick-btns">
-            {['How can you improve my SEO?', 'What does a brand strategy include?', 'How do paid ads work?'].map((q, i) => (
-              <button key={i} className="ai-quick-btn" onClick={() => send(q)}>{['SEO Tips', 'Brand Strategy', 'Paid Ads'][i]}</button>
+          <div className="ai-quick">
+            {quickPrompts.map((q,i)=>(
+              <button key={i} className="ai-qbtn" onClick={()=>send(q.prompt)}>{q.label}</button>
             ))}
           </div>
-          <div className="ai-irow">
+          <div className="ai-input-row">
             <textarea
               ref={inputRef}
-              className="ai-in"
+              className="ai-input"
               placeholder="Ask about marketing..."
               value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }}
+              onChange={e=>setInput(e.target.value)}
+              onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}}
               rows={1}
             />
-            <button className="ai-send" onClick={() => send()} disabled={loading || !input.trim()}>↑</button>
+            <button className="ai-send" onClick={()=>send()} disabled={loading||!input.trim()}>↑</button>
           </div>
           <div className="ai-powered">Powered by Claude AI</div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Nav ──────────────────────────────────────────────────────────────────────
+function Nav({page, setPage}) {
+  const [mob, setMob] = useState(false);
+  const navLinks = ['home','services','portfolio','about','pricing'];
+  const go = (p) => { setPage(p); setMob(false); window.scrollTo({top:0,behavior:'smooth'}); };
+  return (
+    <>
+      <nav className="nav">
+        <div className="nav-logo" onClick={()=>go('home')}>
+          <div className="logo-gem"/>
+          DSPHERY
+        </div>
+        <ul className="nav-links">
+          {navLinks.map(l=>(
+            <li key={l}>
+              <a href="#" className={page===l?'active':''} onClick={e=>{e.preventDefault();go(l);}} style={{textTransform:'capitalize'}}>{l}</a>
+            </li>
+          ))}
+        </ul>
+        <button className="nav-cta" onClick={()=>go('pricing')}>Get Started</button>
+        <button className={`nav-mobile-btn${mob?' open':''}`} onClick={()=>setMob(o=>!o)}>
+          <span/><span/><span/>
+        </button>
+      </nav>
+      <div className={`mobile-menu${mob?' open':''}`}>
+        {navLinks.map(l=>(
+          <a key={l} href="#" onClick={e=>{e.preventDefault();go(l);}} style={{textTransform:'capitalize'}}>{l}</a>
+        ))}
       </div>
     </>
   );
 }
 
-// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
-export default function DSPHERY() {
-  const [theme, setTheme] = useState(() => (typeof window !== 'undefined' ? localStorage.getItem('dsphery-theme') || 'dark' : 'dark'));
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrollPct, setScrollPct] = useState(0);
-  const [pfFilter, setPfFilter] = useState('all');
-  const [loaderHidden, setLoaderHidden] = useState(false);
-  const [loaderPct, setLoaderPct] = useState(0);
-  const rootRef = useRef(null);
-
-  useReveal();
-
-  // Inject CSS once
-  useEffect(() => {
-    if (!document.getElementById('dsphery-styles')) {
-      const style = document.createElement('style');
-      style.id = 'dsphery-styles';
-      style.textContent = CSS;
-      document.head.appendChild(style);
-    }
-  }, []);
-
-  // Loader
-  useEffect(() => {
-    let pct = 0;
-    const t = setInterval(() => {
-      pct = Math.min(pct + Math.random() * 15, 99);
-      setLoaderPct(Math.floor(pct));
-    }, 100);
-    const hide = () => { clearInterval(t); setLoaderPct(100); setTimeout(() => setLoaderHidden(true), 350); };
-    window.addEventListener('load', hide);
-    const fallback = setTimeout(hide, 2400);
-    return () => { clearInterval(t); window.removeEventListener('load', hide); clearTimeout(fallback); };
-  }, []);
-
-  // Scroll progress
-  useEffect(() => {
-    const onScroll = () => {
-      setScrollPct((window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100);
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  // Custom cursor
-  useEffect(() => {
-    const dot = document.getElementById('dsCursorDot');
-    const ring = document.getElementById('dsCursorRing');
-    const ring2 = document.getElementById('dsCursorRing2');
-    if (!dot || !ring || !ring2) return;
-    let mx = -200, my = -200, rx = -200, ry = -200, rx2 = -200, ry2 = -200;
-    const onMove = e => { mx = e.clientX; my = e.clientY; };
-    document.addEventListener('mousemove', onMove);
-    let raf;
-    const animate = () => {
-      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
-      rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
-      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-      rx2 += (mx - rx2) * 0.09; ry2 += (my - ry2) * 0.09;
-      ring2.style.left = rx2 + 'px'; ring2.style.top = ry2 + 'px';
-      raf = requestAnimationFrame(animate);
-    };
-    raf = requestAnimationFrame(animate);
-    return () => { document.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf); };
-  }, []);
-
-  // Hover cursor effect
-  useEffect(() => {
-    const add = () => rootRef.current?.classList.add('cur-hover');
-    const rem = () => rootRef.current?.classList.remove('cur-hover');
-    const els = document.querySelectorAll('a,button,.sv-card,.pf-item,.testi-card,.step-item,.ftab,.ai-quick-btn,.theme-toggle');
-    els.forEach(el => { el.addEventListener('mouseenter', add); el.addEventListener('mouseleave', rem); });
-    return () => els.forEach(el => { el.removeEventListener('mouseenter', add); el.removeEventListener('mouseleave', rem); });
-  });
-
-  const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    if (typeof window !== 'undefined') localStorage.setItem('dsphery-theme', next);
-  };
-
-  const portfolioItems = [
-    { cat: 'brand seo', className: 'large', minH: 600, bgClass: 'mi-a', tag: 'Brand Strategy + SEO', name: 'TechVault Rebrand', meta: '420% organic growth in 8 months', svg: (
-      <svg viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg" style={{ position:'absolute',inset:0,width:'100%',height:'100%',opacity:.6 }}>
-        <defs><radialGradient id="rg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#5dffb8" stopOpacity=".15"/><stop offset="100%" stopColor="#5dffb8" stopOpacity="0"/></radialGradient></defs>
-        <rect width="100%" height="100%" fill="url(#rg1)"/>
-        <circle cx="300" cy="400" r="200" fill="none" stroke="#5dffb8" strokeWidth=".6" opacity=".3"/>
-        <circle cx="300" cy="400" r="140" fill="none" stroke="#5dffb8" strokeWidth=".5" opacity=".2"/>
-        <circle cx="300" cy="400" r="80" fill="none" stroke="#5dffb8" strokeWidth=".5" opacity=".1"/>
-        <text x="300" y="415" textAnchor="middle" fontFamily="Syne" fontSize="48" fill="#5dffb8" opacity=".85" fontWeight="800">LAUNCH</text>
-        <text x="300" y="460" textAnchor="middle" fontFamily="DM Sans" fontSize="12" fill="#5dffb8" opacity=".5" letterSpacing="5">TECHVAULT 2024</text>
-      </svg>
-    )},
-    { cat: 'paid', className: '', minH: 280, bgClass: 'mi-b', tag: 'Paid Media', name: 'Luminary Growth', meta: '4.2x ROAS at $400K/mo', svg: (
-      <svg viewBox="0 0 500 375" xmlns="http://www.w3.org/2000/svg" style={{ position:'absolute',inset:0,width:'100%',height:'100%',opacity:.65 }}>
-        <text x="60" y="280" fontFamily="Syne" fontSize="90" fill="rgba(123,95,255,.2)" fontWeight="800">300%</text>
-        {[100,140,120,90,70,50].map((y,i) => <rect key={i} x={60+i*20} y={y} width="3" height={220-y} fill="#7b5fff" opacity={.3+i*.08}/>)}
-      </svg>
-    )},
-    { cat: 'social', className: '', minH: 280, bgClass: 'mi-c', tag: 'Social Media', name: 'Orbit Commerce', meta: '800K community built in 12 months', svg: (
-      <svg viewBox="0 0 500 375" xmlns="http://www.w3.org/2000/svg" style={{ position:'absolute',inset:0,width:'100%',height:'100%',opacity:.65 }}>
-        <circle cx="250" cy="188" r="110" fill="none" stroke="#ff5d9e" strokeWidth="28" strokeDasharray="450 250" strokeDashoffset="-30" opacity=".35"/>
-        <circle cx="250" cy="188" r="65" fill="rgba(255,93,158,.07)" stroke="#5dffb8" strokeWidth="1" opacity=".6"/>
-        <text x="250" y="197" textAnchor="middle" fontFamily="Syne" fontSize="28" fill="#5dffb8" opacity=".9" fontWeight="800">+800K</text>
-        <text x="250" y="218" textAnchor="middle" fontFamily="DM Sans" fontSize="10" fill="#5dffb8" opacity=".5" letterSpacing="3">FOLLOWERS</text>
-      </svg>
-    )},
-  ];
-
-  const isVisible = (cat) => pfFilter === 'all' || cat.split(' ').includes(pfFilter);
-
+// ─── Marquee ──────────────────────────────────────────────────────────────────
+function Marquee() {
+  const items = ['SEO Strategy','Paid Media','Social Media','Brand Identity','Content Marketing','Email Campaigns','Analytics','Growth Hacking','CRO','Influencer Marketing'];
+  const doubled = [...items,...items];
   return (
-    <div ref={rootRef} className={`ds-root${theme === 'light' ? ' ds-light' : ''}`} id="dsphery-root">
-      {/* Cursor */}
-      <div id="dsCursorDot"><div id="dsCursorDotInner" /></div>
-      <div id="dsCursorRing" />
-      <div id="dsCursorRing2" />
-
-      {/* Loader */}
-      <div className={`ds-loader${loaderHidden ? ' hidden' : ''}`}>
-        <div className="loader-word">{'DSPHERY'.split('').map((c, i) => <span key={i}>{c}</span>)}</div>
-        <div className="loader-orb" />
-        <div className="loader-pct">{loaderPct}%</div>
+    <div className="marquee-wrap">
+      <div className="marquee-track">
+        {doubled.map((it,i)=>(
+          <span key={i} style={{display:'inline-flex',alignItems:'center'}}>
+            <span className="marquee-item">{it}</span>
+            {i%3===2&&<span className="marquee-dot"/>}
+          </span>
+        ))}
       </div>
+    </div>
+  );
+}
 
-      {/* Scroll Progress */}
-      <div className="scroll-prog"><div className="scroll-prog-bar" style={{ width: scrollPct + '%' }} /></div>
-
-      {/* NAV */}
-      <nav className="ds-nav">
-        <a href="#home" className="ds-logo"><div className="logo-orb" />DSPHERY</a>
-        <ul className="nav-links">
-          {['services','work','process','contact'].map(s => (
-            <li key={s}><a href={`#${s}`} style={{ textTransform: 'capitalize' }}>{s}</a></li>
-          ))}
-          <li><a href="#contact" className="nav-cta">Start a Project</a></li>
-        </ul>
-        <div className="nav-right">
-          <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-            <span className="t-icon sun">☀️</span>
-            <span className="t-icon moon">🌙</span>
-          </button>
-          <button className={`hamburger${mobileOpen ? ' open' : ''}`} onClick={() => setMobileOpen(o => !o)}>
-            <span/><span/><span/>
-          </button>
+// ─── Footer ───────────────────────────────────────────────────────────────────
+function Footer({setPage}) {
+  const go = (p) => { setPage(p); window.scrollTo({top:0,behavior:'smooth'}); };
+  return (
+    <footer className="footer">
+      <div className="footer-top">
+        <div className="footer-brand">
+          <div className="nav-logo" style={{cursor:'pointer'}} onClick={()=>go('home')}>
+            <div className="logo-gem"/>
+            DSPHERY
+          </div>
+          <p>A digital marketing agency obsessed with performance, precision, and measurable results for ambitious brands.</p>
+          <div className="social-row" style={{marginTop:24}}>
+            {[['𝕏','Twitter'],['in','LinkedIn'],['ig','Instagram'],['▶','YouTube']].map(([icon,title])=>(
+              <a key={title} href="#" title={title}>{icon}</a>
+            ))}
+          </div>
         </div>
-      </nav>
+        <div className="footer-col">
+          <h5>Services</h5>
+          <ul>{['SEO','Paid Media','Social Media','Content','Analytics'].map(s=>(
+            <li key={s}><a href="#" onClick={e=>{e.preventDefault();go('services');}}>{s}</a></li>
+          ))}</ul>
+        </div>
+        <div className="footer-col">
+          <h5>Company</h5>
+          <ul>{[['About','about'],['Portfolio','portfolio'],['Pricing','pricing'],['Contact','pricing']].map(([l,p])=>(
+            <li key={l}><a href="#" onClick={e=>{e.preventDefault();go(p);}}>{l}</a></li>
+          ))}</ul>
+        </div>
+        <div className="footer-col">
+          <h5>Contact</h5>
+          <ul>
+            <li><a href="mailto:hello@dsphery.com">hello@dsphery.com</a></li>
+            <li><a href="tel:+15550000000">+1 (555) 000-0000</a></li>
+            <li><a href="#">New York, NY</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="footer-bottom">
+        <p>© 2025 DSPHERY. All rights reserved.</p>
+        <p>Crafted with ✦ precision</p>
+      </div>
+    </footer>
+  );
+}
 
-      {/* Mobile Nav */}
-      <div className={`mobile-nav${mobileOpen ? ' open' : ''}`}>
-        {['services','work','process','contact'].map(s => (
-          <a key={s} href={`#${s}`} onClick={() => setMobileOpen(false)} style={{ textTransform: 'capitalize' }}>{s}</a>
+// ─── CTA Section ─────────────────────────────────────────────────────────────
+function CTASection({setPage}) {
+  return (
+    <section className="cta-section">
+      <div className="cta-bg"/>
+      <p className="cta-eyebrow">Ready to grow?</p>
+      <h2 className="cta-h2">
+        Let's Build<br/>
+        <span>Something</span><br/>
+        Great
+      </h2>
+      <div className="cta-btns">
+        <button className="btn-primary" onClick={()=>{setPage('pricing');window.scrollTo({top:0,behavior:'smooth'});}}>Start a Project ↗</button>
+        <button className="btn-outline" onClick={()=>{setPage('about');window.scrollTo({top:0,behavior:'smooth'});}}>Learn About Us</button>
+      </div>
+    </section>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── HOME PAGE ────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+function HomePage({setPage}) {
+  useIntersect();
+  return (
+    <div className="page">
+      {/* HERO */}
+      <section className="hero">
+        <div className="hero-bg"/>
+        <div className="hero-grid-bg"/>
+        <div className="hero-inner">
+          <div className="hero-eyebrow">
+            <span className="hero-badge">Est. 2018 — New York</span>
+          </div>
+          <h1 className="hero-h1">
+            <span className="line"><span>We Build</span></span>
+            <span className="line"><span className="stroke">Brands</span></span>
+            <span className="line"><span className="hi">That Win</span></span>
+          </h1>
+          <p className="hero-desc">We craft data-driven digital strategies that transform your online presence and drive measurable, compounding growth.</p>
+          <div className="hero-ctas">
+            <button className="btn-primary" onClick={()=>{setPage('services');window.scrollTo({top:0,behavior:'smooth'});}}>Explore Services ↗</button>
+            <button className="btn-outline" onClick={()=>{setPage('portfolio');window.scrollTo({top:0,behavior:'smooth'});}}>View Our Work</button>
+          </div>
+          <div className="hero-stats">
+            {[
+              {n:'240',suf:'+',lbl:'Clients Served'},
+              {n:'$4.2B',suf:'',lbl:'Revenue Generated'},
+              {n:'97',suf:'%',lbl:'Client Retention'},
+            ].map((s,i)=>(
+              <div key={i} className="stat-item">
+                <div className="stat-num">
+                  {s.n.startsWith('$') ? <><em>{s.n}</em></> : <><em>{s.n}</em>{s.suf}</>}
+                </div>
+                <div className="stat-lbl">{s.lbl}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="hero-visual"><Globe/></div>
+        <div className="scroll-hint">
+          <div className="scroll-line"/>
+          <span>Scroll</span>
+        </div>
+      </section>
+
+      <Marquee/>
+
+      {/* BENTO STATS */}
+      <div className="bento">
+        {[
+          {n:'240+',lbl:'Clients Worldwide',desc:'From startups to Fortune 500 companies across 30+ industries.'},
+          {n:'$4.2B',lbl:'Revenue Generated',desc:'Collective client revenue attributable to our digital strategies.'},
+          {n:'97%',lbl:'Client Retention',desc:'We become long-term partners because results speak louder.'},
+          {n:'8+',lbl:'Years of Excellence',desc:'A decade of staying ahead in the rapidly evolving digital landscape.'},
+        ].map((s,i)=>(
+          <div key={i} className={`bento-card fade-in fade-d${i+1}`}>
+            <div className="bento-num"><em>{s.n}</em></div>
+            <div className="bento-lbl">{s.lbl}</div>
+            <div className="bento-desc">{s.desc}</div>
+          </div>
         ))}
       </div>
 
-      {/* HERO */}
-      <section className="ds-hero" id="home">
-        <div className="hero-bg">
-          <div className="hero-noise" />
-          <div className="hero-glow" />
-          <div className="hero-grid" />
-          <div className="fpills">
-            {['✦ SEO & Content','✦ Paid Ads','✦ Brand Strategy','✦ Data Analytics'].map((p,i) => (
-              <span key={i} className="fpill">{p}</span>
-            ))}
-          </div>
-        </div>
-        <Globe />
-        <div className="hero-content">
-          <div className="hero-eyebrow"><div className="eyebrow-dot" />Digital Marketing Agency — Est. 2018</div>
-          <h1 className="hero-title">
-            <span className="tl"><span>We Build</span></span>
-            <span className="tl"><span className="t-outline">Brands That</span></span>
-            <span className="tl"><span className="t-accent">Dominate</span></span>
-          </h1>
-        </div>
-        <div className="hero-bottom">
-          <div>
-            <p className="hero-desc">We craft data-driven digital strategies that transform your online presence and drive measurable growth for ambitious businesses.</p>
-            <div className="hero-ctas">
-              <a href="#contact" className="btn-primary">Start a Project <span>↗</span></a>
-              <a href="#work" className="btn-ghost">View Our Work</a>
-            </div>
-          </div>
-          <div className="hero-stats">
-            <div><div className="stat-n"><span>240</span>+</div><div className="stat-l">Clients Served</div></div>
-            <div><div className="stat-n">$4.2B</div><div className="stat-l">Revenue Generated</div></div>
-            <div><div className="stat-n"><span>97</span>%</div><div className="stat-l">Client Retention</div></div>
-          </div>
-        </div>
-        <div className="scroll-ind"><div className="scroll-ln" /><span>Scroll</span></div>
-      </section>
-
-      {/* MARQUEE */}
-      <div className="mq-strip">
-        <div className="mq-track">
-          {['SEO Strategy','Paid Media','Social Media','Brand Identity','Content Marketing','Email Campaigns','Analytics','Growth Hacking','CRO','Influencer Marketing',
-            'SEO Strategy','Paid Media','Social Media','Brand Identity','Content Marketing','Email Campaigns','Analytics','Growth Hacking'].map((item, i, arr) => (
-            <span key={i}>{i % 2 === 0
-              ? <span className="mq-item">{item}</span>
-              : <><span className="mq-item">{item}</span><span className="mq-dot" /></>
-            }</span>
-          ))}
-        </div>
-      </div>
-
-      {/* COUNTER */}
-      <CounterStrip />
-
-      {/* SERVICES */}
-      <section className="ds-section" id="services">
-        <div className="sv-header reveal">
-          <div><div className="sec-label">What We Do</div><h2 className="sec-title">Our<br />Services</h2></div>
-          <p style={{ maxWidth:320, fontSize:15, lineHeight:1.75, color:'var(--fg2)', fontWeight:300 }}>End-to-end digital marketing solutions tailored to your growth ambitions.</p>
-        </div>
-        <div className="sv-grid reveal">
-          {[
-            { n:'01', icon:'🔍', title:'Search Engine Optimization', desc:'Dominate search rankings with advanced technical SEO, content strategy, and authority building that drives lasting organic growth.', tags:['On-Page','Technical','Link Building'] },
-            { n:'02', icon:'🎯', title:'Paid Media & PPC', desc:'Precision-targeted advertising across Google, Meta, TikTok and beyond. AI-optimized campaigns that convert at scale.', tags:['Google Ads','Meta','TikTok'] },
-            { n:'03', icon:'💡', title:'Brand Strategy', desc:"Build a brand that resonates. From identity and positioning to voice and visual systems, we create brands people remember.", tags:['Identity','Positioning','Voice'] },
-            { n:'04', icon:'📱', title:'Social Media Management', desc:'Platform-native content that builds communities, drives engagement, and converts followers into loyal customers.', tags:['Content','Community','Growth'] },
-            { n:'05', icon:'✍️', title:'Content Marketing', desc:'Strategic content that educates, entertains, and converts. From blog posts to video scripts, we tell your story compellingly.', tags:['Blog','Video','Email'] },
-            { n:'06', icon:'📊', title:'Analytics & Growth', desc:'Data is our obsession. We track every metric, find every opportunity, and continuously optimize to compound growth.', tags:['Reporting','CRO','A/B Testing'] },
-          ].map((s, i) => (
-            <div key={i} className="sv-card">
-              <div className="sv-num">{s.n}</div>
-              <div className="sv-icon">{s.icon}</div>
-              <div className="sv-title">{s.title}</div>
-              <div className="sv-desc">{s.desc}</div>
-              <div className="sv-tags">{s.tags.map(t => <span key={t} className="sv-tag">{t}</span>)}</div>
-              <span className="sv-arrow">↗</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* CLIENTS */}
-      <div className="clients-strip">
-        <div className="clients-lbl reveal">Trusted By Forward-Thinking Brands</div>
-        <div style={{ overflow:'hidden' }}>
+      <div className="clients-section">
+        <p className="clients-label">Trusted by forward-thinking brands</p>
+        <div style={{overflow:'hidden'}}>
           <div className="clients-track">
-            {['TECHVAULT','LUMINARY','ORBITCO','NEXGEN','PULSE','MERIDIAN','VANTA','AXIOM',
-              'TECHVAULT','LUMINARY','ORBITCO','NEXGEN','PULSE','MERIDIAN','VANTA','AXIOM'].map((c,i) => (
-              <span key={i} className="cl-logo">{c}</span>
+            {['TECHVAULT','LUMINARY','ORBITCO','NEXGEN','PULSE','MERIDIAN','VANTA','AXIOM','NOVA','QUANTA',
+              'TECHVAULT','LUMINARY','ORBITCO','NEXGEN','PULSE','MERIDIAN','VANTA','AXIOM','NOVA','QUANTA'].map((c,i)=>(
+              <span key={i} className="client-name">{c}</span>
             ))}
           </div>
         </div>
       </div>
 
-      {/* PORTFOLIO */}
-      <section className="ds-section" id="work">
-        <div className="work-header reveal">
-          <div><div className="sec-label">Selected Work</div><h2 className="sec-title">Cases That<br />Speak Volumes</h2></div>
-          <a href="#" className="view-all">View All Projects →</a>
-        </div>
-        <div className="ftabs reveal">
-          {[['all','All'],['seo','SEO'],['paid','Paid Media'],['brand','Brand'],['social','Social']].map(([v,l]) => (
-            <button key={v} className={`ftab${pfFilter === v ? ' active' : ''}`} onClick={() => setPfFilter(v)}>{l}</button>
-          ))}
-        </div>
-        <div className="pf-grid reveal">
-          {portfolioItems.map((item, i) => (
-            <div key={i} className={`pf-item${item.className ? ' ' + item.className : ''}`}
-              style={{ opacity: isVisible(item.cat) ? 1 : .15, transform: isVisible(item.cat) ? 'scale(1)' : 'scale(.97)', pointerEvents: isVisible(item.cat) ? '' : 'none' }}>
-              <div className={`mock-img ${item.bgClass}`} style={{ height:'100%', minHeight:item.minH, position:'relative' }}>
-                {item.svg}
-              </div>
-              <div className="pf-overlay">
-                <div className="pf-tag">{item.tag}</div>
-                <div className="pf-name">{item.name}</div>
-                <div className="pf-meta">{item.meta}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* PROCESS */}
-      <section className="ds-section" id="process" style={{ paddingTop:0 }}>
-        <div className="proc-inner">
-          <div className="proc-text reveal">
-            <div className="sec-label">Our Approach</div>
-            <h2 className="sec-title">How We<br />Make Magic</h2>
-            <p className="proc-body">We don't believe in cookie-cutter strategies. Every brand is unique and deserves a tailored approach built on real data and sharp creative thinking.</p>
-            <a href="#contact" className="btn-primary">Work With Us <span>→</span></a>
+      {/* FEATURES — fixed two-column grid */}
+      <section className="features-section">
+        {/* Left column: label + title + description + CTA */}
+        <div className="features-left fade-in">
+          <p className="label">What sets us apart</p>
+          <h2 className="section-title" style={{marginTop:16}}>
+            Why Choose<br/><span className="outline">DSPHERY</span>
+          </h2>
+          <p style={{fontSize:15,color:'var(--fg2)',marginTop:24,lineHeight:1.75,maxWidth:380,fontWeight:300}}>
+            We combine deep expertise with cutting-edge technology to deliver strategies that outperform the market.
+          </p>
+          <div style={{marginTop:36}}>
+            <button className="btn-primary" onClick={()=>{setPage('about');window.scrollTo({top:0,behavior:'smooth'});}}>About Us ↗</button>
           </div>
-          <ul className="steps-list reveal">
+          {/* Feature list sits in left column below intro */}
+          <div className="features-list" style={{marginTop:48}}>
             {[
-              { n:'01', title:'Discovery & Audit', desc:"We dissect your current digital presence, analyze competitors, and identify the biggest growth opportunities hiding in plain sight." },
-              { n:'02', title:'Strategy Blueprint', desc:"A bespoke roadmap with clear KPIs, channel mix, budget allocation, and 90-day sprints designed to compound results over time." },
-              { n:'03', title:'Launch & Optimize', desc:"Rapid deployment, A/B testing, and relentless iteration. We move fast, measure everything, and double down on what works." },
-              { n:'04', title:'Scale & Report', desc:"Monthly deep-dive reports, quarterly strategy reviews, and proactive scaling when we find winning signals in your data." },
-            ].map((s, i) => (
-              <li key={i} className="step-item">
-                <div className="step-num">{s.n}</div>
-                <div><div className="step-title">{s.title}</div><div className="step-desc">{s.desc}</div></div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* TESTIMONIALS */}
-      <section className="ds-testimonials">
-        <div className="sec-label reveal">What Clients Say</div>
-        <div className="testi-grid">
-          {[
-            { cls:'av-a', init:'JM', name:'James Mitchell', role:'CEO, TechVault', text:"DSPHERY transformed our SEO from an afterthought into our #1 revenue channel. Organic traffic grew 420% in eight months — completely beyond our expectations." },
-            { cls:'av-b', init:'SK', name:'Sarah Kim', role:'CMO, Luminary Co.', text:"Their paid media team is exceptional. We scaled from $50K to $400K monthly ad spend while maintaining a 4.2x ROAS. The ROI speaks for itself.", delay:'rd1' },
-            { cls:'av-c', init:'RP', name:'Ryan Park', role:'Founder, Orbit Commerce', text:"In 12 months DSPHERY built us a social presence with 800K engaged followers and a community that actively champions our brand.", delay:'rd2' },
-          ].map((t, i) => (
-            <div key={i} className={`testi-card reveal${t.delay ? ' ' + t.delay : ''}`}>
-              <div className="stars">★★★★★</div>
-              <div className="testi-q">"</div>
-              <p className="testi-text">{t.text}</p>
-              <div className="testi-author">
-                <div className={`t-avatar ${t.cls}`}>{t.init}</div>
-                <div><div className="t-name">{t.name}</div><div className="t-role">{t.role}</div></div>
+              {n:'01',title:'Data-First Approach',desc:'Every decision we make is grounded in real data, not guesswork. We track and measure everything to maximize ROI.'},
+              {n:'02',title:'Custom Strategy',desc:"No cookie-cutter solutions. We craft bespoke strategies tailored to your brand's unique goals and competitive landscape."},
+              {n:'03',title:'Full-Funnel Expertise',desc:'From awareness to conversion and retention, we own the entire customer journey and optimize every touchpoint.'},
+              {n:'04',title:'Transparent Reporting',desc:'Deep-dive monthly reports with real metrics that actually matter to your business growth and bottom line.'},
+            ].map((f,i)=>(
+              <div key={i} className="feature-item">
+                <div className="fi-num">{f.n}</div>
+                <div>
+                  <div className="fi-title">{f.title}</div>
+                  <div className="fi-desc">{f.desc}</div>
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right column: visual card — sticky */}
+        <div className="features-visual fade-in fade-d2" style={{position:'sticky',top:'calc(var(--nav-h) + 24px)'}}>
+          <div className="fv-card">
+            <div className="fv-metric">
+              <div className="fv-label">Avg. Organic Growth</div>
+              <div className="fv-value">+312%</div>
             </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="cta-section" id="contact">
-        <div className="cta-bg" />
-        <div className="cta-lbl">Ready to Grow?</div>
-        <h2 className="cta-title reveal">Let's Build<br /><span>Something</span><br />Great</h2>
-        <div style={{ display:'flex', gap:16, justifyContent:'center', flexWrap:'wrap' }}>
-          <a href="mailto:hello@dsphery.com" className="btn-dark">Start Your Project <span>↗</span></a>
-          <a href="tel:+1234567890" className="btn-ghost" style={{ color:'var(--fg)', borderColor:'var(--border)' }}>Book a Call</a>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="ds-footer">
-        <div className="ft-top">
-          <div>
-            <a href="#home" className="ds-logo"><div className="logo-orb" />DSPHERY</a>
-            <p className="ft-tl">A digital marketing agency obsessed with performance, precision, and measurable results.</p>
-            <div className="social-links" style={{ marginTop:24 }}>
-              {[['𝕏','Twitter'],['in','LinkedIn'],['ig','Instagram'],['▶','YouTube']].map(([icon,title]) => (
-                <a key={title} href="#" title={title}>{icon}</a>
+            <div className="fv-bars">
+              {[
+                ['SEO',     88,'var(--accent)'],
+                ['Paid Media',95,'var(--accent2)'],
+                ['Social',  76,'var(--accent3)'],
+                ['Content', 82,'var(--accent)'],
+              ].map(([label,pct,color],i)=>(
+                <div key={i} className="fv-bar-row">
+                  <div className="fv-bar-label">{label}</div>
+                  <div className="fv-bar-bg">
+                    <div className="fv-bar-fill" style={{width:`${pct}%`,background:color}}/>
+                  </div>
+                  <div className="fv-bar-pct">{pct}%</div>
+                </div>
               ))}
             </div>
           </div>
-          <div className="ft-links">
-            <div className="ft-col"><h4>Services</h4><ul>{['SEO','Paid Media','Social Media','Content','Analytics'].map(s => <li key={s}><a href="#">{s}</a></li>)}</ul></div>
-            <div className="ft-col"><h4>Company</h4><ul>{['About','Work','Blog','Careers','Contact'].map(s => <li key={s}><a href="#">{s}</a></li>)}</ul></div>
-            <div className="ft-col"><h4>Contact</h4><ul><li><a href="#">hello@dsphery.com</a></li><li><a href="#">+1 (555) 000-0000</a></li><li><a href="#">New York, NY</a></li></ul></div>
+        </div>
+      </section>
+
+      {/* TESTIMONIAL TEASE */}
+      <section className="tease-section">
+        <div className="tease-inner">
+          <div className="fade-in">
+            <p className="label">Social proof</p>
+            <h2 className="section-title" style={{marginTop:16,fontSize:'clamp(44px,5vw,70px)'}}>
+              What Clients<br/><span className="accent">Say</span>
+            </h2>
+            <p style={{fontSize:15,color:'var(--fg2)',marginTop:20,lineHeight:1.75,fontWeight:300}}>
+              Don't take our word for it — here's what our clients say about working with DSPHERY.
+            </p>
+          </div>
+          <div className="tease-cards fade-in fade-d2">
+            {[
+              {bg:'linear-gradient(135deg,#00ffb2,#00d080)',color:'#04050a',init:'JM',name:'James Mitchell',role:'CEO, TechVault',text:'DSPHERY transformed our SEO into our #1 revenue channel. 420% growth in 8 months.'},
+              {bg:'linear-gradient(135deg,#6e44ff,#4020cc)',color:'#fff',init:'SK',name:'Sarah Kim',role:'CMO, Luminary',text:'Scaled from $50K to $400K monthly ad spend while keeping a 4.2x ROAS. Exceptional.'},
+              {bg:'linear-gradient(135deg,#ff3d6a,#cc0040)',color:'#fff',init:'RP',name:'Ryan Park',role:'Founder, Orbit Commerce',text:'800K engaged followers in 12 months. Our community actively champions our brand now.'},
+              {bg:'linear-gradient(135deg,#00d4ff,#0080cc)',color:'#fff',init:'LC',name:'Lisa Chen',role:'VP Marketing, Nexgen',text:"Best marketing investment we've ever made. ROI was visible within the first 60 days."},
+            ].map((t,i)=>(
+              <div key={i} className="tease-card">
+                <div className="tease-stars">★★★★★</div>
+                <p className="tease-text">{t.text}</p>
+                <div className="tease-author">
+                  <div className="ta-av" style={{background:t.bg,color:t.color}}>{t.init}</div>
+                  <div>
+                    <div className="ta-name">{t.name}</div>
+                    <div className="ta-role">{t.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="ft-bottom">
-          <p className="ft-copy">© 2025 DSPHERY. All rights reserved.</p>
-          <p className="ft-copy">Crafted with ✦ precision</p>
-        </div>
-      </footer>
+      </section>
 
-      {/* AI CHAT */}
-      <AIChat />
+      <CTASection setPage={setPage}/>
+      <Footer setPage={setPage}/>
     </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── SERVICES PAGE ────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+function ServicesPage({setPage}) {
+  useIntersect();
+  const svcs = [
+    {n:'01',icon:'🔍',title:'Search Engine Optimization',desc:'Dominate search rankings with advanced technical SEO, content strategy, and authority building that drives lasting organic growth.',tags:['On-Page SEO','Technical SEO','Link Building','Local SEO']},
+    {n:'02',icon:'🎯',title:'Paid Media & PPC',desc:'Precision-targeted advertising across Google, Meta, TikTok and beyond. AI-optimized campaigns that convert at scale while continuously reducing cost per acquisition.',tags:['Google Ads','Meta Ads','TikTok Ads','Programmatic']},
+    {n:'03',icon:'💡',title:'Brand Strategy',desc:"Build a brand that resonates deeply and stands apart. From identity systems to brand voice and visual language — we craft brands people remember, trust, and advocate for.",tags:['Brand Identity','Positioning','Messaging','Voice & Tone']},
+    {n:'04',icon:'📱',title:'Social Media Management',desc:'Platform-native content that builds engaged communities, drives meaningful conversations, and converts followers into loyal brand advocates and paying customers.',tags:['Content Calendar','Community','Influencer','Reporting']},
+    {n:'05',icon:'✍️',title:'Content Marketing',desc:'Strategic content that educates, entertains, and converts. From blog posts and whitepapers to video scripts and podcasts — we tell your story compellingly across every channel.',tags:['Blog Writing','Video Scripts','Email','Whitepapers']},
+    {n:'06',icon:'📊',title:'Analytics & Growth',desc:'Data is our obsession. We track every meaningful metric, uncover every hidden opportunity, and continuously optimize to compound your growth over time.',tags:['Dashboards','CRO','A/B Testing','Attribution']},
+  ];
+  return (
+    <div className="page">
+      <section className="services-hero">
+        <div className="services-hero-inner">
+          <div className="fade-in">
+            <p className="label">What we do</p>
+            <h1 className="section-title" style={{marginTop:16}}>
+              Full-Stack<br/>
+              <span className="outline">Digital</span><br/>
+              <span className="accent">Marketing</span>
+            </h1>
+          </div>
+          <div className="fade-in fade-d2">
+            <p className="services-intro">
+              End-to-end digital marketing solutions designed to work together as a unified growth engine — not isolated tactics. Every service we offer is built on data, driven by creativity, and measured relentlessly.
+            </p>
+            <div style={{display:'flex',gap:14,marginTop:36,flexWrap:'wrap',alignItems:'center'}}>
+              <button className="btn-primary" onClick={()=>{setPage('pricing');window.scrollTo({top:0,behavior:'smooth'});}}>View Pricing ↗</button>
+              <button className="btn-outline" onClick={()=>{setPage('portfolio');window.scrollTo({top:0,behavior:'smooth'});}}>See Results</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <Marquee/>
+
+      <div style={{padding:'64px 0 0'}}>
+        <div className="services-grid fade-in">
+          {svcs.map((s,i)=>(
+            <div key={i} className="svc-card">
+              <div className="svc-num">{s.n}</div>
+              <div className="svc-icon">{s.icon}</div>
+              <div className="svc-title">{s.title}</div>
+              <div className="svc-desc">{s.desc}</div>
+              <div className="svc-tags">{s.tags.map(t=><span key={t} className="svc-tag">{t}</span>)}</div>
+              <span className="svc-arrow">↗</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Process */}
+      <section className="process-section">
+        <div className="section-header-center">
+          <p className="label" style={{justifyContent:'center'}}>How we work</p>
+          <h2 className="section-title" style={{marginTop:16,textAlign:'center'}}>
+            Our <span className="accent">Process</span>
+          </h2>
+          <p style={{fontSize:15,color:'var(--fg2)',marginTop:16,maxWidth:480,marginInline:'auto',fontWeight:300,lineHeight:1.7}}>
+            Every engagement follows a proven, repeatable framework designed to maximize results from day one.
+          </p>
+        </div>
+        <div className="process-grid">
+          {[
+            {n:'01',title:'Discovery & Audit',desc:'We dissect your digital presence, analyze competitors, and map out the biggest growth opportunities hiding in plain sight.'},
+            {n:'02',title:'Strategy Blueprint',desc:'A bespoke roadmap with clear KPIs, channel mix, budget allocation, and 90-day sprints built to compound over time.'},
+            {n:'03',title:'Launch & Optimize',desc:'Rapid deployment, continuous A/B testing, and relentless iteration. We move fast and double down on what works.'},
+            {n:'04',title:'Scale & Report',desc:'Monthly deep-dive reports, quarterly strategy reviews, and proactive scaling when we find winning signals in your data.'},
+          ].map((s,i)=>(
+            <div key={i} className="proc-step fade-in">
+              <div className="proc-step-num">{s.n}</div>
+              <div className="proc-step-title">{s.title}</div>
+              <div className="proc-step-desc">{s.desc}</div>
+              {i<3&&<div className="proc-connector">→</div>}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <CTASection setPage={setPage}/>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── PORTFOLIO PAGE ───────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+const PROJECTS = [
+  {cat:'seo brand',tag:'Brand Strategy + SEO',title:'TechVault Rebrand',meta:'Enterprise SaaS — B2B',result:'420% organic growth · 8 months',bg:'linear-gradient(135deg,#091a0f,#030f07)',
+    svg:<svg viewBox="0 0 500 280" style={{width:'100%',height:'100%',position:'absolute',inset:0,opacity:.7}}><circle cx="250" cy="140" r="120" fill="none" stroke="#00ffb2" strokeWidth="40" strokeDasharray="350 450" opacity=".15"/><text x="250" y="155" textAnchor="middle" fontFamily="Bebas Neue" fontSize="64" fill="#00ffb2" opacity=".6" letterSpacing="4">LAUNCH</text></svg>},
+  {cat:'paid',tag:'Paid Media & PPC',title:'Luminary Growth',meta:'DTC Consumer Goods',result:'4.2x ROAS at $400K/mo',bg:'linear-gradient(135deg,#0d0a1f,#050215)',
+    svg:<svg viewBox="0 0 500 280" style={{width:'100%',height:'100%',position:'absolute',inset:0,opacity:.7}}>{[100,160,130,90,70,55,40].map((y,i)=><rect key={i} x={60+i*52} y={y} width="36" height={220-y} fill="#6e44ff" opacity={.15+i*.04} rx="4"/>)}<text x="390" y="80" textAnchor="middle" fontFamily="Bebas Neue" fontSize="42" fill="#6e44ff" opacity=".5">+320%</text></svg>},
+  {cat:'social',tag:'Social Media',title:'Orbit Commerce',meta:'E-Commerce Retail',result:'800K community in 12 months',bg:'linear-gradient(135deg,#1a0a14,#0f0009)',
+    svg:<svg viewBox="0 0 500 280" style={{width:'100%',height:'100%',position:'absolute',inset:0,opacity:.7}}><circle cx="250" cy="140" r="100" fill="none" stroke="#ff3d6a" strokeWidth="30" strokeDasharray="280 350" opacity=".2"/><text x="250" y="152" textAnchor="middle" fontFamily="Bebas Neue" fontSize="44" fill="#00ffb2" opacity=".7">800K</text><text x="250" y="178" textAnchor="middle" fontFamily="Bebas Neue" fontSize="14" fill="#00ffb2" opacity=".4" letterSpacing="5">FOLLOWERS</text></svg>},
+  {cat:'seo content',tag:'SEO + Content',title:'Nexgen Digital',meta:'FinTech Platform',result:'5x organic traffic · 6 months',bg:'linear-gradient(135deg,#081520,#030d18)',
+    svg:<svg viewBox="0 0 500 280" style={{width:'100%',height:'100%',position:'absolute',inset:0,opacity:.7}}>{[[60,220],[110,180],[160,160],[210,130],[260,100],[310,80],[360,50]].map(([x,y],i,arr)=>i>0&&<line key={i} x1={arr[i-1][0]} y1={arr[i-1][1]} x2={x} y2={y} stroke="#00ffb2" strokeWidth="2" opacity=".4"/>)}<text x="380" y="40" textAnchor="middle" fontFamily="Bebas Neue" fontSize="32" fill="#00ffb2" opacity=".6">5x</text></svg>},
+  {cat:'brand',tag:'Brand Strategy',title:'Pulse Health Co.',meta:'Health & Wellness',result:'Full rebrand + 180% revenue lift',bg:'linear-gradient(135deg,#1a0f04,#120a02)',
+    svg:<svg viewBox="0 0 500 280" style={{width:'100%',height:'100%',position:'absolute',inset:0,opacity:.7}}><path d="M60,140 L110,90 L160,140 L210,60 L260,140 L310,100 L360,140 L410,120" fill="none" stroke="#ff3d6a" strokeWidth="2.5" opacity=".4"/><text x="250" y="220" textAnchor="middle" fontFamily="Bebas Neue" fontSize="28" fill="#ff3d6a" opacity=".5" letterSpacing="4">PULSE</text></svg>},
+  {cat:'paid social',tag:'Paid Media + Social',title:'Vanta Apparel',meta:'Fashion & Lifestyle',result:'12x ROAS launch campaign',bg:'linear-gradient(135deg,#0f1a0a,#080e05)',
+    svg:<svg viewBox="0 0 500 280" style={{width:'100%',height:'100%',position:'absolute',inset:0,opacity:.7}}><rect x="80" y="60" width="340" height="160" fill="none" stroke="#00ffb2" strokeWidth="1" opacity=".15" rx="8"/><text x="250" y="152" textAnchor="middle" fontFamily="Bebas Neue" fontSize="52" fill="#00ffb2" opacity=".55" letterSpacing="6">12x ROAS</text></svg>},
+];
+
+function PortfolioPage({setPage}) {
+  const [filter, setFilter] = useState('all');
+  useIntersect();
+  return (
+    <div className="page">
+      <section className="portfolio-hero">
+        <div className="fade-in">
+          <p className="label">Selected work</p>
+          <h1 className="section-title" style={{marginTop:16}}>
+            Cases That<br/>
+            <span className="outline">Speak</span><br/>
+            <span className="accent">Volumes</span>
+          </h1>
+          <p style={{fontSize:16,color:'var(--fg2)',marginTop:20,maxWidth:480,lineHeight:1.7,fontWeight:300}}>
+            A curated selection of campaigns, strategies, and transformations that drove real, measurable results for ambitious brands.
+          </p>
+        </div>
+        <div className="portfolio-filters fade-in fade-d2">
+          {[['all','All Work'],['seo','SEO'],['paid','Paid Media'],['brand','Brand'],['social','Social'],['content','Content']].map(([v,l])=>(
+            <button key={v} className={`pf-btn${filter===v?' active':''}`} onClick={()=>setFilter(v)}>{l}</button>
+          ))}
+        </div>
+      </section>
+      <div className="portfolio-grid">
+        {PROJECTS.map((p,i)=>{
+          const visible = filter==='all'||p.cat.split(' ').includes(filter);
+          return (
+            <div key={i} className={`portfolio-item fade-in${visible?'':' hidden'}`}>
+              <div className="pi-img">
+                <div className="pi-img-inner" style={{background:p.bg,position:'relative'}}>
+                  {p.svg}
+                </div>
+                <div className="pi-overlay">
+                  <span className="pi-overlay-btn">View Case Study ↗</span>
+                </div>
+              </div>
+              <div className="pi-content">
+                <div className="pi-tag">{p.tag}</div>
+                <div className="pi-title">{p.title}</div>
+                <div className="pi-meta">{p.meta}</div>
+                <div className="pi-result">✦ {p.result}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <CTASection setPage={setPage}/>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── ABOUT PAGE ───────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+function AboutPage({setPage}) {
+  useIntersect();
+  return (
+    <div className="page">
+      <section className="about-hero">
+        <div className="fade-in">
+          <p className="label">Our story</p>
+          <h1 className="section-title" style={{marginTop:16}}>
+            Built to<br/>
+            <span className="outline">Drive</span><br/>
+            <span className="accent">Results</span>
+          </h1>
+          <p className="about-content-text">
+            DSPHERY was founded in 2018 with a single belief: that great marketing should be measurable, repeatable, and unfair to competitors. We started as a scrappy team of 4 performance marketers who were tired of agencies that prioritized aesthetics over outcomes. Today, we're a full-service powerhouse of 60+ specialists across strategy, creative, media, and analytics.
+          </p>
+          <p style={{fontSize:15,color:'var(--fg2)',lineHeight:1.75,fontWeight:300,marginBottom:36}}>
+            Our clients don't hire us for pretty slide decks — they hire us because we move the needle in ways their last three agencies couldn't.
+          </p>
+          <div style={{display:'flex',gap:14,flexWrap:'wrap',alignItems:'center'}}>
+            <button className="btn-primary" onClick={()=>{setPage('pricing');window.scrollTo({top:0,behavior:'smooth'});}}>Work With Us ↗</button>
+            <button className="btn-outline" onClick={()=>{setPage('portfolio');window.scrollTo({top:0,behavior:'smooth'});}}>See Our Work</button>
+          </div>
+        </div>
+        <div className="about-visual fade-in fade-d2">
+          <div className="about-img-wrap" style={{fontSize:80}}>
+            <span style={{position:'relative',zIndex:1}}>🌐</span>
+            <div className="about-float about-float-1">
+              <div className="af-num">240+</div>
+              <div className="af-lbl">Clients Served</div>
+            </div>
+            <div className="about-float about-float-2">
+              <div className="af-num">97%</div>
+              <div className="af-lbl">Retention Rate</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="values-section">
+        <div className="section-header-center">
+          <p className="label" style={{justifyContent:'center'}}>What we believe</p>
+          <h2 className="section-title" style={{marginTop:16,textAlign:'center'}}>
+            Our <span className="accent">Values</span>
+          </h2>
+        </div>
+        <div className="values-grid">
+          {[
+            {icon:'🎯',title:'Results First',desc:"Every decision, every strategy, every creative choice is anchored to measurable outcomes. If it doesn't move the needle, we don't do it."},
+            {icon:'🔬',title:'Data Obsessed',desc:'We instrument everything, test relentlessly, and follow the data wherever it leads — even when it challenges our assumptions.'},
+            {icon:'🤝',title:'True Partnership',desc:"We become an extension of your team, not a vendor. Your wins are our wins, and we treat your budget like our own."},
+            {icon:'🚀',title:'Bold Thinking',desc:"We don't follow the playbook — we write new ones. Our best ideas come from questioning what everyone else takes for granted."},
+            {icon:'⚡',title:'Radical Speed',desc:'In digital marketing, speed is a competitive advantage. We move fast, iterate quickly, and beat competitors to market.'},
+            {icon:'💎',title:'Relentless Quality',desc:"Good enough is never enough. We obsess over the details that others miss because that's where the biggest gains hide."},
+          ].map((v,i)=>(
+            <div key={i} className={`value-card fade-in fade-d${(i%4)+1}`}>
+              <div className="value-icon">{v.icon}</div>
+              <div className="value-title">{v.title}</div>
+              <div className="value-desc">{v.desc}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Team */}
+      <section className="team-section">
+        <div className="section-header-center">
+          <p className="label" style={{justifyContent:'center'}}>The people</p>
+          <h2 className="section-title" style={{marginTop:16,textAlign:'center'}}>
+            Meet the <span className="accent">Team</span>
+          </h2>
+          <p style={{fontSize:15,color:'var(--fg2)',marginTop:16,maxWidth:480,marginInline:'auto',fontWeight:300,lineHeight:1.7}}>
+            World-class specialists who are as passionate about your growth as you are.
+          </p>
+        </div>
+        <div className="team-grid">
+          {[
+            {emoji:'👩‍💼',bg:'linear-gradient(135deg,#091a0f,#030f07)',name:'Alex Rivera',role:'CEO & Founder',bio:'Former Google performance lead. Built DSPHERY from a 4-person shop to 60+ specialists.'},
+            {emoji:'👨‍💻',bg:'linear-gradient(135deg,#0d0a1f,#050215)',name:'Marcus Chen',role:'Head of SEO',bio:'10 years of technical SEO. Responsible for over $1.2B in attributed organic revenue.'},
+            {emoji:'👩‍🎨',bg:'linear-gradient(135deg,#1a0a14,#0f0009)',name:'Priya Sharma',role:'Creative Director',bio:'Ex-Wieden+Kennedy. Believes great creative and great data are two sides of the same coin.'},
+            {emoji:'👨‍📊',bg:'linear-gradient(135deg,#081520,#030d18)',name:'Jake Thompson',role:'Head of Paid Media',bio:'Managed over $200M in ad spend. Specializes in multi-channel attribution and ROAS optimization.'},
+          ].map((m,i)=>(
+            <div key={i} className={`team-card fade-in fade-d${i+1}`}>
+              <div className="team-photo" style={{background:m.bg}}>{m.emoji}</div>
+              <div className="team-info">
+                <div className="team-name">{m.name}</div>
+                <div className="team-role">{m.role}</div>
+                <div className="team-bio">{m.bio}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <CTASection setPage={setPage}/>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── PRICING PAGE ─────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+function PricingPage({setPage}) {
+  const [annual, setAnnual] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(null);
+  useIntersect();
+
+  const plans = [
+    {tier:'Starter',name:'Growth',popular:false,desc:'Perfect for small businesses ready to scale their digital presence.',features:[
+      {ok:true,txt:'SEO Audit + On-Page Optimization'},
+      {ok:true,txt:'Monthly Content Strategy (4 pieces)'},
+      {ok:true,txt:'Google Ads Management (up to $5K budget)'},
+      {ok:true,txt:'Social Media Management (2 platforms)'},
+      {ok:true,txt:'Monthly Performance Report'},
+      {ok:true,txt:'Dedicated Account Manager'},
+      {ok:false,txt:'Brand Strategy Workshop'},
+      {ok:false,txt:'Advanced Analytics Dashboard'},
+    ]},
+    {tier:'Most Popular',name:'Scale',popular:true,desc:'Comprehensive marketing for growing companies ready to dominate.',features:[
+      {ok:true,txt:'Everything in Growth, plus:'},
+      {ok:true,txt:'Full Technical SEO Implementation'},
+      {ok:true,txt:'Multi-Channel Paid Media (up to $30K)'},
+      {ok:true,txt:'Social Media Management (4 platforms)'},
+      {ok:true,txt:'Monthly Content Strategy (12 pieces)'},
+      {ok:true,txt:'Brand Strategy Workshop (quarterly)'},
+      {ok:true,txt:'Advanced Analytics Dashboard'},
+      {ok:true,txt:'CRO Audit + A/B Testing'},
+    ]},
+    {tier:'Enterprise',name:'Dominate',popular:false,desc:'Full-service, white-glove marketing for market leaders.',features:[
+      {ok:true,txt:'Everything in Scale, plus:'},
+      {ok:true,txt:'Unlimited Paid Media Budget Management'},
+      {ok:true,txt:'Custom Brand Strategy + Identity System'},
+      {ok:true,txt:'Full Content Production Studio'},
+      {ok:true,txt:'Weekly Strategy Calls'},
+      {ok:true,txt:'Dedicated 4-person specialist team'},
+      {ok:true,txt:'Priority Support (4-hour response)'},
+      {ok:true,txt:'Quarterly Business Reviews + C-Suite Deck'},
+    ]},
+  ];
+
+  // Prices calculated correctly
+  const baseMonthly = [2990, 6990, 13990];
+  const baseAnnual  = [2490, 5990, 11990];
+
+  const faqs = [
+    {q:'Do you offer custom packages?',a:'Absolutely. Every brand is different, and we frequently build custom retainers that combine specific services. Reach out for a custom quote.'},
+    {q:"What's the minimum contract length?",a:'Our standard engagements are 3-month minimums. Annual contracts include a 15% discount and priority onboarding.'},
+    {q:'How quickly can we expect to see results?',a:'Paid media campaigns typically show results within 30 days. SEO compounds over 3-6 months. We set honest expectations upfront.'},
+    {q:'Do you work with international brands?',a:'Yes — we work with brands across North America, Europe, APAC, and the Middle East. We have multilingual capabilities.'},
+    {q:'What industries do you specialize in?',a:'We have deep expertise in B2B SaaS, E-commerce, Health & Wellness, FinTech, and Consumer Goods, among others.'},
+    {q:'Can I upgrade or downgrade my plan?',a:'Yes. You can upgrade anytime with a 30-day notice. Downgrades take effect at the next billing cycle.'},
+  ];
+
+  return (
+    <div className="page">
+      <section className="pricing-hero">
+        <p className="label" style={{justifyContent:'center'}}>Transparent pricing</p>
+        <h1 className="section-title" style={{marginTop:16,fontSize:'clamp(52px,8vw,100px)'}}>
+          Simple,<br/>
+          <span className="outline">Honest</span><br/>
+          <span className="accent">Pricing</span>
+        </h1>
+        <p className="pricing-subtitle">No hidden fees, no surprise invoices. Just clear investment levels tied directly to your growth goals.</p>
+        <div className="pricing-toggle">
+          <span className="toggle-label">Monthly</span>
+          <div className={`toggle-track${annual?' active':''}`} onClick={()=>setAnnual(a=>!a)}>
+            <div className="toggle-thumb"/>
+          </div>
+          <span className="toggle-label">Annual</span>
+          {annual&&<span className="toggle-save">Save 15%</span>}
+        </div>
+      </section>
+
+      <div className="pricing-cards">
+        {plans.map((p,i)=>{
+          const price = annual ? baseAnnual[i] : baseMonthly[i];
+          return (
+            <div key={i} className={`pricing-card fade-in fade-d${i+1}${p.popular?' featured':''}`}>
+              {p.popular&&<div className="pricing-badge">Most Popular</div>}
+              <div className="pricing-tier">{p.tier}</div>
+              <div className="pricing-name">{p.name}</div>
+              <p style={{fontSize:13,color:'var(--fg2)',lineHeight:1.6,fontWeight:300}}>{p.desc}</p>
+              <div className="pricing-price">
+                <em>$</em>
+                <span>{price.toLocaleString()}</span>
+              </div>
+              <div className="pricing-period">{annual?'per month, billed annually':'per month'}</div>
+              <div className="pricing-divider"/>
+              <div className="pricing-features">
+                {p.features.map((f,j)=>(
+                  <div key={j} className="pf-feature">
+                    <span className={f.ok?'pf-check':'pf-cross'}>{f.ok?'✓':'✗'}</span>
+                    <span style={{color:f.ok?'var(--fg2)':'var(--fg3)'}}>{f.txt}</span>
+                  </div>
+                ))}
+              </div>
+              <button
+                className={p.popular?'btn-primary':'btn-outline'}
+                style={{width:'100%',justifyContent:'center',marginTop:'auto'}}
+              >
+                Get Started ↗
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Enterprise callout */}
+      <div style={{padding:'0 var(--px) 80px'}}>
+        <div style={{
+          background:'var(--card)',border:'1px solid rgba(0,255,178,.15)',borderRadius:20,
+          padding:'48px 40px',display:'flex',gap:40,alignItems:'center',
+          justifyContent:'space-between',flexWrap:'wrap',position:'relative',overflow:'hidden'
+        }}>
+          <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at right,rgba(0,255,178,.04) 0%,transparent 60%)',pointerEvents:'none'}}/>
+          <div style={{position:'relative'}}>
+            <p className="label" style={{marginBottom:12}}>Need something custom?</p>
+            <h3 style={{fontFamily:'Bebas Neue,sans-serif',fontSize:36,letterSpacing:2,marginBottom:8}}>Let's Build Your Perfect Package</h3>
+            <p style={{fontSize:15,color:'var(--fg2)',fontWeight:300,maxWidth:480,lineHeight:1.65}}>
+              Tell us your goals and budget and we'll design a bespoke engagement that fits. No pressure, just clarity.
+            </p>
+          </div>
+          <div style={{display:'flex',gap:12,flexShrink:0,flexWrap:'wrap',position:'relative'}}>
+            <a href="mailto:hello@dsphery.com" className="btn-primary">Contact Sales ↗</a>
+            <a href="tel:+15550000000" className="btn-outline">Book a Call</a>
+          </div>
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <section className="pricing-faq">
+        <div className="section-header-center">
+          <p className="label" style={{justifyContent:'center'}}>Common questions</p>
+          <h2 className="section-title" style={{marginTop:16,textAlign:'center',fontSize:'clamp(44px,6vw,80px)'}}>FAQ</h2>
+        </div>
+        <div className="faq-grid">
+          {faqs.map((f,i)=>(
+            <div key={i} className={`faq-item fade-in${faqOpen===i?' open':''}`} onClick={()=>setFaqOpen(faqOpen===i?null:i)}>
+              <div className="faq-q">
+                <span>{f.q}</span>
+                <span className="faq-icon">+</span>
+              </div>
+              <div className="faq-a">{f.a}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <CTASection setPage={setPage}/>
+      <Footer setPage={setPage}/>
+    </div>
+  );
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+// ══════════════════════════════════════════════════════════════════════════════
+export default function App() {
+  const [page, setPage] = useState('home');
+  const [scrollPct, setScrollPct] = useState(0);
+
+  // Inject CSS
+  useEffect(()=>{
+    if(!document.getElementById('dsglobal')){
+      const s=document.createElement('style');
+      s.id='dsglobal';
+      s.textContent=GLOBAL_CSS;
+      document.head.appendChild(s);
+    }
+    return ()=>{
+      // clean up on unmount if needed
+    };
+  },[]);
+
+  // Scroll progress
+  useEffect(()=>{
+    const fn=()=>{
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollPct(total>0?(scrolled/total)*100:0);
+    };
+    window.addEventListener('scroll',fn,{passive:true});
+    return()=>window.removeEventListener('scroll',fn);
+  },[]);
+
+  // Custom cursor
+  useEffect(()=>{
+    const cur=document.getElementById('dsCursor');
+    const ring=document.getElementById('dsCursorRing');
+    if(!cur||!ring) return;
+    let rx=-200,ry=-200,mx=-200,my=-200;
+    const onMove=e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';};
+    document.addEventListener('mousemove',onMove);
+    let raf;
+    const anim=()=>{
+      rx+=(mx-rx)*.15;ry+=(my-ry)*.15;
+      ring.style.left=rx+'px';ring.style.top=ry+'px';
+      raf=requestAnimationFrame(anim);
+    };
+    raf=requestAnimationFrame(anim);
+    const addHov=()=>document.body.classList.add('hov');
+    const remHov=()=>document.body.classList.remove('hov');
+    document.querySelectorAll('a,button,.portfolio-item,.svc-card,.team-card,.bento-card,.value-card,.tease-card,.faq-item').forEach(el=>{
+      el.addEventListener('mouseenter',addHov);
+      el.addEventListener('mouseleave',remHov);
+    });
+    return()=>{document.removeEventListener('mousemove',onMove);cancelAnimationFrame(raf);};
+  });
+
+  const pages = {
+    home:     <HomePage      setPage={setPage}/>,
+    services: <ServicesPage  setPage={setPage}/>,
+    portfolio:<PortfolioPage setPage={setPage}/>,
+    about:    <AboutPage     setPage={setPage}/>,
+    pricing:  <PricingPage   setPage={setPage}/>,
+  };
+
+  return (
+    <>
+      <div id="dsCursor"/>
+      <div id="dsCursorRing"/>
+      <div id="scrollBar" style={{width:scrollPct+'%'}}/>
+      <Nav page={page} setPage={setPage}/>
+      {pages[page]}
+      <AIChat/>
+    </>
   );
 }

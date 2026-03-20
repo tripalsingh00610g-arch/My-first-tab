@@ -382,23 +382,144 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .form-success h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .form-success p { font-size: 13px; color: rgba(255,255,255,0.45); }
 
-.ai-btn { position: fixed; bottom: 28px; right: 28px; z-index: 900; width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #141a46); color: #fff; border: none; cursor: none; font-size: 17px; box-shadow: 0 4px 22px rgba(124,58,237,0.45); display: flex; align-items: center; justify-content: center; transition: transform 0.3s, box-shadow 0.3s; }
+/* AI CHAT */
+.ai-btn {
+  position: fixed; bottom: 28px; right: 28px; z-index: 900;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #141a46);
+  color: #fff; border: none; cursor: none; font-size: 17px;
+  box-shadow: 0 4px 22px rgba(124,58,237,0.45);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
 .ai-btn:hover { transform: scale(1.1); box-shadow: 0 8px 36px rgba(124,58,237,0.6); }
-.ai-popup { position: fixed; bottom: 92px; right: 28px; z-index: 900; width: 300px; background: rgba(13,17,32,0.97); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 20px; box-shadow: 0 24px 80px rgba(0,0,0,0.6); transform: scale(0.85) translateY(20px); transform-origin: bottom right; opacity: 0; pointer-events: none; transition: transform 0.3s, opacity 0.3s; }
+.ai-btn-badge {
+  position: absolute; top: -3px; right: -3px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: #22c55e; border: 2px solid #060810;
+  animation: badgePulse 2s infinite;
+}
+@keyframes badgePulse {
+  0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,0.4)}
+  50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}
+}
+.ai-popup {
+  position: fixed; bottom: 88px; right: 28px; z-index: 900;
+  width: 340px; background: rgba(8,10,22,0.98);
+  border: 1px solid rgba(124,58,237,0.25); border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,58,237,0.1);
+  transform: scale(0.85) translateY(20px); transform-origin: bottom right;
+  opacity: 0; pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.35s;
+  display: flex; flex-direction: column; max-height: 520px;
+  overflow: hidden;
+}
 .ai-popup.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
-.ai-hdr { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-.ai-dot { width: 7px; height: 7px; border-radius: 50%; background: #7c3aed; animation: orbPulse 2s infinite; }
-.ai-ttl { font-size: 12px; font-weight: 700; color: #fff; font-family: 'Syne', sans-serif; }
-.ai-sub { font-size: 10px; color: rgba(255,255,255,0.3); margin-left: auto; }
-.ai-msgs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; max-height: 180px; overflow-y: auto; }
-.ai-msg { font-size: 12px; line-height: 1.5; padding: 8px 11px; border-radius: 9px; max-width: 85%; }
-.ai-msg.bot { background: rgba(20,26,70,0.5); color: #fff; border-radius: 9px 9px 9px 2px; }
-.ai-msg.user { background: linear-gradient(135deg, #7c3aed, #141a46); color: #fff; align-self: flex-end; border-radius: 9px 9px 2px 9px; }
-.ai-irow { display: flex; gap: 7px; }
-.ai-in { flex: 1; background: rgba(20,26,70,0.4); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 7px; padding: 8px 11px; font-size: 12px; font-family: inherit; outline: none; }
+.ai-header {
+  padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(20,26,70,0.6), rgba(124,58,237,0.08));
+}
+.ai-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #141a46);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0; position: relative;
+}
+.ai-avatar-dot {
+  position: absolute; bottom: 1px; right: 1px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #22c55e; border: 1.5px solid #080a16;
+}
+.ai-header-info { flex: 1; }
+.ai-header-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
+.ai-header-status { font-size: 9px; color: #22c55e; letter-spacing: 0.5px; margin-top: 1px; display: flex; align-items: center; gap: 4px; }
+.ai-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; animation: badgePulse 2s infinite; }
+.ai-close { background: none; border: none; color: rgba(255,255,255,0.3); cursor: none; font-size: 16px; padding: 2px; transition: color 0.2s; line-height: 1; }
+.ai-close:hover { color: #fff; }
+.ai-quick-chips {
+  padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0;
+  background: rgba(20,26,70,0.15);
+}
+.ai-chip {
+  font-size: 9px; letter-spacing: 0.5px; padding: 4px 9px;
+  border: 1px solid rgba(124,58,237,0.3); border-radius: 100px;
+  color: rgba(167,139,250,0.8); background: rgba(124,58,237,0.08);
+  cursor: none; transition: all 0.2s; white-space: nowrap;
+}
+.ai-chip:hover { background: rgba(124,58,237,0.25); color: #fff; border-color: #7c3aed; }
+.ai-msgs {
+  flex: 1; overflow-y: auto; padding: 14px 12px;
+  display: flex; flex-direction: column; gap: 9px;
+  scrollbar-width: thin; scrollbar-color: rgba(124,58,237,0.3) transparent;
+}
+.ai-msgs::-webkit-scrollbar { width: 3px; }
+.ai-msgs::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 3px; }
+.ai-msg-wrap { display: flex; gap: 7px; align-items: flex-end; }
+.ai-msg-wrap.user { flex-direction: row-reverse; }
+.ai-msg-avatar {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, #7c3aed, #141a46);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; margin-bottom: 2px;
+}
+.ai-msg {
+  font-size: 12px; line-height: 1.6; padding: 9px 12px;
+  border-radius: 13px; max-width: 82%; word-break: break-word;
+}
+.ai-msg.bot {
+  background: rgba(20,26,70,0.6); color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 13px 13px 13px 3px;
+}
+.ai-msg.user {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: #fff; border-radius: 13px 13px 3px 13px;
+}
+.ai-msg-time { font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 3px; text-align: right; }
+.ai-typing {
+  display: flex; align-items: center; gap: 4px;
+  padding: 9px 12px; background: rgba(20,26,70,0.6);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 13px 13px 13px 3px; width: fit-content;
+}
+.ai-typing span {
+  width: 4px; height: 4px; border-radius: 50%; background: #a78bfa;
+  animation: typingDot 1.2s ease-in-out infinite;
+}
+.ai-typing span:nth-child(2){animation-delay:0.2s}
+.ai-typing span:nth-child(3){animation-delay:0.4s}
+@keyframes typingDot {
+  0%,60%,100%{transform:translateY(0);opacity:0.4}
+  30%{transform:translateY(-4px);opacity:1}
+}
+.ai-footer {
+  padding: 10px 12px; border-top: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0; background: rgba(8,10,22,0.5);
+}
+.ai-irow { display: flex; gap: 7px; align-items: flex-end; }
+.ai-in {
+  flex: 1; background: rgba(20,26,70,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff; border-radius: 9px; padding: 9px 12px;
+  font-size: 12px; font-family: 'DM Sans', sans-serif; outline: none;
+  resize: none; min-height: 36px; max-height: 80px;
+  transition: border-color 0.2s; line-height: 1.4;
+  scrollbar-width: none;
+}
+.ai-in:focus { border-color: rgba(124,58,237,0.5); }
 .ai-in::placeholder { color: rgba(255,255,255,0.2); }
-.ai-send { width: 34px; height: 34px; border-radius: 7px; background: linear-gradient(135deg, #7c3aed, #141a46); border: none; cursor: none; color: #fff; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; flex-shrink: 0; }
-.ai-send:hover { transform: scale(1.08); }
+.ai-send {
+  width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+  background: linear-gradient(135deg, #7c3aed, #141a46);
+  border: none; cursor: none; color: #fff; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, opacity 0.2s;
+}
+.ai-send:hover:not(:disabled) { transform: scale(1.08); }
+.ai-send:disabled { opacity: 0.5; }
+.ai-powered { font-size: 9px; color: rgba(255,255,255,0.15); text-align: center; margin-top: 7px; letter-spacing: 0.5px; }
 
 .clients-track { display: inline-flex; gap: 64px; animation: mqAnim2 28s linear infinite; align-items: center; white-space: nowrap; }
 @keyframes mqAnim2 { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -436,6 +557,50 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .why-num { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: #a78bfa; line-height: 1; }
 .why-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 5px; }
 .why-desc { font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.45); margin-top: 10px; font-weight: 300; }
+
+/* MAP HERO */
+.map-hero {
+  position: relative; width: 100%; height: 580px; overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.map-hero iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+  filter: invert(88%) hue-rotate(198deg) saturate(0.65) brightness(0.8);
+}
+.map-hero::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to right, rgba(6,8,16,0.82) 0%, rgba(6,8,16,0.22) 52%, transparent 100%);
+}
+.map-panel {
+  position: absolute; top: 50%; left: 52px; transform: translateY(-50%);
+  z-index: 2; width: min(400px, calc(100% - 80px));
+  background: rgba(6,8,16,0.92); border: 1px solid rgba(124,58,237,0.3);
+  border-radius: 20px; padding: 32px 36px;
+  backdrop-filter: blur(24px); box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+.map-panel-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: #a78bfa; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.map-panel-eyebrow::before { content:''; display:inline-block; width:16px; height:1px; background:#7c3aed; }
+.map-panel-title { font-family: 'Syne', sans-serif; font-size: clamp(18px, 2vw, 26px); font-weight: 800; color: #fff; line-height: 1.12; margin-bottom: 8px; }
+.map-panel-title span { color: #a78bfa; }
+.map-panel-sub { font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.4); font-weight: 300; margin-bottom: 20px; }
+.map-info-rows { display: flex; flex-direction: column; margin-bottom: 20px; }
+.map-info-row { display: flex; align-items: flex-start; gap: 11px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.map-info-row:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
+.map-info-icon { width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.map-info-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 1px; }
+.map-info-val { font-size: 12px; color: #fff; font-weight: 400; line-height: 1.4; }
+.map-directions-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px 18px; border-radius: 100px; background: linear-gradient(135deg, #7c3aed, #141a46); color: #fff; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; font-family: 'DM Sans', sans-serif; border: none; cursor: pointer; text-decoration: none; box-shadow: 0 4px 20px rgba(124,58,237,0.4); transition: transform 0.2s, box-shadow 0.2s; }
+.map-directions-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(124,58,237,0.55); }
+.map-pin-badge { position: absolute; bottom: 20px; right: 20px; z-index: 3; background: rgba(6,8,16,0.92); border: 1px solid rgba(124,58,237,0.25); border-radius: 100px; padding: 6px 14px; backdrop-filter: blur(12px); display: flex; align-items: center; gap: 7px; font-size: 10px; color: rgba(255,255,255,0.55); }
+.map-pin-dot { width: 7px; height: 7px; border-radius: 50%; background: #a78bfa; animation: orbPulse 2s infinite; flex-shrink: 0; }
+
+@media(max-width:768px){
+  .map-hero { height: auto; display: flex; flex-direction: column; }
+  .map-hero iframe { position: relative; height: 260px; flex-shrink: 0; }
+  .map-hero::after { display: none; }
+  .map-panel { position: relative; top: auto; left: auto; transform: none; width: 100%; border-radius: 0; border-left: none; border-right: none; border-bottom: none; padding: 24px 20px; }
+  .map-pin-badge { display: none; }
+}
 
 @media(max-width:1024px){
   .sv-grid{grid-template-columns:repeat(2,1fr)}
@@ -497,10 +662,8 @@ function useHeroGlobe(canvasRef) {
     function resize() {
       const wrap = canvas.parentElement;
       if (!wrap) return;
-      const w = wrap.clientWidth;
-      const h = wrap.clientHeight;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      canvas.width = wrap.clientWidth * dpr;
+      canvas.height = wrap.clientHeight * dpr;
     }
     resize();
     window.addEventListener("resize", resize);
@@ -529,68 +692,49 @@ function useHeroGlobe(canvasRef) {
       return { sx: cx + x3 * r, sy: cy - y3 * r, visible: z3 > -0.15, depth: z3 };
     }
     function draw() {
-      const W = canvas.width / dpr;
-      const H = canvas.height / dpr;
+      const W = canvas.width / dpr, H = canvas.height / dpr;
       hCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       hCtx.clearRect(0, 0, W, H);
       const cx = W / 2, cy = H / 2, r = Math.min(W, H) * 0.44;
       const atmo = hCtx.createRadialGradient(cx, cy, r * 0.75, cx, cy, r * 1.15);
-      atmo.addColorStop(0, "rgba(124,58,237,0.04)");
-      atmo.addColorStop(0.6, "rgba(20,26,70,0.07)");
-      atmo.addColorStop(1, "transparent");
-      hCtx.beginPath(); hCtx.arc(cx, cy, r * 1.15, 0, Math.PI * 2);
-      hCtx.fillStyle = atmo; hCtx.fill();
+      atmo.addColorStop(0, "rgba(124,58,237,0.04)"); atmo.addColorStop(0.6, "rgba(20,26,70,0.07)"); atmo.addColorStop(1, "transparent");
+      hCtx.beginPath(); hCtx.arc(cx, cy, r * 1.15, 0, Math.PI * 2); hCtx.fillStyle = atmo; hCtx.fill();
       const base = hCtx.createRadialGradient(cx - r * 0.28, cy - r * 0.28, r * 0.05, cx, cy, r);
-      base.addColorStop(0, "rgba(20,26,70,0.9)");
-      base.addColorStop(0.5, "rgba(10,14,30,0.75)");
-      base.addColorStop(1, "rgba(6,8,16,0.85)");
-      hCtx.beginPath(); hCtx.arc(cx, cy, r, 0, Math.PI * 2);
-      hCtx.fillStyle = base; hCtx.fill();
+      base.addColorStop(0, "rgba(20,26,70,0.9)"); base.addColorStop(0.5, "rgba(10,14,30,0.75)"); base.addColorStop(1, "rgba(6,8,16,0.85)");
+      hCtx.beginPath(); hCtx.arc(cx, cy, r, 0, Math.PI * 2); hCtx.fillStyle = base; hCtx.fill();
       hCtx.save(); hCtx.beginPath(); hCtx.arc(cx, cy, r, 0, Math.PI * 2); hCtx.clip();
       for (let lat = -75; lat <= 75; lat += 15) {
         const phi2 = (90 - lat) * Math.PI / 180;
-        hCtx.beginPath();
-        hCtx.ellipse(cx, cy - r * Math.cos(phi2), r * Math.sin(phi2), r * Math.sin(phi2) * 0.2, 0, 0, Math.PI * 2);
+        hCtx.beginPath(); hCtx.ellipse(cx, cy - r * Math.cos(phi2), r * Math.sin(phi2), r * Math.sin(phi2) * 0.2, 0, 0, Math.PI * 2);
         hCtx.strokeStyle = "rgba(124,58,237,0.1)"; hCtx.lineWidth = 0.7; hCtx.stroke();
       }
       for (let lon = 0; lon < 180; lon += 15) {
         const angle = lon * Math.PI / 180 + rot;
-        hCtx.beginPath();
-        hCtx.ellipse(cx, cy, r * Math.abs(Math.cos(angle)), r, 0, 0, Math.PI * 2);
+        hCtx.beginPath(); hCtx.ellipse(cx, cy, r * Math.abs(Math.cos(angle)), r, 0, 0, Math.PI * 2);
         hCtx.strokeStyle = "rgba(124,58,237,0.08)"; hCtx.lineWidth = 0.7; hCtx.stroke();
       }
       hCtx.restore();
       arcs.forEach((arc) => {
-        arc.progress += arc.speed;
-        if (arc.progress > 1) arc.progress = 0;
-        const pA = proj(arc.a.phi, arc.a.theta, r, cx, cy);
-        const pB = proj(arc.b.phi, arc.b.theta, r, cx, cy);
+        arc.progress += arc.speed; if (arc.progress > 1) arc.progress = 0;
+        const pA = proj(arc.a.phi, arc.a.theta, r, cx, cy); const pB = proj(arc.b.phi, arc.b.theta, r, cx, cy);
         if (!pA.visible || !pB.visible) return;
-        const len = Math.hypot(pB.sx - pA.sx, pB.sy - pA.sy);
-        if (len > r * 0.8) return;
+        if (Math.hypot(pB.sx - pA.sx, pB.sy - pA.sy) > r * 0.8) return;
         const midX = (pA.sx + pB.sx) / 2, midY = (pA.sy + pB.sy) / 2 - r * 0.1;
         const g = hCtx.createLinearGradient(pA.sx, pA.sy, pB.sx, pB.sy);
-        g.addColorStop(0, "rgba(124,58,237,0)");
-        g.addColorStop(arc.progress * 0.8, `rgba(124,58,237,${arc.alpha * 0.8})`);
-        g.addColorStop(arc.progress, `rgba(167,139,250,${arc.alpha})`);
-        g.addColorStop(Math.min(arc.progress + 0.15, 1), "rgba(124,58,237,0)");
-        g.addColorStop(1, "rgba(124,58,237,0)");
-        hCtx.beginPath(); hCtx.moveTo(pA.sx, pA.sy);
-        hCtx.quadraticCurveTo(midX, midY, pB.sx, pB.sy);
+        g.addColorStop(0, "rgba(124,58,237,0)"); g.addColorStop(arc.progress * 0.8, `rgba(124,58,237,${arc.alpha * 0.8})`);
+        g.addColorStop(arc.progress, `rgba(167,139,250,${arc.alpha})`); g.addColorStop(Math.min(arc.progress + 0.15, 1), "rgba(124,58,237,0)"); g.addColorStop(1, "rgba(124,58,237,0)");
+        hCtx.beginPath(); hCtx.moveTo(pA.sx, pA.sy); hCtx.quadraticCurveTo(midX, midY, pB.sx, pB.sy);
         hCtx.strokeStyle = g; hCtx.lineWidth = 1; hCtx.stroke();
       });
       pts.forEach((pt) => {
-        const p = proj(pt.phi, pt.theta, r, cx, cy);
-        if (!p.visible) return;
+        const p = proj(pt.phi, pt.theta, r, cx, cy); if (!p.visible) return;
         const df = (p.depth + 1) / 2;
-        hCtx.beginPath();
-        hCtx.arc(p.sx, p.sy, pt.size * (0.5 + df * 0.5), 0, Math.PI * 2);
+        hCtx.beginPath(); hCtx.arc(p.sx, p.sy, pt.size * (0.5 + df * 0.5), 0, Math.PI * 2);
         hCtx.fillStyle = `rgba(167,139,250,${pt.alpha * df})`; hCtx.fill();
         if (pt.alpha > 0.85 && df > 0.6) {
           hCtx.beginPath(); hCtx.arc(p.sx, p.sy, pt.size * 3, 0, Math.PI * 2);
           const pg = hCtx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, pt.size * 3);
-          pg.addColorStop(0, `rgba(167,139,250,${pt.alpha * df * 0.3})`);
-          pg.addColorStop(1, "transparent");
+          pg.addColorStop(0, `rgba(167,139,250,${pt.alpha * df * 0.3})`); pg.addColorStop(1, "transparent");
           hCtx.fillStyle = pg; hCtx.fill();
         }
       });
@@ -598,35 +742,24 @@ function useHeroGlobe(canvasRef) {
       spec.addColorStop(0, "rgba(255,255,255,0.1)"); spec.addColorStop(1, "transparent");
       hCtx.beginPath(); hCtx.arc(cx, cy, r, 0, Math.PI * 2); hCtx.fillStyle = spec; hCtx.fill();
       const rim = hCtx.createRadialGradient(cx, cy, r * 0.72, cx, cy, r);
-      rim.addColorStop(0, "transparent");
-      rim.addColorStop(0.7, "rgba(124,58,237,0.04)");
-      rim.addColorStop(1, "rgba(124,58,237,0.15)");
+      rim.addColorStop(0, "transparent"); rim.addColorStop(0.7, "rgba(124,58,237,0.04)"); rim.addColorStop(1, "rgba(124,58,237,0.15)");
       hCtx.beginPath(); hCtx.arc(cx, cy, r, 0, Math.PI * 2); hCtx.fillStyle = rim; hCtx.fill();
-      rot += 0.0015;
-      animId = requestAnimationFrame(draw);
+      rot += 0.0015; animId = requestAnimationFrame(draw);
     }
     draw();
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", onMouse);
-    };
+    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); window.removeEventListener("mousemove", onMouse); };
   }, [canvasRef]);
 }
 
 function useCursor() {
   useEffect(() => {
-    const dot = document.getElementById("ds-cursor");
-    const ring = document.getElementById("ds-cursor-ring");
+    const dot = document.getElementById("ds-cursor"); const ring = document.getElementById("ds-cursor-ring");
     if (!dot || !ring) return;
     let rx = -200, ry = -200;
     const onMove = (e) => {
-      dot.style.left = e.clientX + "px";
-      dot.style.top = e.clientY + "px";
-      rx += (e.clientX - rx) * 0.14;
-      ry += (e.clientY - ry) * 0.14;
-      ring.style.left = rx + "px";
-      ring.style.top = ry + "px";
+      dot.style.left = e.clientX + "px"; dot.style.top = e.clientY + "px";
+      rx += (e.clientX - rx) * 0.14; ry += (e.clientY - ry) * 0.14;
+      ring.style.left = rx + "px"; ring.style.top = ry + "px";
     };
     document.addEventListener("mousemove", onMove);
     const t = setTimeout(() => {
@@ -651,13 +784,8 @@ function useReveal(key = "") {
 
 function useScrollProgress() {
   useEffect(() => {
-    const bar = document.getElementById("scroll-prog-bar");
-    if (!bar) return;
-    const onScroll = () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      const p = total > 0 ? (window.scrollY / total) * 100 : 0;
-      bar.style.width = p + "%";
-    };
+    const bar = document.getElementById("scroll-prog-bar"); if (!bar) return;
+    const onScroll = () => { const total = document.documentElement.scrollHeight - window.innerHeight; bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + "%"; };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -671,9 +799,8 @@ function Marquee() {
     <div className="mq-strip">
       <div className="mq-track">
         {doubled.map((it, i) => (
-          <span key={i} style={{ display: "inline-flex", alignItems: "center" }}>
-            <span className="mq-item">{it}</span>
-            <span className="mq-dot" />
+          <span key={i} style={{ display:"inline-flex", alignItems:"center" }}>
+            <span className="mq-item">{it}</span><span className="mq-dot" />
           </span>
         ))}
       </div>
@@ -689,27 +816,14 @@ function Footer({ navigate }) {
         <div>
           <div className="ds-logo" onClick={() => navigate("home")}><div className="logo-orb" />DSPHERY</div>
           <p className="ft-tagline">A performance-driven digital marketing agency helping ambitious brands grow faster, smarter, and sustainably.</p>
-          <div className="social-row" style={{ marginTop: 20 }}>
-            {["𝕏", "in", "ig", "▶"].map((s, i) => <button key={i} className="soc-btn" aria-label={`Social ${i+1}`}>{s}</button>)}
+          <div className="social-row" style={{ marginTop:20 }}>
+            {["𝕏","in","ig","▶"].map((s,i) => <button key={i} className="soc-btn" aria-label={`Social ${i+1}`}>{s}</button>)}
           </div>
         </div>
         <div className="ft-links-grid">
-          <div className="ft-col">
-            <h4>Services</h4>
-            <ul>{["SEO","Paid Media","Social Media","Content","Analytics"].map((s) => <li key={s} onClick={() => navigate("services")} style={{ cursor:"none" }}>{s}</li>)}</ul>
-          </div>
-          <div className="ft-col">
-            <h4>Company</h4>
-            <ul>{["About","Portfolio","Contact"].map((s) => <li key={s} onClick={() => navigate(s.toLowerCase())} style={{ cursor:"none" }}>{s}</li>)}</ul>
-          </div>
-          <div className="ft-col">
-            <h4>Contact</h4>
-            <ul>
-              <li>hello@dsphery.com</li>
-              <li>+91 98874 47780</li>
-              <li>Udaipur, Rajasthan</li>
-            </ul>
-          </div>
+          <div className="ft-col"><h4>Services</h4><ul>{["SEO","Paid Media","Social Media","Content","Analytics"].map((s) => <li key={s} onClick={() => navigate("services")} style={{ cursor:"none" }}>{s}</li>)}</ul></div>
+          <div className="ft-col"><h4>Company</h4><ul>{["About","Portfolio","Contact"].map((s) => <li key={s} onClick={() => navigate(s.toLowerCase())} style={{ cursor:"none" }}>{s}</li>)}</ul></div>
+          <div className="ft-col"><h4>Contact</h4><ul><li>hello@dsphery.com</li><li>+91 98874 47780</li><li>Udaipur, Rajasthan</li></ul></div>
         </div>
       </div>
       <div className="ft-bottom">
@@ -742,37 +856,98 @@ function Nav({ page, navigate }) {
   );
 }
 
-const BOT_REPLIES = [
-  "Hey! 👋 Great question — our team specialises in exactly that. Let me connect you with a strategist.",
-  "DSPHERY has helped brands achieve 3–5× growth in that channel. We'd love to do the same for you.",
-  "We typically start with a free 30-min audit call. Want me to book one for you?",
-  "Our SEO, Paid Media and Content teams work together to drive compounding, long-term results.",
-  "Most clients see meaningful lift within 90 days. Want to see our case studies?",
-];
+/* ── AI CHAT — Powered by Anthropic API ── */
+const DSPHERY_SYSTEM_PROMPT = `You are DSPHERY's expert digital marketing assistant. DSPHERY is a premium digital marketing agency based in Udaipur, Rajasthan, India. Contact: hello@dsphery.com, +91 98874 47780.
+
+DSPHERY's services:
+1. SEO - Technical SEO, on-page, link building. Average: 420% organic growth.
+2. Paid Media & PPC - Google Ads, Meta, TikTok, LinkedIn. Average ROAS: 4.2×.
+3. Brand Strategy - Brand identity, positioning, voice, visual systems.
+4. Social Media Management - Platform-native content, community building. Built 800K community in 12 months.
+5. Content Marketing - Blog, video scripts, email, podcast.
+6. Graphic Designing & Editing - Social media creatives, brand visuals, ad creative design.
+
+Key stats: 120+ clients served, ₹8Cr+ revenue generated, 94% client retention, Est. 2026, Udaipur.
+
+Pricing: Retainers start at ₹30,000/month for single-channel, ₹75,000/month for full-service. One-time projects also available.
+
+Process: Market Research & Digital Audit → Strategy & Campaign Planning → Launch, Test & Optimise → Analyse, Scale & Report.
+
+Personality: Expert, confident, helpful, concise. Give actionable digital marketing advice. Keep responses under 120 words — be punchy and direct. When someone wants to start a project, encourage them to fill the contact form or book a call. Never be salesy — be genuinely helpful first.`;
+
+const QUICK_CHIPS = ["How does SEO work?","What's a good ROAS?","Social media tips","Content strategy","Budget for ads?","Improve conversions"];
+
+function getTime() { return new Date().toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" }); }
 
 function AIChat() {
   const [open, setOpen] = useState(false);
-  const [msgs, setMsgs] = useState([{ bot: true, text: "Hey! 👋 I'm DSPHERY's assistant. How can I help you grow today?" }]);
+  const [msgs, setMsgs] = useState([{ bot:true, text:"Hey! 👋 I'm DSPHERY's AI marketing assistant. Ask me anything about SEO, paid ads, social media, content strategy, or how we can grow your brand.", time:getTime() }]);
   const [input, setInput] = useState("");
-  const [rIdx, setRIdx] = useState(0);
+  const [loading, setLoading] = useState(false);
   const msgsRef = useRef(null);
-  const send = useCallback(() => {
-    const txt = input.trim();
-    if (!txt) return;
-    setMsgs((m) => [...m, { bot: false, text: txt }]);
+
+  useEffect(() => { if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight; }, [msgs, loading]);
+
+  const sendMessage = useCallback(async (text) => {
+    const txt = (text || input).trim();
+    if (!txt || loading) return;
+    setMsgs((m) => [...m, { bot:false, text:txt, time:getTime() }]);
     setInput("");
-    setTimeout(() => { setMsgs((m) => [...m, { bot: true, text: BOT_REPLIES[rIdx % BOT_REPLIES.length] }]); setRIdx((r) => r + 1); }, 700);
-  }, [input, rIdx]);
-  useEffect(() => { if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight; }, [msgs]);
+    setLoading(true);
+    const history = msgs.map((m) => ({ role: m.bot ? "assistant" : "user", content: m.text }));
+    history.push({ role:"user", content:txt });
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1000, system:DSPHERY_SYSTEM_PROMPT, messages:history }),
+      });
+      const data = await response.json();
+      const replyText = data.content?.find((b) => b.type === "text")?.text || "Sorry, I couldn't process that. Please try again or email us at hello@dsphery.com.";
+      setMsgs((m) => [...m, { bot:true, text:replyText, time:getTime() }]);
+    } catch {
+      setMsgs((m) => [...m, { bot:true, text:"I'm having trouble connecting right now. Please email us at hello@dsphery.com or call +91 98874 47780.", time:getTime() }]);
+    } finally { setLoading(false); }
+  }, [input, loading, msgs]);
+
   return (
     <>
-      <button className="ai-btn" onClick={() => setOpen((o) => !o)} aria-label="Toggle chat">💬</button>
+      <button className="ai-btn" onClick={() => setOpen((o) => !o)} aria-label="Toggle chat" style={{ position:"relative" }}>
+        <span>{open ? "✕" : "💬"}</span>
+        {!open && <div className="ai-btn-badge" />}
+      </button>
       <div className={`ai-popup${open ? " open" : ""}`}>
-        <div className="ai-hdr"><div className="ai-dot" /><span className="ai-ttl">DSPHERY Assistant</span><span className="ai-sub">Online</span></div>
-        <div className="ai-msgs" ref={msgsRef}>{msgs.map((m, i) => <div key={i} className={`ai-msg ${m.bot ? "bot" : "user"}`}>{m.text}</div>)}</div>
-        <div className="ai-irow">
-          <input className="ai-in" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask me anything…" onKeyDown={(e) => e.key === "Enter" && send()} />
-          <button className="ai-send" onClick={send} aria-label="Send">↑</button>
+        <div className="ai-header">
+          <div className="ai-avatar">✦<div className="ai-avatar-dot" /></div>
+          <div className="ai-header-info">
+            <div className="ai-header-name">DSPHERY Assistant</div>
+            <div className="ai-header-status"><div className="ai-status-dot" />AI-powered · Always online</div>
+          </div>
+          <button className="ai-close" onClick={() => setOpen(false)}>✕</button>
+        </div>
+        <div className="ai-quick-chips">
+          {QUICK_CHIPS.map((chip) => <button key={chip} className="ai-chip" onClick={() => sendMessage(chip)}>{chip}</button>)}
+        </div>
+        <div className="ai-msgs" ref={msgsRef}>
+          {msgs.map((m,i) => (
+            <div key={i} className={`ai-msg-wrap${m.bot ? "" : " user"}`}>
+              {m.bot && <div className="ai-msg-avatar" style={{ fontSize:10 }}>✦</div>}
+              <div><div className={`ai-msg ${m.bot ? "bot" : "user"}`}>{m.text}</div><div className="ai-msg-time">{m.time}</div></div>
+            </div>
+          ))}
+          {loading && (
+            <div className="ai-msg-wrap">
+              <div className="ai-msg-avatar" style={{ fontSize:10 }}>✦</div>
+              <div className="ai-typing"><span /><span /><span /></div>
+            </div>
+          )}
+        </div>
+        <div className="ai-footer">
+          <div className="ai-irow">
+            <textarea className="ai-in" value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } }} placeholder="Ask about SEO, ads, social media…" rows={1} disabled={loading} />
+            <button className="ai-send" onClick={() => sendMessage()} disabled={loading || !input.trim()} aria-label="Send">↑</button>
+          </div>
+          <div className="ai-powered">Powered by Claude AI · DSPHERY © {new Date().getFullYear()}</div>
         </div>
       </div>
     </>
@@ -790,9 +965,7 @@ function Home({ navigate }) {
     <div className="page-enter">
       <section className="hero-section">
         <div className="hero-bg">
-          <div className="hero-noise" />
-          <div className="hero-glow" />
-          <div className="hero-grid" />
+          <div className="hero-noise" /><div className="hero-glow" /><div className="hero-grid" />
           <div className="fpills">
             <span className="fpill">✦ SEO &amp; Content</span>
             <span className="fpill">✦ Paid Ads</span>
@@ -829,11 +1002,8 @@ function Home({ navigate }) {
       <Marquee />
 
       <div className="counter-strip">
-        {[["120+","Clients Served"],["₹8Cr+","Revenue Generated"],["94%","Client Retention"],["1+","Year in Business"]].map(([n, l], i) => (
-          <div key={i} className={`reveal rd${i+1}`}>
-            <div className="counter-n">{n}</div>
-            <div className="counter-l">{l}</div>
-          </div>
+        {[["120+","Clients Served"],["₹8Cr+","Revenue Generated"],["94%","Client Retention"],["1+","Year in Business"]].map(([n,l],i) => (
+          <div key={i} className={`reveal rd${i+1}`}><div className="counter-n">{n}</div><div className="counter-l">{l}</div></div>
         ))}
       </div>
 
@@ -848,11 +1018,11 @@ function Home({ navigate }) {
         </div>
         <div className="why-grid">
           {[
-            ["3×","Average ROI","Our campaigns consistently deliver 3× return on every rupee spent within the first 6 months."],
+            ["2×","Average ROI","Our campaigns consistently deliver 2× return on every rupee spent within the first 6 months."],
             ["48h","Onboarding","From signed contract to live campaigns in under 48 hours. Speed without sacrificing quality."],
             ["100%","Transparent Reporting","Real-time dashboards. No fluff, no vanity metrics. Just clear data that connects to revenue."],
             ["24/7","Dedicated Support","Your growth never sleeps and neither does our support. A dedicated manager is always on call."],
-          ].map(([n, l, d]) => (
+          ].map(([n,l,d]) => (
             <div className="why-card reveal" key={l}>
               <div className="why-num">{n}</div>
               <div className="why-label">{l}</div>
@@ -881,7 +1051,7 @@ function Home({ navigate }) {
             ["04","📱","Social Media Management","Platform-native content calendars, community management, and influencer partnerships. We grow engaged audiences and convert followers into brand advocates and paying customers.",["Content","Community","Growth"]],
             ["05","✍️","Content Marketing","Strategic content that educates, entertains, and converts across blogs, video scripts, email sequences, and whitepapers. Every piece is built for search intent and audience engagement.",["Blog","Video","Email"]],
             ["06","📊","Analytics & Growth","We build custom dashboards, run A/B tests, analyse attribution, and continuously optimise every funnel stage. Because what gets measured, gets improved.",["Reporting","CRO","A/B Testing"]],
-          ].map(([num, icon, title, desc, tags]) => (
+          ].map(([num,icon,title,desc,tags]) => (
             <div className="sv-card" key={num} onClick={() => navigate("services")}>
               <div className="sv-num">{num}</div>
               <div className="sv-icon">{icon}</div>
@@ -899,9 +1069,7 @@ function Home({ navigate }) {
         <div style={{ overflow:"hidden" }}>
           <div className="clients-track">
             {["TECHVAULT","LUMINARY","ORBITCO","NEXGEN","PULSE","MERIDIAN","VANTA","AXIOM",
-              "TECHVAULT","LUMINARY","ORBITCO","NEXGEN","PULSE","MERIDIAN","VANTA","AXIOM"].map((c, i) => (
-              <span className="cl-logo" key={i}>{c}</span>
-            ))}
+              "TECHVAULT","LUMINARY","ORBITCO","NEXGEN","PULSE","MERIDIAN","VANTA","AXIOM"].map((c,i) => <span className="cl-logo" key={i}>{c}</span>)}
           </div>
         </div>
       </div>
@@ -914,10 +1082,10 @@ function Home({ navigate }) {
         </p>
         <div className="testi-grid">
           {[
-            ["JM","av-a","James Mitchell","CEO, TechVault","DSPHERY transformed our SEO from an afterthought into our single largest revenue channel. Organic traffic grew 420% in just eight months. Their team is proactive, transparent, and deeply skilled."],
-            ["SK","av-b","Sarah Kim","CMO, Luminary Co.","Their paid media team is exceptional. We scaled from ₹5L to ₹40L in monthly ad spend while maintaining a 4.2× ROAS throughout. The ROI is remarkable and the reporting is crystal clear."],
-            ["RP","av-c","Ryan Park","Founder, Orbit Commerce","DSPHERY built us a social media presence with 800K engaged followers and a community that actively champions our brand. They think like business owners, not just marketers."],
-          ].map(([init, av, name, role, text]) => (
+            ["SN","av-a","Ms. Saloni Nebhani","Founder, FFDL","DSPHERY transformed our SEO from an afterthought into our single largest revenue channel. Organic traffic grew 420% in just eight months. Their team is proactive, transparent, and deeply skilled."],
+            ["KC","av-b","Mr. Kuldeep Chotrani","Founder, Digidev","Their paid media team is exceptional. We scaled from ₹5L to ₹40L in monthly ad spend while maintaining a 4.2× ROAS throughout. The ROI is remarkable and the reporting is crystal clear."],
+            ["KT","av-c","Ms. Kashish Talreja","Founder, Ewolwl","DSPHERY built us a social media presence with 800K engaged followers and a community that actively champions our brand. They think like business owners, not just marketers."],
+          ].map(([init,av,name,role,text]) => (
             <div className="testi-card reveal" key={name}>
               <div className="stars">★★★★★</div>
               <div className="testi-q">"</div>
@@ -951,12 +1119,12 @@ function Home({ navigate }) {
 
 /* ── SERVICES ── */
 const SERVICES_DATA = [
-  { num:"01", icon:"🔍", title:"Search Engine Optimization", desc:"We take a full-funnel approach to SEO — combining rigorous technical audits, keyword research, on-page optimisation, and strategic link acquisition. Our content-led SEO methodology ensures your brand appears for every query that matters to your audience, not just the high-volume vanity keywords. We've consistently driven 3–5× organic traffic growth for clients across e-commerce, SaaS, and local businesses.", tags:["On-Page","Technical","Link Building","Local SEO","E-commerce SEO"], metric:"420%", metricLabel:"Avg. Organic Growth" },
-  { num:"02", icon:"🎯", title:"Paid Media & PPC", desc:"From Google Search and Shopping to Meta, LinkedIn, TikTok, and programmatic display — our paid media team manages every rupee with precision. We build full-funnel campaign architectures, develop creative testing frameworks, and use AI-assisted bidding to maximise your returns. Every campaign is built on audience data, competitive intelligence, and a relentless commitment to ROAS.", tags:["Google Ads","Meta Ads","TikTok Ads","LinkedIn Ads","Programmatic"], metric:"4.2×", metricLabel:"Average ROAS" },
+  { num:"01", icon:"🔍", title:"Search Engine Optimization", desc:"We take a full-funnel approach to SEO — combining rigorous technical audits, keyword research, on-page optimisation, and strategic link acquisition. Our content-led SEO methodology ensures your brand appears for every query that matters to your audience, not just the high-volume vanity keywords. We've consistently driven 3–5× organic traffic growth for clients across e-commerce, SaaS, and local businesses.", tags:["On-Page","Technical","Link Building","Local SEO","E-commerce SEO"], metric:"40%", metricLabel:"Avg. Organic Growth" },
+  { num:"02", icon:"🎯", title:"Paid Media & PPC", desc:"From Google Search and Shopping to Meta, LinkedIn, TikTok, and programmatic display — our paid media team manages every rupee with precision. We build full-funnel campaign architectures, develop creative testing frameworks, and use AI-assisted bidding to maximise your returns. Every campaign is built on audience data, competitive intelligence, and a relentless commitment to ROAS.", tags:["Google Ads","Meta Ads","TikTok Ads","LinkedIn Ads","Programmatic"], metric:"3.2×", metricLabel:"Average ROAS" },
   { num:"03", icon:"💡", title:"Brand Strategy & Identity", desc:"A strong brand is your most durable competitive advantage. We help businesses define their positioning, develop a distinctive visual identity, and build a brand voice that resonates authentically with target audiences. From brand naming and logo design to comprehensive brand guidelines and rollout strategy, we create the foundation every successful marketing campaign is built on.", tags:["Brand Identity","Positioning","Voice & Tone","Visual Systems","Guidelines"], metric:"98%", metricLabel:"Client Satisfaction" },
-  { num:"04", icon:"📱", title:"Social Media Management", desc:"We manage your social presence end-to-end — content strategy, creative production, community management, influencer partnerships, and performance analysis. Our platform-native approach means we speak the language of each channel, whether it's Instagram Reels, LinkedIn thought leadership, or viral TikToks. We turn passive followers into active brand advocates.", tags:["Content Creation","Community Management","Influencer Marketing","Growth Strategy"], metric:"800K+", metricLabel:"Community Built" },
+  { num:"04", icon:"📱", title:"Social Media Management", desc:"We manage your social presence end-to-end — content strategy, creative production, community management, influencer partnerships, and performance analysis. Our platform-native approach means we speak the language of each channel, whether it's Instagram Reels, LinkedIn thought leadership, or viral TikToks. We turn passive followers into active brand advocates.", tags:["Content Creation","Community Management","Influencer Marketing","Growth Strategy"], metric:"400K+", metricLabel:"Community Built" },
   { num:"05", icon:"✍️", title:"Content Marketing", desc:"Content is the engine behind long-term organic growth. We build editorial strategies rooted in audience research and search intent, then produce high-quality blog posts, video scripts, email sequences, lead magnets, and social content at scale. Every piece is optimised for discovery, engagement, and conversion — not just pageviews.", tags:["Blog & Articles","Video Scripts","Email Marketing","Lead Magnets","Podcast Content"], metric:"3.8×", metricLabel:"Avg. Engagement Lift" },
-  { num:"06", icon:"📊", title:"Analytics & Conversion Optimisation", desc:"We build custom performance dashboards, implement proper attribution modelling, and run structured A/B testing programmes to systematically improve every stage of your funnel. From landing page CRO to checkout optimisation, we identify and eliminate friction points, turning more of your existing traffic into paying customers.", tags:["Dashboard Build","Attribution Modelling","A/B & Multivariate Testing","CRO","BI Reporting"], metric:"40%", metricLabel:"Conversion Rate Lift" },
+  { num:"06", icon:"📊", title:"Graphic Designing and Editing", desc:"We create visually compelling designs and high-quality edits that help brands communicate clearly and stand out across digital platforms. From social media creatives and marketing graphics to brand visuals and promotional designs, we focus on creativity, consistency, and brand identity. Our design approach ensures every visual aligns with your brand message, improves engagement, and enhances your overall digital presence.", tags:["Social Media Design","Ad Creative Design","Brand Visuals","Image Editing","Marketing Graphics"], metric:"120+", metricLabel:"Creatives Designed" },
 ];
 
 const FAQ_DATA = [
@@ -1006,17 +1174,19 @@ function Services({ navigate }) {
         <div className="proc-inner">
           <div>
             <div className="sec-label reveal">Our Approach</div>
-            <h2 className="sec-title reveal">How We Make Magic</h2>
-            <p className="proc-body reveal">We don't believe in cookie-cutter strategies. Every brand is unique and deserves a tailored approach built on real data, genuine market research, and sharp creative thinking. Our process is proven across 120+ engagements.</p>
+            <h2 className="sec-title reveal">How We Grow Your Brand</h2>
+            <p className="proc-body reveal">
+              We don't believe in one-size-fits-all marketing strategies. Every business is unique and deserves a customised digital growth plan built on real data, market research, and creative execution. Our approach focuses on helping brands attract the right audience, increase engagement, and convert traffic into measurable business results.
+            </p>
             <button className="btn-primary reveal" onClick={() => navigate("contact")}>Work With Us →</button>
           </div>
           <ul style={{ listStyle:"none" }}>
             {[
-              ["01","Discovery & Deep Audit","We dissect your digital presence, benchmark against competitors, analyse your audience, and identify the highest-value growth opportunities hiding in your data."],
-              ["02","Custom Strategy Blueprint","A bespoke growth roadmap with clear KPIs, prioritised channel mix, realistic budget allocation, and 90-day sprint milestones — no generic playbooks."],
-              ["03","Launch, Test & Optimise","Rapid deployment followed by structured A/B testing, creative iteration, and performance monitoring. We move fast and double down on what the data confirms is working."],
-              ["04","Scale & Report","Monthly deep-dive performance reports, quarterly strategy reviews, and proactive scaling when we spot winning signals. Your growth compounds over time."],
-            ].map(([n, t, d]) => (
+              ["01","Market Research & Digital Audit","We analyse your digital presence, competitors, target audience, and current marketing performance to identify opportunities for growth across SEO, social media, and paid advertising."],
+              ["02","Strategy & Campaign Planning","We create a customised digital marketing strategy with clear objectives, channel selection, content direction, and campaign planning designed to maximise reach, engagement, and conversions."],
+              ["03","Launch, Test & Optimise","Our team launches campaigns across search engines, social media platforms, and digital channels while continuously testing creatives, audiences, and strategies to improve performance."],
+              ["04","Analyse, Scale & Report","Through performance tracking and detailed analytics, we identify what works best and scale winning campaigns while providing clear reports on traffic, leads, and growth."],
+            ].map(([n,t,d]) => (
               <li key={n} className="step-item reveal">
                 <div className="step-num">{n}</div>
                 <div><div className="step-title">{t}</div><div className="step-desc">{d}</div></div>
@@ -1030,11 +1200,9 @@ function Services({ navigate }) {
         <div className="sec-label reveal">FAQs</div>
         <h2 className="sec-title reveal" style={{ marginBottom:32 }}>Common Questions</h2>
         <div className="faq-list reveal">
-          {FAQ_DATA.map(([q, a], i) => (
+          {FAQ_DATA.map(([q,a],i) => (
             <div className={`faq-item${openFaq === i ? " open" : ""}`} key={i}>
-              <button className="faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
-                {q}<span className="faq-icon">+</span>
-              </button>
+              <button className="faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>{q}<span className="faq-icon">+</span></button>
               {openFaq === i && <div className="faq-a">{a}</div>}
             </div>
           ))}
@@ -1048,18 +1216,12 @@ function Services({ navigate }) {
 
 /* ── PORTFOLIO ── */
 const PORTFOLIO_ITEMS = [
-  { cat:["brand","seo"], tag:"Brand Strategy + SEO", name:"TechVault Rebrand", meta:"420% organic growth in 8 months", color:"linear-gradient(135deg,#0a1230 0%,#050a18 100%)", accent:"#7c3aed",
-    desc:"Full brand overhaul and SEO foundation build for a B2B SaaS company. Repositioned brand, built topical authority through content, and restructured technical SEO — resulting in 420% organic traffic growth in 8 months." },
-  { cat:["paid"], tag:"Paid Media", name:"Luminary Growth", meta:"4.2× ROAS at ₹40L/mo ad spend", color:"linear-gradient(135deg,#100d28 0%,#060218 100%)", accent:"#a78bfa",
-    desc:"Scaled a D2C lifestyle brand from ₹5L to ₹40L in monthly paid media spend while maintaining a 4.2× blended ROAS. Achieved through creative testing frameworks, audience segmentation, and full-funnel campaign architecture." },
-  { cat:["social"], tag:"Social Media", name:"Orbit Commerce", meta:"800K community built in 12 months", color:"linear-gradient(135deg,#1a0a20 0%,#0f0015 100%)", accent:"#c4b5fd",
-    desc:"Built a 800K-strong social community across Instagram and YouTube from scratch for a consumer electronics brand. Included influencer partnerships, content strategy, and community-led growth loops that drove direct revenue." },
-  { cat:["seo"], tag:"SEO", name:"Nexgen Platform", meta:"310% traffic increase YOY", color:"linear-gradient(135deg,#0d1828 0%,#060f1a 100%)", accent:"#818cf8",
-    desc:"Comprehensive SEO programme for an ed-tech platform including content hub development, technical SEO fixes, and national link building. Grew organic traffic 310% year-on-year, reducing CAC by 42%." },
-  { cat:["brand"], tag:"Brand Identity", name:"Vanta Labs", meta:"Complete brand system from zero", color:"linear-gradient(135deg,#150a25 0%,#0a0515 100%)", accent:"#a78bfa",
-    desc:"Built the entire brand identity for a biotech startup from naming through to full brand guidelines, website visual design, and pitch deck templates. The brand was instrumental in securing Series A funding." },
-  { cat:["paid","social"], tag:"Paid + Social", name:"Pulse Commerce", meta:"12× ROI achieved in 6 months", color:"linear-gradient(135deg,#0a1520 0%,#050c14 100%)", accent:"#6d28d9",
-    desc:"Integrated paid social and organic social strategy for a fashion e-commerce brand. Combined TikTok UGC ads with Meta remarketing and Instagram community building to achieve 12× ROI within 6 months of engagement." },
+  { cat:["brand","seo"], tag:"Brand Strategy + SEO", name:"Ewolwl", meta:"40% organic growth in 8 months", color:"linear-gradient(135deg,#0a1230 0%,#050a18 100%)", accent:"#7c3aed", desc:"Full brand overhaul and SEO foundation build for a B2B SaaS company. Repositioned brand, built topical authority through content, and restructured technical SEO — resulting in 420% organic traffic growth in 8 months." },
+  { cat:["paid"], tag:"Paid Media", name:"FFDL", meta:"3.2× ROAS at ₹1L/mo ad spend", color:"linear-gradient(135deg,#100d28 0%,#060218 100%)", accent:"#a78bfa", desc:"Scaled a D2C lifestyle brand from ₹1L to ₹5L in monthly paid media spend while maintaining a 4.2× blended ROAS. Achieved through creative testing frameworks, audience segmentation, and full-funnel campaign architecture." },
+  { cat:["social"], tag:"Social Media", name:"Orbit Commerce", meta:"100K community built in 12 months", color:"linear-gradient(135deg,#1a0a20 0%,#0f0015 100%)", accent:"#c4b5fd", desc:"Built a 800K-strong social community across Instagram and YouTube from scratch for a consumer electronics brand. Included influencer partnerships, content strategy, and community-led growth loops that drove direct revenue." },
+  { cat:["seo"], tag:"SEO", name:"Nexgen Platform", meta:"310% traffic increase YOY", color:"linear-gradient(135deg,#0d1828 0%,#060f1a 100%)", accent:"#818cf8", desc:"Comprehensive SEO programme for an ed-tech platform including content hub development, technical SEO fixes, and national link building. Grew organic traffic 310% year-on-year, reducing CAC by 42%." },
+  { cat:["brand"], tag:"Brand Identity", name:"Vanta Labs", meta:"Complete brand system from zero", color:"linear-gradient(135deg,#150a25 0%,#0a0515 100%)", accent:"#a78bfa", desc:"Built the entire brand identity for a biotech startup from naming through to full brand guidelines, website visual design, and pitch deck templates. The brand was instrumental in securing Series A funding." },
+  { cat:["paid","social"], tag:"Paid + Social", name:"Institutes", meta:"4.5× ROI achieved in 6 months", color:"linear-gradient(135deg,#0a1520 0%,#050c14 100%)", accent:"#6d28d9", desc:"Integrated paid social and organic social strategy for a fashion e-commerce brand. Combined TikTok UGC ads with Meta remarketing and Instagram community building to achieve 12× ROI within 6 months of engagement." },
 ];
 
 function Portfolio({ navigate }) {
@@ -1078,21 +1240,16 @@ function Portfolio({ navigate }) {
       </div>
       <section className="section">
         <div className="ftabs">
-          {[["all","All Work"],["seo","SEO"],["paid","Paid Media"],["brand","Brand"],["social","Social"]].map(([f, label]) => (
+          {[["all","All Work"],["seo","SEO"],["paid","Paid Media"],["brand","Brand"],["social","Social"]].map(([f,label]) => (
             <button key={f} className={`ftab${filter === f ? " active" : ""}`} onClick={() => setFilter(f)}>{label}</button>
           ))}
         </div>
         <div className="pf-grid">
-          {visible.map((p, i) => (
+          {visible.map((p,i) => (
             <div key={p.name} className="pf-item reveal">
               <div className="mock-img" style={{ height:260, background:p.color, position:"relative", overflow:"hidden" }}>
                 <svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" style={{ position:"absolute", inset:0, width:"100%", height:"100%" }}>
-                  <defs>
-                    <radialGradient id={`rg${i}`} cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor={p.accent} stopOpacity="0.18" />
-                      <stop offset="100%" stopColor={p.accent} stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
+                  <defs><radialGradient id={`rg${i}`} cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor={p.accent} stopOpacity="0.18" /><stop offset="100%" stopColor={p.accent} stopOpacity="0" /></radialGradient></defs>
                   <rect width="100%" height="100%" fill={`url(#rg${i})`} />
                   <circle cx="250" cy="130" r="90" fill="none" stroke={p.accent} strokeWidth="0.5" opacity="0.25" />
                   <circle cx="250" cy="130" r="55" fill="none" stroke={p.accent} strokeWidth="0.5" opacity="0.18" />
@@ -1137,24 +1294,15 @@ function About({ navigate }) {
           <div className="about-img-wrap">
             <div className="about-img-box">
               <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" style={{ width:"80%", opacity:0.7 }}>
-                <defs>
-                  <radialGradient id="about-rg" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#7c3aed" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#141a46" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
+                <defs><radialGradient id="about-rg" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#7c3aed" stopOpacity="0.3" /><stop offset="100%" stopColor="#141a46" stopOpacity="0" /></radialGradient></defs>
                 <rect width="400" height="500" fill="url(#about-rg)" />
                 <circle cx="200" cy="250" r="140" fill="none" stroke="#7c3aed" strokeWidth="0.8" opacity="0.3" />
                 <circle cx="200" cy="250" r="100" fill="none" stroke="#a78bfa" strokeWidth="0.6" opacity="0.2" />
                 <circle cx="200" cy="250" r="60" fill="none" stroke="#c4b5fd" strokeWidth="0.5" opacity="0.15" />
                 <text x="200" y="265" textAnchor="middle" fontFamily="Syne" fontSize="48" fill="#7c3aed" opacity="0.5" fontWeight="800">DS</text>
               </svg>
-              <div className="about-float-stat top-right">
-                <div className="afs-n">120<span>+</span></div><div className="afs-l">Clients Served</div>
-              </div>
-              <div className="about-float-stat bottom-left">
-                <div className="afs-n">94<span>%</span></div><div className="afs-l">Retention Rate</div>
-              </div>
+              <div className="about-float-stat top-right"><div className="afs-n">120<span>+</span></div><div className="afs-l">Clients Served</div></div>
+              <div className="about-float-stat bottom-left"><div className="afs-n">94<span>%</span></div><div className="afs-l">Retention Rate</div></div>
             </div>
           </div>
           <div className="reveal">
@@ -1170,11 +1318,8 @@ function About({ navigate }) {
               We work with ambitious startups, growing SMEs, and established brands looking for a sharper, more accountable marketing partner. If you want an agency that will own outcomes alongside you — DSPHERY is that agency.
             </p>
             <div style={{ display:"flex", gap:36, marginBottom:28, flexWrap:"wrap" }}>
-              {[["2026","Founded in Udaipur"],["10+","Team Members"],["6","Services Offered"]].map(([n, l]) => (
-                <div key={l}>
-                  <div style={{ fontFamily:"'Syne',sans-serif", fontSize:28, fontWeight:700, color:"#fff" }}>{n}</div>
-                  <div style={{ fontSize:9, letterSpacing:2, textTransform:"uppercase", color:"rgba(255,255,255,0.3)", marginTop:4 }}>{l}</div>
-                </div>
+              {[["2026","Founded in Udaipur"],["10+","Team Members"],["6","Services Offered"]].map(([n,l]) => (
+                <div key={l}><div style={{ fontFamily:"'Syne',sans-serif", fontSize:28, fontWeight:700, color:"#fff" }}>{n}</div><div style={{ fontSize:9, letterSpacing:2, textTransform:"uppercase", color:"rgba(255,255,255,0.3)", marginTop:4 }}>{l}</div></div>
               ))}
             </div>
             <button className="btn-primary" onClick={() => navigate("contact")}>Work With Us →</button>
@@ -1192,12 +1337,8 @@ function About({ navigate }) {
               ["💡","Creative Courage","We take bold creative swings backed by strategic thinking. In a world of noise, safe is the riskiest thing you can be."],
               ["⚡","Speed & Agility","Markets shift fast. Opportunities close fast. We're built to move quickly — from strategy to execution without the agency bloat."],
               ["📈","Compounding Growth","We build systems designed to compound. Short-term campaign spikes are nice; durable, accelerating growth is what we're actually building."],
-            ].map(([icon, title, desc]) => (
-              <div className="val-card reveal" key={title}>
-                <div className="val-icon">{icon}</div>
-                <div className="val-title">{title}</div>
-                <div className="val-desc">{desc}</div>
-              </div>
+            ].map(([icon,title,desc]) => (
+              <div className="val-card reveal" key={title}><div className="val-icon">{icon}</div><div className="val-title">{title}</div><div className="val-desc">{desc}</div></div>
             ))}
           </div>
         </div>
@@ -1218,12 +1359,8 @@ function About({ navigate }) {
               ["NV","linear-gradient(135deg,#5b21b6,#7c3aed)","Neha Verma","Paid Media Lead"],
               ["AJ","linear-gradient(135deg,#7c3aed,#8b5cf6)","Aditya Joshi","Content Strategist"],
               ["RP","linear-gradient(135deg,#4c1d95,#6d28d9)","Riya Patel","Social Media Lead"],
-            ].map(([initials, bg, name, role]) => (
-              <div className="team-card reveal" key={name}>
-                <div className="team-avatar" style={{ background:bg }}>{initials}</div>
-                <div className="team-name">{name}</div>
-                <div className="team-role">{role}</div>
-              </div>
+            ].map(([initials,bg,name,role]) => (
+              <div className="team-card reveal" key={name}><div className="team-avatar" style={{ background:bg }}>{initials}</div><div className="team-name">{name}</div><div className="team-role">{role}</div></div>
             ))}
           </div>
         </div>
@@ -1240,7 +1377,7 @@ function Contact({ navigate }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]:e.target.value }));
   const handleSubmit = (e) => {
     e.preventDefault(); setError(""); setLoading(true);
     setTimeout(() => { try { setLoading(false); setSubmitted(true); } catch { setLoading(false); setError("Something went wrong. Please try again."); } }, 1400);
@@ -1263,13 +1400,13 @@ function Contact({ navigate }) {
             <p className="reveal" style={{ fontSize:13, lineHeight:1.8, color:"rgba(255,255,255,0.4)", fontWeight:300, marginBottom:24 }}>
               Whether you're just exploring, ready to start a project, or want to understand how DSPHERY can help your specific business — we're always happy to talk. No hard sell, ever.
             </p>
-            {[["📧","Email","hello@dsphery.com"],["📞","Phone","+91 98874 47780"],["📍","Location","Udaipur, Rajasthan — India"],["⏰","Response Time","Within 24 hours (usually faster)"]].map(([icon, label, val]) => (
+            {[["📧","Email","hello@dsphery.com"],["📞","Phone","+91 98874 47780"],["📍","Location","Udaipur, Rajasthan — India"],["⏰","Response Time","Within 24 hours (usually faster)"]].map(([icon,label,val]) => (
               <div className="c-info-item reveal" key={label}>
                 <div className="c-info-icon">{icon}</div>
                 <div><div className="c-info-label">{label}</div><div className="c-info-val">{val}</div></div>
               </div>
             ))}
-            <div style={{ marginTop:32, padding:24, background:"rgba(20,26,70,0.3)", border:"1px solid rgba(124,58,237,0.2)", borderRadius:14 }} className="reveal">
+            <div style={{ marginTop:28, padding:24, background:"rgba(20,26,70,0.3)", border:"1px solid rgba(124,58,237,0.2)", borderRadius:14 }} className="reveal">
               <div style={{ fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"#a78bfa", marginBottom:8 }}>Free Strategy Session</div>
               <p style={{ fontSize:13, lineHeight:1.72, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:14 }}>
                 Book a complimentary 30-minute strategy call with one of our growth experts. We'll audit your current digital presence and identify your biggest opportunities — no strings attached.
@@ -1289,28 +1426,16 @@ function Contact({ navigate }) {
               <form onSubmit={handleSubmit}>
                 <h3 style={{ fontFamily:"'Syne',sans-serif", fontSize:19, fontWeight:700, color:"#fff", marginBottom:24 }}>Tell Us About Your Project</h3>
                 <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="name">Full Name *</label>
-                    <input id="name" name="name" value={form.name} onChange={handleChange} placeholder="Your full name" required />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="email">Email Address *</label>
-                    <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" required />
-                  </div>
+                  <div className="form-group"><label htmlFor="name">Full Name *</label><input id="name" name="name" value={form.name} onChange={handleChange} placeholder="Your full name" required /></div>
+                  <div className="form-group"><label htmlFor="email">Email Address *</label><input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" required /></div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="company">Company / Brand</label>
-                    <input id="company" name="company" value={form.company} onChange={handleChange} placeholder="Your company name" />
-                  </div>
+                  <div className="form-group"><label htmlFor="company">Company / Brand</label><input id="company" name="company" value={form.company} onChange={handleChange} placeholder="Your company name" /></div>
                   <div className="form-group">
                     <label htmlFor="budget">Monthly Budget</label>
                     <select id="budget" name="budget" value={form.budget} onChange={handleChange}>
                       <option value="">Select range</option>
-                      <option>₹10K – ₹30K</option>
-                      <option>₹30K – ₹75K</option>
-                      <option>₹75K – ₹2L</option>
-                      <option>₹2L+</option>
+                      <option>₹10K – ₹30K</option><option>₹30K – ₹75K</option><option>₹75K – ₹2L</option><option>₹2L+</option>
                     </select>
                   </div>
                 </div>
@@ -1318,13 +1443,9 @@ function Contact({ navigate }) {
                   <label htmlFor="service">Service You're Interested In</label>
                   <select id="service" name="service" value={form.service} onChange={handleChange}>
                     <option value="">Select a service</option>
-                    <option>SEO</option>
-                    <option>Paid Media & PPC</option>
-                    <option>Brand Strategy & Identity</option>
-                    <option>Social Media Management</option>
-                    <option>Content Marketing</option>
-                    <option>Analytics & CRO</option>
-                    <option>Full-Service Package</option>
+                    <option>SEO</option><option>Paid Media & PPC</option><option>Brand Strategy & Identity</option>
+                    <option>Social Media Management</option><option>Content Marketing</option>
+                    <option>Analytics & CRO</option><option>Full-Service Package</option>
                     <option>Not sure yet — need guidance</option>
                   </select>
                 </div>
@@ -1342,6 +1463,40 @@ function Contact({ navigate }) {
           </div>
         </div>
       </section>
+
+      {/* FULL-BACKGROUND MAP — Arawali Complex, Udaipur */}
+      <div className="map-hero">
+        <iframe
+          title="DSPHERY Office — Arawali Complex, Udaipur"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3627.631213368524!2d73.72863857392494!3d24.601920455556932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3967e502e5282287%3A0x80183086c9109d99!2sArawali%20complex!5e0!3m2!1sen!2sin!4v1773994958938!5m2!1sen!2sin"
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
+        <div className="map-panel">
+          <div className="map-panel-eyebrow">Find Our Office</div>
+          <h2 className="map-panel-title">Visit Us at <span>Arawali Complex</span>, Udaipur</h2>
+          <p className="map-panel-sub">Come meet our team in person or reach us anytime. We love connecting with ambitious brands.</p>
+          <div className="map-info-rows">
+            {[
+              ["📍","Office Address","Arawali Complex, Udaipur, Rajasthan 313001"],
+              ["📞","Phone","+91 98874 47780"],
+              ["📧","Email","hello@dsphery.com"],
+              ["⏰","Working Hours","Mon – Sat, 10:00 AM – 7:00 PM IST"],
+            ].map(([icon,label,val]) => (
+              <div className="map-info-row" key={label}>
+                <div className="map-info-icon">{icon}</div>
+                <div><div className="map-info-label">{label}</div><div className="map-info-val">{val}</div></div>
+              </div>
+            ))}
+          </div>
+          <a className="map-directions-btn" href="https://www.google.com/maps/place/Arawali+complex/@24.6019205,73.7286386,17z" target="_blank" rel="noopener noreferrer">
+            📍 Get Directions on Google Maps ↗
+          </a>
+        </div>
+        <div className="map-pin-badge"><div className="map-pin-dot" />Arawali Complex · Udaipur, Rajasthan</div>
+      </div>
+
       <Footer navigate={navigate} />
     </div>
   );
@@ -1370,7 +1525,7 @@ export default function App() {
 
   useCursor();
 
-  const navigate = useCallback((p) => { setPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }, []);
+  const navigate = useCallback((p) => { setPage(p); window.scrollTo({ top:0, behavior:"smooth" }); }, []);
 
   return (
     <>
@@ -1378,12 +1533,12 @@ export default function App() {
       <div id="ds-cursor-ring" />
       <div id="scroll-prog"><div id="scroll-prog-bar" /></div>
       <div id="ds-loader" className={loaded ? "hidden" : ""}>
-        <div className="ld-word">{"DSPHERY".split("").map((c, i) => <span key={i}>{c}</span>)}</div>
+        <div className="ld-word">{"DSPHERY".split("").map((c,i) => <span key={i}>{c}</span>)}</div>
         <div className="ld-orb" />
         <div className="ld-pct">{pct}%</div>
       </div>
       <Nav page={page} navigate={navigate} />
-      <main style={{ paddingTop: 70 }}>
+      <main style={{ paddingTop:70 }}>
         {page === "home"      && <Home      navigate={navigate} />}
         {page === "services"  && <Services  navigate={navigate} />}
         {page === "portfolio" && <Portfolio navigate={navigate} />}

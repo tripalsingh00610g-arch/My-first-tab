@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 const GLOBAL_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Poppins:ital,wght@0,300;0,400;0,500;1,300&display=swap');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -22,7 +22,7 @@ ul { list-style: none; }
 #ds-cursor {
   position: fixed; top: 0; left: 0;
   width: 12px; height: 12px;
-  background: #a78bfa; border-radius: 50%;
+  background: #39ff14; border-radius: 50%;
   pointer-events: none; z-index: 99999;
   transform: translate(-50%,-50%);
   transition: transform 0.08s, width 0.25s, height 0.25s, background 0.25s;
@@ -31,16 +31,16 @@ ul { list-style: none; }
 #ds-cursor-ring {
   position: fixed; top: 0; left: 0;
   width: 40px; height: 40px;
-  border: 1px solid rgba(167,139,250,0.4); border-radius: 50%;
+  border: 1px solid rgba(57,255,20,0.4); border-radius: 50%;
   pointer-events: none; z-index: 99998;
   transform: translate(-50%,-50%);
   transition: left 0.12s ease, top 0.12s ease, width 0.3s, height 0.3s, opacity 0.3s;
 }
-body.hovered #ds-cursor { width: 8px; height: 8px; background: #c4b5fd; }
-body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196,181,253,0.5); }
+body.hovered #ds-cursor { width: 8px; height: 8px; background: #39ff14; }
+body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,255,20,0.5); }
 
 #scroll-prog { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 1001; background: transparent; }
-#scroll-prog-bar { height: 100%; background: linear-gradient(90deg, #141a46, #7c3aed, #a78bfa); width: 0%; transition: width 0.1s; }
+#scroll-prog-bar { height: 100%; background: linear-gradient(90deg, #141a46, #39ff14, #fff); width: 0%; transition: width 0.1s; }
 
 #ds-loader {
   position: fixed; inset: 0; background: #060810; z-index: 99997;
@@ -64,16 +64,16 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 @keyframes ldIn { from{transform:translateY(110%);opacity:0} to{transform:translateY(0);opacity:1} }
 .ld-orb {
   width: 52px; height: 52px; border-radius: 50%;
-  border: 1.5px solid #7c3aed; position: relative; overflow: hidden;
+  border: 1.5px solid #141a46; position: relative; overflow: hidden;
 }
 .ld-orb::before {
   content: ''; position: absolute; inset: -20px; border-radius: 50%;
-  background: conic-gradient(from 0deg, transparent 0%, #7c3aed 30%, transparent 60%);
+  background: conic-gradient(from 0deg, transparent 0%, #141a46 30%, transparent 60%);
   animation: orbSpin 1.2s linear infinite;
 }
 .ld-orb::after { content: ''; position: absolute; inset: 3px; border-radius: 50%; background: #060810; }
 @keyframes orbSpin { to { transform: rotate(360deg); } }
-.ld-pct { font-size: 11px; letter-spacing: 4px; color: rgba(255,255,255,0.3); font-weight: 300; }
+.ld-pct { font-family: 'Poppins', sans-serif; font-size: 11px; letter-spacing: 4px; color: rgba(255,255,255,0.3); font-weight: 300; }
 
 .ds-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
@@ -88,13 +88,13 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 }
 .logo-orb {
   width: 24px; height: 24px; border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #141a46);
-  box-shadow: 0 0 18px rgba(124,58,237,0.5);
+  background: linear-gradient(135deg, #141a46, #39ff14);
+  box-shadow: 0 0 18px rgba(57,255,20,0.4);
   animation: orbPulse 3s ease-in-out infinite; flex-shrink: 0;
 }
 @keyframes orbPulse {
-  0%,100%{box-shadow:0 0 18px rgba(124,58,237,0.4)}
-  50%{box-shadow:0 0 30px rgba(124,58,237,0.7)}
+  0%,100%{box-shadow:0 0 18px rgba(57,255,20,0.3)}
+  50%{box-shadow:0 0 30px rgba(57,255,20,0.6)}
 }
 .ds-nav-links { display: flex; align-items: center; gap: 32px; }
 .ds-nav-links button {
@@ -105,11 +105,11 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 }
 .ds-nav-links button:hover, .ds-nav-links button.active { color: #fff; }
 .nav-cta-btn {
-  border: 1px solid #7c3aed !important; color: #a78bfa !important;
+  border: 1px solid #39ff14 !important; color: #39ff14 !important;
   padding: 7px 18px !important; border-radius: 100px !important;
   transition: background 0.2s, color 0.2s !important;
 }
-.nav-cta-btn:hover { background: #7c3aed !important; color: #fff !important; }
+.nav-cta-btn:hover { background: #39ff14 !important; color: #060810 !important; }
 .hamburger { display: none; flex-direction: column; gap: 5px; cursor: none; padding: 4px; background: none; border: none; }
 .hamburger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: 0.3s; }
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
@@ -135,13 +135,13 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 
 .btn-primary {
   display: inline-flex; align-items: center; gap: 10px;
-  background: linear-gradient(135deg, #7c3aed, #141a46);
-  color: #fff; padding: 12px 26px; border-radius: 100px;
+  background: linear-gradient(135deg, #141a46, #0a0f2e);
+  color: #39ff14; padding: 12px 26px; border-radius: 100px;
   font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;
   cursor: none; transition: transform 0.2s, box-shadow 0.2s;
-  border: none; box-shadow: 0 4px 24px rgba(124,58,237,0.35);
+  border: 1px solid #39ff14; box-shadow: 0 4px 24px rgba(57,255,20,0.2);
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(124,58,237,0.5); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(57,255,20,0.35); }
 .btn-ghost {
   display: inline-flex; align-items: center; gap: 10px;
   border: 1px solid rgba(255,255,255,0.12); color: #fff;
@@ -153,9 +153,9 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 
 .sec-label {
   font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
-  color: #a78bfa; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
+  color: #39ff14; margin-bottom: 12px; display: flex; align-items: center; gap: 10px;
 }
-.sec-label::before { content:''; display:inline-block; width:20px; height:1px; background:#7c3aed; }
+.sec-label::before { content:''; display:inline-block; width:20px; height:1px; background:#39ff14; }
 .sec-title {
   font-family: 'Syne', sans-serif;
   font-size: clamp(28px, 4vw, 52px);
@@ -169,23 +169,23 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 }
 .mq-track { display: inline-flex; align-items: center; animation: mqAnim 32s linear infinite; }
 .mq-strip:hover .mq-track { animation-play-state: paused; }
-.mq-item { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 20px; }
-.mq-dot { width: 3px; height: 3px; border-radius: 50%; background: #7c3aed; flex-shrink: 0; }
+.mq-item { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.35); padding: 0 20px; }
+.mq-dot { width: 3px; height: 3px; border-radius: 50%; background: #39ff14; flex-shrink: 0; }
 @keyframes mqAnim { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
 .ds-footer { padding: 72px 52px 36px; border-top: 1px solid rgba(255,255,255,0.06); background: rgba(20,26,70,0.15); }
 .ft-top { display: grid; grid-template-columns: 1fr 1.5fr; gap: 60px; margin-bottom: 48px; }
-.ft-tagline { font-size: 13px; line-height: 1.75; color: rgba(255,255,255,0.4); margin-top: 14px; max-width: 260px; font-weight: 300; }
+.ft-tagline { font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.75; color: rgba(255,255,255,0.4); margin-top: 14px; max-width: 260px; font-weight: 300; }
 .ft-links-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 40px; }
-.ft-col h4 { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #a78bfa; margin-bottom: 16px; font-family: 'Syne', sans-serif; }
+.ft-col h4 { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #39ff14; margin-bottom: 16px; font-family: 'Syne', sans-serif; }
 .ft-col ul { display: flex; flex-direction: column; gap: 10px; }
-.ft-col ul li { font-size: 13px; color: rgba(255,255,255,0.4); cursor: none; transition: color 0.2s; font-weight: 300; }
+.ft-col ul li { font-family: 'Poppins', sans-serif; font-size: 13px; color: rgba(255,255,255,0.4); cursor: none; transition: color 0.2s; font-weight: 300; }
 .ft-col ul li:hover { color: #fff; }
 .ft-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06); }
-.ft-copy { font-size: 12px; color: rgba(255,255,255,0.2); }
+.ft-copy { font-family: 'Poppins', sans-serif; font-size: 12px; color: rgba(255,255,255,0.2); }
 .social-row { display: flex; gap: 12px; }
 .soc-btn { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 12px; color: rgba(255,255,255,0.4); cursor: none; transition: border-color 0.2s, color 0.2s; background: none; }
-.soc-btn:hover { border-color: #7c3aed; color: #a78bfa; }
+.soc-btn:hover { border-color: #39ff14; color: #39ff14; }
 
 /* HERO */
 .hero-section {
@@ -202,9 +202,9 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .hero-glow {
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 55% 65% at 68% 48%, rgba(124,58,237,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 65% at 68% 48%, rgba(20,26,70,0.18) 0%, transparent 60%),
     radial-gradient(ellipse 45% 45% at 22% 72%, rgba(20,26,70,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse 35% 35% at 82% 18%, rgba(167,139,250,0.05) 0%, transparent 50%);
+    radial-gradient(ellipse 35% 35% at 82% 18%, rgba(57,255,20,0.04) 0%, transparent 50%);
 }
 .hero-grid {
   position: absolute; inset: 0;
@@ -222,7 +222,7 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .fpills { position: absolute; inset: 0; pointer-events: none; }
 .fpill {
   position: absolute; font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-  color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.4); border: 1px solid rgba(57,255,20,0.15);
   padding: 5px 13px; border-radius: 100px;
   background: rgba(20,26,70,0.5); backdrop-filter: blur(12px);
   animation: fpFloat 7s ease-in-out infinite; white-space: nowrap;
@@ -234,10 +234,10 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 @keyframes fpFloat { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-14px) rotate(1deg)} }
 .hero-content { position: relative; z-index: 2; max-width: 60%; }
 .hero-eyebrow {
-  font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #a78bfa;
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: #39ff14;
   font-weight: 500; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
 }
-.eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: #7c3aed; animation: orbPulse 2s ease-in-out infinite; }
+.eyebrow-dot { width: 5px; height: 5px; border-radius: 50%; background: #39ff14; animation: orbPulse 2s ease-in-out infinite; }
 .hero-title {
   font-family: 'Syne', sans-serif;
   font-size: clamp(40px, 6.5vw, 96px);
@@ -250,23 +250,23 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .tl:nth-child(3) span{animation-delay:0.6s}
 @keyframes tlIn { from{transform:translateY(110%)} to{transform:translateY(0)} }
 .t-outline { -webkit-text-stroke: 2px #fff; color: transparent; }
-.t-accent { background: linear-gradient(90deg, #7c3aed, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.t-accent { background: linear-gradient(90deg, #141a46, #39ff14); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
 .hero-bottom { display: flex; align-items: flex-end; justify-content: space-between; position: relative; z-index: 2; gap: 40px; flex-wrap: wrap; padding-top: 44px; }
-.hero-desc { max-width: 400px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.5); font-weight: 300; }
+.hero-desc { font-family: 'Poppins', sans-serif; max-width: 400px; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.5); font-weight: 300; }
 .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 22px; }
 .hero-stats { display: flex; gap: 40px; }
 .stat-n { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; color: #fff; line-height: 1; }
-.stat-n span { color: #a78bfa; }
-.stat-l { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 5px; }
+.stat-n span { color: #39ff14; }
+.stat-l { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 5px; }
 .scroll-ind { position: absolute; bottom: 28px; left: 52px; display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.25); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; z-index: 2; }
 .scroll-ln { width: 32px; height: 1px; background: rgba(255,255,255,0.15); overflow: hidden; position: relative; }
-.scroll-ln::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:#7c3aed; animation: sln 2s ease-in-out infinite; }
+.scroll-ln::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:#39ff14; animation: sln 2s ease-in-out infinite; }
 @keyframes sln { to { left: 100%; } }
 
 .counter-strip { padding: 48px 52px; background: rgba(20,26,70,0.2); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); display: grid; grid-template-columns: repeat(4,1fr); gap: 32px; text-align: center; }
 .counter-n { font-family: 'Syne', sans-serif; font-size: clamp(28px, 3.5vw, 48px); font-weight: 700; color: #fff; letter-spacing: 1px; }
-.counter-n span { color: #a78bfa; }
-.counter-l { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 6px; }
+.counter-n span { color: #39ff14; }
+.counter-l { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 6px; }
 
 .sv-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; }
 .sv-card {
@@ -275,14 +275,14 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 }
 .sv-card:nth-child(3n){ border-right: none; }
 .sv-card:nth-child(4),.sv-card:nth-child(5),.sv-card:nth-child(6){ border-bottom: none; }
-.sv-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(124,58,237,0.06) 0%, transparent 60%); opacity:0; transition:opacity 0.3s; }
+.sv-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, rgba(20,26,70,0.3) 0%, transparent 60%); opacity:0; transition:opacity 0.3s; }
 .sv-card:hover::before { opacity:1; }
 .sv-card:hover { background: rgba(20,26,70,0.4); }
-.sv-card:hover .sv-arrow { transform: translate(4px,-4px); color: #a78bfa; }
+.sv-card:hover .sv-arrow { transform: translate(4px,-4px); color: #39ff14; }
 .sv-num { font-family: 'Syne', sans-serif; font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.2); margin-bottom: 14px; font-weight: 600; }
 .sv-icon { font-size: 24px; margin-bottom: 12px; }
 .sv-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; color: #fff; font-family: 'Syne', sans-serif; }
-.sv-desc { font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
+.sv-desc { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
 .sv-arrow { position: absolute; top: 24px; right: 24px; font-size: 16px; color: rgba(255,255,255,0.2); transition: transform 0.3s, color 0.3s; }
 .sv-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
 .sv-tag { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; color: rgba(255,255,255,0.3); }
@@ -292,83 +292,83 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .mock-img { width: 100%; transition: transform 0.6s cubic-bezier(0.23,1,0.32,1); }
 .pf-item:hover .mock-img { transform: scale(1.04); }
 .pf-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 22px; background: linear-gradient(to top, rgba(6,8,16,0.95) 0%, transparent 100%); }
-.pf-tag { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #a78bfa; margin-bottom: 4px; }
+.pf-tag { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #39ff14; margin-bottom: 4px; }
 .pf-name { font-size: 17px; font-weight: 700; color: #fff; font-family: 'Syne', sans-serif; }
-.pf-meta { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+.pf-meta { font-family: 'Poppins', sans-serif; font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; }
 .ftabs { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 28px; }
 .ftab { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); cursor: none; background: transparent; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
-.ftab.active,.ftab:hover { background: #7c3aed; color: #fff; border-color: #7c3aed; }
+.ftab.active,.ftab:hover { background: #141a46; color: #39ff14; border-color: #39ff14; }
 
 .proc-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-.proc-body { font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.45); margin: 18px 0 28px; font-weight: 300; }
+.proc-body { font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.45); margin: 18px 0 28px; font-weight: 300; }
 .step-item { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.07); cursor: none; transition: padding-left 0.3s; }
 .step-item:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
 .step-item:hover { padding-left: 12px; }
-.step-item:hover .step-num { color: #a78bfa; }
+.step-item:hover .step-num { color: #39ff14; }
 .step-num { font-family: 'Syne', sans-serif; font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.2); padding-top: 4px; flex-shrink: 0; font-weight: 700; }
 .step-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: #fff; font-family: 'Syne', sans-serif; }
-.step-desc { font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
+.step-desc { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
 
 .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 40px; }
 .testi-card { background: rgba(20,26,70,0.25); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 32px 26px; position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
 .testi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
-.testi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, #141a46, #7c3aed, #a78bfa); opacity:0; transition:opacity 0.3s; }
+.testi-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, #141a46, #39ff14, #fff); opacity:0; transition:opacity 0.3s; }
 .testi-card:hover::before { opacity:1; }
 .testi-q { font-family: 'Syne', sans-serif; font-size: 48px; font-weight: 800; color: rgba(255,255,255,0.08); line-height: 0.7; margin-bottom: 14px; }
-.testi-text { font-size: 13px; line-height: 1.72; color: rgba(255,255,255,0.5); font-weight: 300; margin-bottom: 24px; }
+.testi-text { font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.72; color: rgba(255,255,255,0.5); font-weight: 300; margin-bottom: 24px; }
 .testi-author { display: flex; align-items: center; gap: 12px; }
 .t-avatar { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-.av-a{background:linear-gradient(135deg,#141a46,#7c3aed);color:#fff}
-.av-b{background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff}
-.av-c{background:linear-gradient(135deg,#a78bfa,#c4b5fd);color:#141a46}
+.av-a{background:linear-gradient(135deg,#141a46,#39ff14);color:#060810}
+.av-b{background:linear-gradient(135deg,#0a0f2e,#141a46);color:#39ff14}
+.av-c{background:linear-gradient(135deg,#39ff14,#a0ff80);color:#141a46}
 .t-name { font-size: 12px; font-weight: 700; color: #fff; font-family: 'Syne', sans-serif; }
-.t-role { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
-.stars { color: #a78bfa; font-size: 10px; margin-bottom: 8px; letter-spacing: 2px; }
+.t-role { font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+.stars { color: #39ff14; font-size: 10px; margin-bottom: 8px; letter-spacing: 2px; }
 
 .cta-section { padding: 110px 52px; text-align: center; position: relative; overflow: hidden; }
-.cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 65% 65% at 50% 50%, rgba(124,58,237,0.07) 0%, transparent 70%); pointer-events: none; }
-.cta-lbl { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: #a78bfa; margin-bottom: 20px; }
+.cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 65% 65% at 50% 50%, rgba(20,26,70,0.2) 0%, transparent 70%); pointer-events: none; }
+.cta-lbl { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: #39ff14; margin-bottom: 20px; }
 .cta-title { font-family: 'Syne', sans-serif; font-size: clamp(40px, 7vw, 100px); font-weight: 800; letter-spacing: -1.5px; line-height: 0.95; color: #fff; margin-bottom: 40px; }
 .cta-title span { -webkit-text-stroke: 2px #fff; color: transparent; }
 
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; margin-bottom: 80px; }
 .about-img-wrap { position: relative; }
-.about-img-box { width: 100%; aspect-ratio: 4/5; border-radius: 16px; background: linear-gradient(135deg, rgba(20,26,70,0.8), rgba(124,58,237,0.2)); border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.about-img-box { width: 100%; aspect-ratio: 4/5; border-radius: 16px; background: linear-gradient(135deg, rgba(20,26,70,0.8), rgba(57,255,20,0.08)); border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .about-float-stat { position: absolute; padding: 14px 20px; background: rgba(6,8,16,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; backdrop-filter: blur(12px); }
 .about-float-stat.top-right { top: 24px; right: -20px; }
 .about-float-stat.bottom-left { bottom: 40px; left: -24px; }
 .afs-n { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: #fff; }
-.afs-n span { color: #a78bfa; }
-.afs-l { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 3px; }
+.afs-n span { color: #39ff14; }
+.afs-l { font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 3px; }
 .team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; margin-top: 40px; }
 .team-card { background: rgba(20,26,70,0.2); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 26px 20px; text-align: center; transition: transform 0.3s, background 0.3s; cursor: none; }
 .team-card:hover { transform: translateY(-5px); background: rgba(20,26,70,0.4); }
 .team-avatar { width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
 .team-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: #fff; }
-.team-role { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; letter-spacing: 1px; }
+.team-role { font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 4px; letter-spacing: 1px; }
 .values-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
 .val-card { padding: 28px 24px; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; background: rgba(20,26,70,0.15); transition: border-color 0.3s; }
-.val-card:hover { border-color: rgba(124,58,237,0.4); }
+.val-card:hover { border-color: rgba(57,255,20,0.3); }
 .val-icon { font-size: 22px; margin-bottom: 12px; }
 .val-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 7px; }
-.val-desc { font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
+.val-desc { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
 
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 72px; align-items: start; }
 .contact-info { position: sticky; top: 100px; }
 .c-info-item { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
-.c-info-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.25); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
-.c-info-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 3px; }
-.c-info-val { font-size: 13px; color: #fff; font-weight: 400; }
+.c-info-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(20,26,70,0.5); border: 1px solid rgba(57,255,20,0.2); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.c-info-label { font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 3px; }
+.c-info-val { font-family: 'Poppins', sans-serif; font-size: 13px; color: #fff; font-weight: 400; }
 .contact-form-wrap { background: rgba(20,26,70,0.2); border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 40px 36px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 7px; }
+.form-group label { display: block; font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 7px; }
 .form-group input, .form-group select, .form-group textarea {
   width: 100%; background: rgba(6,8,16,0.6); border: 1px solid rgba(255,255,255,0.1);
   color: #fff; border-radius: 10px; padding: 11px 14px; font-size: 13px;
-  font-family: 'DM Sans', sans-serif; outline: none; transition: border-color 0.2s;
+  font-family: 'Poppins', sans-serif; outline: none; transition: border-color 0.2s;
 }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #7c3aed; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #39ff14; }
 .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
 .form-group select {
   appearance: none;
@@ -380,19 +380,19 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .form-success { text-align: center; padding: 40px 0; }
 .form-success-icon { font-size: 44px; margin-bottom: 14px; }
 .form-success h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-.form-success p { font-size: 13px; color: rgba(255,255,255,0.45); }
+.form-success p { font-family: 'Poppins', sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); }
 
 /* AI CHAT */
 .ai-btn {
   position: fixed; bottom: 28px; right: 28px; z-index: 900;
   width: 48px; height: 48px; border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #141a46);
-  color: #fff; border: none; cursor: none; font-size: 17px;
-  box-shadow: 0 4px 22px rgba(124,58,237,0.45);
+  background: linear-gradient(135deg, #141a46, #0a0f2e);
+  color: #39ff14; border: 1px solid #39ff14; cursor: none; font-size: 17px;
+  box-shadow: 0 4px 22px rgba(57,255,20,0.25);
   display: flex; align-items: center; justify-content: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-.ai-btn:hover { transform: scale(1.1); box-shadow: 0 8px 36px rgba(124,58,237,0.6); }
+.ai-btn:hover { transform: scale(1.1); box-shadow: 0 8px 36px rgba(57,255,20,0.4); }
 .ai-btn-badge {
   position: absolute; top: -3px; right: -3px;
   width: 13px; height: 13px; border-radius: 50%;
@@ -406,8 +406,8 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .ai-popup {
   position: fixed; bottom: 88px; right: 28px; z-index: 900;
   width: 340px; background: rgba(8,10,22,0.98);
-  border: 1px solid rgba(124,58,237,0.25); border-radius: 20px;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,58,237,0.1);
+  border: 1px solid rgba(57,255,20,0.2); border-radius: 20px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(57,255,20,0.08);
   transform: scale(0.85) translateY(20px); transform-origin: bottom right;
   opacity: 0; pointer-events: none;
   transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.35s;
@@ -418,13 +418,14 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .ai-header {
   padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.07);
   display: flex; align-items: center; gap: 9px; flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(20,26,70,0.6), rgba(124,58,237,0.08));
+  background: linear-gradient(135deg, rgba(20,26,70,0.6), rgba(57,255,20,0.05));
 }
 .ai-avatar {
   width: 32px; height: 32px; border-radius: 50%;
-  background: linear-gradient(135deg, #7c3aed, #141a46);
+  background: linear-gradient(135deg, #141a46, #0a0f2e);
+  border: 1px solid #39ff14;
   display: flex; align-items: center; justify-content: center;
-  font-size: 14px; flex-shrink: 0; position: relative;
+  font-size: 14px; flex-shrink: 0; position: relative; color: #39ff14;
 }
 .ai-avatar-dot {
   position: absolute; bottom: 1px; right: 1px;
@@ -433,8 +434,8 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 }
 .ai-header-info { flex: 1; }
 .ai-header-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
-.ai-header-status { font-size: 9px; color: #22c55e; letter-spacing: 0.5px; margin-top: 1px; display: flex; align-items: center; gap: 4px; }
-.ai-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; animation: badgePulse 2s infinite; }
+.ai-header-status { font-family: 'Poppins', sans-serif; font-size: 9px; color: #39ff14; letter-spacing: 0.5px; margin-top: 1px; display: flex; align-items: center; gap: 4px; }
+.ai-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #39ff14; animation: badgePulse 2s infinite; }
 .ai-close { background: none; border: none; color: rgba(255,255,255,0.3); cursor: none; font-size: 16px; padding: 2px; transition: color 0.2s; line-height: 1; }
 .ai-close:hover { color: #fff; }
 .ai-quick-chips {
@@ -443,29 +444,30 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
   background: rgba(20,26,70,0.15);
 }
 .ai-chip {
-  font-size: 9px; letter-spacing: 0.5px; padding: 4px 9px;
-  border: 1px solid rgba(124,58,237,0.3); border-radius: 100px;
-  color: rgba(167,139,250,0.8); background: rgba(124,58,237,0.08);
+  font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 0.5px; padding: 4px 9px;
+  border: 1px solid rgba(57,255,20,0.25); border-radius: 100px;
+  color: rgba(57,255,20,0.7); background: rgba(57,255,20,0.05);
   cursor: none; transition: all 0.2s; white-space: nowrap;
 }
-.ai-chip:hover { background: rgba(124,58,237,0.25); color: #fff; border-color: #7c3aed; }
+.ai-chip:hover { background: rgba(57,255,20,0.15); color: #39ff14; border-color: #39ff14; }
 .ai-msgs {
   flex: 1; overflow-y: auto; padding: 14px 12px;
   display: flex; flex-direction: column; gap: 9px;
-  scrollbar-width: thin; scrollbar-color: rgba(124,58,237,0.3) transparent;
+  scrollbar-width: thin; scrollbar-color: rgba(57,255,20,0.2) transparent;
 }
 .ai-msgs::-webkit-scrollbar { width: 3px; }
-.ai-msgs::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 3px; }
+.ai-msgs::-webkit-scrollbar-thumb { background: rgba(57,255,20,0.2); border-radius: 3px; }
 .ai-msg-wrap { display: flex; gap: 7px; align-items: flex-end; }
 .ai-msg-wrap.user { flex-direction: row-reverse; }
 .ai-msg-avatar {
   width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
-  background: linear-gradient(135deg, #7c3aed, #141a46);
+  background: linear-gradient(135deg, #141a46, #0a0f2e);
+  border: 1px solid #39ff14;
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; margin-bottom: 2px;
+  font-size: 10px; color: #39ff14; margin-bottom: 2px;
 }
 .ai-msg {
-  font-size: 12px; line-height: 1.6; padding: 9px 12px;
+  font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.6; padding: 9px 12px;
   border-radius: 13px; max-width: 82%; word-break: break-word;
 }
 .ai-msg.bot {
@@ -474,10 +476,10 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
   border-radius: 13px 13px 13px 3px;
 }
 .ai-msg.user {
-  background: linear-gradient(135deg, #7c3aed, #5b21b6);
-  color: #fff; border-radius: 13px 13px 3px 13px;
+  background: linear-gradient(135deg, #141a46, #0a0f2e);
+  color: #fff; border: 1px solid rgba(57,255,20,0.2); border-radius: 13px 13px 3px 13px;
 }
-.ai-msg-time { font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 3px; text-align: right; }
+.ai-msg-time { font-family: 'Poppins', sans-serif; font-size: 9px; color: rgba(255,255,255,0.2); margin-top: 3px; text-align: right; }
 .ai-typing {
   display: flex; align-items: center; gap: 4px;
   padding: 9px 12px; background: rgba(20,26,70,0.6);
@@ -485,7 +487,7 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
   border-radius: 13px 13px 13px 3px; width: fit-content;
 }
 .ai-typing span {
-  width: 4px; height: 4px; border-radius: 50%; background: #a78bfa;
+  width: 4px; height: 4px; border-radius: 50%; background: #39ff14;
   animation: typingDot 1.2s ease-in-out infinite;
 }
 .ai-typing span:nth-child(2){animation-delay:0.2s}
@@ -503,23 +505,23 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
   flex: 1; background: rgba(20,26,70,0.5);
   border: 1px solid rgba(255,255,255,0.1);
   color: #fff; border-radius: 9px; padding: 9px 12px;
-  font-size: 12px; font-family: 'DM Sans', sans-serif; outline: none;
+  font-size: 12px; font-family: 'Poppins', sans-serif; outline: none;
   resize: none; min-height: 36px; max-height: 80px;
   transition: border-color 0.2s; line-height: 1.4;
   scrollbar-width: none;
 }
-.ai-in:focus { border-color: rgba(124,58,237,0.5); }
+.ai-in:focus { border-color: rgba(57,255,20,0.4); }
 .ai-in::placeholder { color: rgba(255,255,255,0.2); }
 .ai-send {
   width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
-  background: linear-gradient(135deg, #7c3aed, #141a46);
-  border: none; cursor: none; color: #fff; font-size: 14px;
+  background: linear-gradient(135deg, #141a46, #0a0f2e);
+  border: 1px solid #39ff14; cursor: none; color: #39ff14; font-size: 14px;
   display: flex; align-items: center; justify-content: center;
   transition: transform 0.2s, opacity 0.2s;
 }
 .ai-send:hover:not(:disabled) { transform: scale(1.08); }
 .ai-send:disabled { opacity: 0.5; }
-.ai-powered { font-size: 9px; color: rgba(255,255,255,0.15); text-align: center; margin-top: 7px; letter-spacing: 0.5px; }
+.ai-powered { font-family: 'Poppins', sans-serif; font-size: 9px; color: rgba(255,255,255,0.15); text-align: center; margin-top: 7px; letter-spacing: 0.5px; }
 
 .clients-track { display: inline-flex; gap: 64px; animation: mqAnim2 28s linear infinite; align-items: center; white-space: nowrap; }
 @keyframes mqAnim2 { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -537,26 +539,26 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
   transition: background 0.3s, border-color 0.3s;
   grid-template-columns: 1fr 2.5fr auto;
 }
-.svc-row:hover { background: rgba(20,26,70,0.35); border-color: rgba(124,58,237,0.3); }
-.svc-metric-n { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #a78bfa; }
-.svc-metric-l { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+.svc-row:hover { background: rgba(20,26,70,0.35); border-color: rgba(57,255,20,0.25); }
+.svc-metric-n { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #39ff14; }
+.svc-metric-l { font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
 
 /* FAQ */
 .faq-list { display: grid; gap: 12px; }
 .faq-item { border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; overflow: hidden; background: rgba(20,26,70,0.12); transition: border-color 0.3s; }
-.faq-item.open { border-color: rgba(124,58,237,0.3); }
+.faq-item.open { border-color: rgba(57,255,20,0.25); }
 .faq-q { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; background: none; border: none; color: #fff; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; cursor: none; text-align: left; gap: 16px; }
-.faq-icon { font-size: 18px; color: #a78bfa; flex-shrink: 0; transition: transform 0.3s; }
+.faq-icon { font-size: 18px; color: #39ff14; flex-shrink: 0; transition: transform 0.3s; }
 .faq-item.open .faq-icon { transform: rotate(45deg); }
-.faq-a { font-size: 13px; line-height: 1.78; color: rgba(255,255,255,0.5); padding: 0 22px 20px; font-weight: 300; }
+.faq-a { font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.78; color: rgba(255,255,255,0.5); padding: 0 22px 20px; font-weight: 300; }
 
 /* WHY US */
 .why-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
 .why-card { padding: 26px 22px; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; background: rgba(20,26,70,0.15); text-align: center; transition: border-color 0.3s, transform 0.3s; }
-.why-card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-4px); }
-.why-num { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: #a78bfa; line-height: 1; }
-.why-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 5px; }
-.why-desc { font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.45); margin-top: 10px; font-weight: 300; }
+.why-card:hover { border-color: rgba(57,255,20,0.35); transform: translateY(-4px); }
+.why-num { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 800; color: #39ff14; line-height: 1; }
+.why-label { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 5px; }
+.why-desc { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.45); margin-top: 10px; font-weight: 300; }
 
 /* MAP HERO */
 .map-hero {
@@ -574,25 +576,25 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 .map-panel {
   position: absolute; top: 50%; left: 52px; transform: translateY(-50%);
   z-index: 2; width: min(400px, calc(100% - 80px));
-  background: rgba(6,8,16,0.92); border: 1px solid rgba(124,58,237,0.3);
+  background: rgba(6,8,16,0.92); border: 1px solid rgba(57,255,20,0.25);
   border-radius: 20px; padding: 32px 36px;
   backdrop-filter: blur(24px); box-shadow: 0 24px 80px rgba(0,0,0,0.6);
 }
-.map-panel-eyebrow { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: #a78bfa; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-.map-panel-eyebrow::before { content:''; display:inline-block; width:16px; height:1px; background:#7c3aed; }
+.map-panel-eyebrow { font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: #39ff14; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.map-panel-eyebrow::before { content:''; display:inline-block; width:16px; height:1px; background:#39ff14; }
 .map-panel-title { font-family: 'Syne', sans-serif; font-size: clamp(18px, 2vw, 26px); font-weight: 800; color: #fff; line-height: 1.12; margin-bottom: 8px; }
-.map-panel-title span { color: #a78bfa; }
-.map-panel-sub { font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.4); font-weight: 300; margin-bottom: 20px; }
+.map-panel-title span { color: #39ff14; }
+.map-panel-sub { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.4); font-weight: 300; margin-bottom: 20px; }
 .map-info-rows { display: flex; flex-direction: column; margin-bottom: 20px; }
 .map-info-row { display: flex; align-items: flex-start; gap: 11px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
 .map-info-row:first-child { border-top: 1px solid rgba(255,255,255,0.07); }
-.map-info-icon { width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0; background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; }
-.map-info-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 1px; }
-.map-info-val { font-size: 12px; color: #fff; font-weight: 400; line-height: 1.4; }
-.map-directions-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px 18px; border-radius: 100px; background: linear-gradient(135deg, #7c3aed, #141a46); color: #fff; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; font-family: 'DM Sans', sans-serif; border: none; cursor: pointer; text-decoration: none; box-shadow: 0 4px 20px rgba(124,58,237,0.4); transition: transform 0.2s, box-shadow 0.2s; }
-.map-directions-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(124,58,237,0.55); }
-.map-pin-badge { position: absolute; bottom: 20px; right: 20px; z-index: 3; background: rgba(6,8,16,0.92); border: 1px solid rgba(124,58,237,0.25); border-radius: 100px; padding: 6px 14px; backdrop-filter: blur(12px); display: flex; align-items: center; gap: 7px; font-size: 10px; color: rgba(255,255,255,0.55); }
-.map-pin-dot { width: 7px; height: 7px; border-radius: 50%; background: #a78bfa; animation: orbPulse 2s infinite; flex-shrink: 0; }
+.map-info-icon { width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0; background: rgba(20,26,70,0.6); border: 1px solid rgba(57,255,20,0.2); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+.map-info-label { font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 1px; }
+.map-info-val { font-family: 'Poppins', sans-serif; font-size: 12px; color: #fff; font-weight: 400; line-height: 1.4; }
+.map-directions-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 10px 18px; border-radius: 100px; background: linear-gradient(135deg, #141a46, #0a0f2e); border: 1px solid #39ff14; color: #39ff14; font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; cursor: pointer; text-decoration: none; box-shadow: 0 4px 20px rgba(57,255,20,0.2); transition: transform 0.2s, box-shadow 0.2s; }
+.map-directions-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 36px rgba(57,255,20,0.3); }
+.map-pin-badge { position: absolute; bottom: 20px; right: 20px; z-index: 3; background: rgba(6,8,16,0.92); border: 1px solid rgba(57,255,20,0.2); border-radius: 100px; padding: 6px 14px; backdrop-filter: blur(12px); display: flex; align-items: center; gap: 7px; font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.55); }
+.map-pin-dot { width: 7px; height: 7px; border-radius: 50%; background: #39ff14; animation: orbPulse 2s infinite; flex-shrink: 0; }
 
 @media(max-width:768px){
   .map-hero { height: auto; display: flex; flex-direction: column; }
@@ -652,6 +654,8 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(196
 }
 `;
 
+// ── GLOBE FIX: use ResizeObserver + delayed initial resize so canvas is sized
+// correctly on the very first render (before the wrapper has painted).
 function useHeroGlobe(canvasRef) {
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -659,14 +663,27 @@ function useHeroGlobe(canvasRef) {
     const hCtx = canvas.getContext("2d");
     let animId;
     const dpr = window.devicePixelRatio || 1;
+
     function resize() {
       const wrap = canvas.parentElement;
       if (!wrap) return;
-      canvas.width = wrap.clientWidth * dpr;
-      canvas.height = wrap.clientHeight * dpr;
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      if (w === 0 || h === 0) return; // guard against 0-size on first paint
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
     }
+
+    // Initial size — try immediately, then again after a frame to handle
+    // cases where the wrapper hasn't laid out yet on first mount.
     resize();
+    const rafId = requestAnimationFrame(() => { resize(); });
+
+    // Also watch for any future size changes (page resize, etc.)
+    const ro = new ResizeObserver(() => resize());
+    if (canvas.parentElement) ro.observe(canvas.parentElement);
     window.addEventListener("resize", resize);
+
     const pts = [];
     for (let i = 0; i < 280; i++) {
       pts.push({ phi: Math.acos(2 * Math.random() - 1), theta: Math.random() * 2 * Math.PI, size: Math.random() * 2.2 + 0.4, alpha: Math.random() * 0.7 + 0.3 });
@@ -681,6 +698,7 @@ function useHeroGlobe(canvasRef) {
       tiltY += ((e.clientX / window.innerWidth - 0.5) * 0.2 - tiltY) * 0.05;
     };
     window.addEventListener("mousemove", onMouse);
+
     function proj(phi, theta, r, cx, cy) {
       let x = Math.sin(phi) * Math.cos(theta + rot);
       let y = Math.cos(phi);
@@ -691,13 +709,16 @@ function useHeroGlobe(canvasRef) {
       const x3 = x * cosY + z2 * sinY, y3 = y2, z3 = -x * sinY + z2 * cosY;
       return { sx: cx + x3 * r, sy: cy - y3 * r, visible: z3 > -0.15, depth: z3 };
     }
+
     function draw() {
       const W = canvas.width / dpr, H = canvas.height / dpr;
+      // If canvas still has no size, skip this frame
+      if (W === 0 || H === 0) { rot += 0.0015; animId = requestAnimationFrame(draw); return; }
       hCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       hCtx.clearRect(0, 0, W, H);
       const cx = W / 2, cy = H / 2, r = Math.min(W, H) * 0.44;
       const atmo = hCtx.createRadialGradient(cx, cy, r * 0.75, cx, cy, r * 1.15);
-      atmo.addColorStop(0, "rgba(124,58,237,0.04)"); atmo.addColorStop(0.6, "rgba(20,26,70,0.07)"); atmo.addColorStop(1, "transparent");
+      atmo.addColorStop(0, "rgba(20,26,70,0.08)"); atmo.addColorStop(0.6, "rgba(20,26,70,0.07)"); atmo.addColorStop(1, "transparent");
       hCtx.beginPath(); hCtx.arc(cx, cy, r * 1.15, 0, Math.PI * 2); hCtx.fillStyle = atmo; hCtx.fill();
       const base = hCtx.createRadialGradient(cx - r * 0.28, cy - r * 0.28, r * 0.05, cx, cy, r);
       base.addColorStop(0, "rgba(20,26,70,0.9)"); base.addColorStop(0.5, "rgba(10,14,30,0.75)"); base.addColorStop(1, "rgba(6,8,16,0.85)");
@@ -706,12 +727,12 @@ function useHeroGlobe(canvasRef) {
       for (let lat = -75; lat <= 75; lat += 15) {
         const phi2 = (90 - lat) * Math.PI / 180;
         hCtx.beginPath(); hCtx.ellipse(cx, cy - r * Math.cos(phi2), r * Math.sin(phi2), r * Math.sin(phi2) * 0.2, 0, 0, Math.PI * 2);
-        hCtx.strokeStyle = "rgba(124,58,237,0.1)"; hCtx.lineWidth = 0.7; hCtx.stroke();
+        hCtx.strokeStyle = "rgba(20,26,70,0.4)"; hCtx.lineWidth = 0.7; hCtx.stroke();
       }
       for (let lon = 0; lon < 180; lon += 15) {
         const angle = lon * Math.PI / 180 + rot;
         hCtx.beginPath(); hCtx.ellipse(cx, cy, r * Math.abs(Math.cos(angle)), r, 0, 0, Math.PI * 2);
-        hCtx.strokeStyle = "rgba(124,58,237,0.08)"; hCtx.lineWidth = 0.7; hCtx.stroke();
+        hCtx.strokeStyle = "rgba(20,26,70,0.35)"; hCtx.lineWidth = 0.7; hCtx.stroke();
       }
       hCtx.restore();
       arcs.forEach((arc) => {
@@ -721,8 +742,8 @@ function useHeroGlobe(canvasRef) {
         if (Math.hypot(pB.sx - pA.sx, pB.sy - pA.sy) > r * 0.8) return;
         const midX = (pA.sx + pB.sx) / 2, midY = (pA.sy + pB.sy) / 2 - r * 0.1;
         const g = hCtx.createLinearGradient(pA.sx, pA.sy, pB.sx, pB.sy);
-        g.addColorStop(0, "rgba(124,58,237,0)"); g.addColorStop(arc.progress * 0.8, `rgba(124,58,237,${arc.alpha * 0.8})`);
-        g.addColorStop(arc.progress, `rgba(167,139,250,${arc.alpha})`); g.addColorStop(Math.min(arc.progress + 0.15, 1), "rgba(124,58,237,0)"); g.addColorStop(1, "rgba(124,58,237,0)");
+        g.addColorStop(0, "rgba(57,255,20,0)"); g.addColorStop(arc.progress * 0.8, `rgba(57,255,20,${arc.alpha * 0.6})`);
+        g.addColorStop(arc.progress, `rgba(57,255,20,${arc.alpha})`); g.addColorStop(Math.min(arc.progress + 0.15, 1), "rgba(57,255,20,0)"); g.addColorStop(1, "rgba(57,255,20,0)");
         hCtx.beginPath(); hCtx.moveTo(pA.sx, pA.sy); hCtx.quadraticCurveTo(midX, midY, pB.sx, pB.sy);
         hCtx.strokeStyle = g; hCtx.lineWidth = 1; hCtx.stroke();
       });
@@ -730,11 +751,11 @@ function useHeroGlobe(canvasRef) {
         const p = proj(pt.phi, pt.theta, r, cx, cy); if (!p.visible) return;
         const df = (p.depth + 1) / 2;
         hCtx.beginPath(); hCtx.arc(p.sx, p.sy, pt.size * (0.5 + df * 0.5), 0, Math.PI * 2);
-        hCtx.fillStyle = `rgba(167,139,250,${pt.alpha * df})`; hCtx.fill();
+        hCtx.fillStyle = `rgba(57,255,20,${pt.alpha * df * 0.7})`; hCtx.fill();
         if (pt.alpha > 0.85 && df > 0.6) {
           hCtx.beginPath(); hCtx.arc(p.sx, p.sy, pt.size * 3, 0, Math.PI * 2);
           const pg = hCtx.createRadialGradient(p.sx, p.sy, 0, p.sx, p.sy, pt.size * 3);
-          pg.addColorStop(0, `rgba(167,139,250,${pt.alpha * df * 0.3})`); pg.addColorStop(1, "transparent");
+          pg.addColorStop(0, `rgba(57,255,20,${pt.alpha * df * 0.2})`); pg.addColorStop(1, "transparent");
           hCtx.fillStyle = pg; hCtx.fill();
         }
       });
@@ -742,12 +763,18 @@ function useHeroGlobe(canvasRef) {
       spec.addColorStop(0, "rgba(255,255,255,0.1)"); spec.addColorStop(1, "transparent");
       hCtx.beginPath(); hCtx.arc(cx, cy, r, 0, Math.PI * 2); hCtx.fillStyle = spec; hCtx.fill();
       const rim = hCtx.createRadialGradient(cx, cy, r * 0.72, cx, cy, r);
-      rim.addColorStop(0, "transparent"); rim.addColorStop(0.7, "rgba(124,58,237,0.04)"); rim.addColorStop(1, "rgba(124,58,237,0.15)");
+      rim.addColorStop(0, "transparent"); rim.addColorStop(0.7, "rgba(20,26,70,0.04)"); rim.addColorStop(1, "rgba(57,255,20,0.08)");
       hCtx.beginPath(); hCtx.arc(cx, cy, r, 0, Math.PI * 2); hCtx.fillStyle = rim; hCtx.fill();
       rot += 0.0015; animId = requestAnimationFrame(draw);
     }
     draw();
-    return () => { cancelAnimationFrame(animId); window.removeEventListener("resize", resize); window.removeEventListener("mousemove", onMouse); };
+    return () => {
+      cancelAnimationFrame(animId);
+      cancelAnimationFrame(rafId);
+      ro.disconnect();
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouse);
+    };
   }, [canvasRef]);
 }
 
@@ -856,7 +883,6 @@ function Nav({ page, navigate }) {
   );
 }
 
-/* ── AI CHAT — Powered by Anthropic API ── */
 const DSPHERY_SYSTEM_PROMPT = `You are DSPHERY's expert digital marketing assistant. DSPHERY is a premium digital marketing agency based in Udaipur, Rajasthan, India. Contact: hello@dsphery.com, +91 98874 47780.
 
 DSPHERY's services:
@@ -1007,12 +1033,11 @@ function Home({ navigate }) {
         ))}
       </div>
 
-      {/* WHY DSPHERY */}
       <section className="section" style={{ borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
         <div className="reveal" style={{ textAlign:"center", marginBottom:44 }}>
           <div className="sec-label" style={{ justifyContent:"center" }}>Why Choose Us</div>
           <h2 className="sec-title">The DSPHERY Difference</h2>
-          <p style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:560, margin:"14px auto 0", fontWeight:300 }}>
+          <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:560, margin:"14px auto 0", fontWeight:300 }}>
             We don't just run campaigns — we build growth engines. Here's what sets us apart from every other agency in the market.
           </p>
         </div>
@@ -1037,7 +1062,7 @@ function Home({ navigate }) {
           <div className="reveal">
             <div className="sec-label">What We Do</div>
             <h2 className="sec-title">Our Core Services</h2>
-            <p style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:380, marginTop:12, fontWeight:300 }}>
+            <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:380, marginTop:12, fontWeight:300 }}>
               Six deeply specialised disciplines working in sync to accelerate your brand's digital growth.
             </p>
           </div>
@@ -1065,7 +1090,7 @@ function Home({ navigate }) {
       </section>
 
       <div style={{ padding:"40px 52px", overflow:"hidden", borderTop:"1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"rgba(255,255,255,0.2)", textAlign:"center", marginBottom:24 }} className="reveal">Trusted By Forward-Thinking Brands</div>
+        <div style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"rgba(255,255,255,0.2)", textAlign:"center", marginBottom:24 }} className="reveal">Trusted By Forward-Thinking Brands</div>
         <div style={{ overflow:"hidden" }}>
           <div className="clients-track">
             {["TECHVAULT","LUMINARY","ORBITCO","NEXGEN","PULSE","MERIDIAN","VANTA","AXIOM",
@@ -1077,7 +1102,7 @@ function Home({ navigate }) {
       <section className="section" style={{ background:"rgba(20,26,70,0.1)" }}>
         <div className="sec-label reveal">Client Success Stories</div>
         <h2 className="sec-title reveal" style={{ marginBottom:8 }}>Results That Speak</h2>
-        <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300 }}>
+        <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300 }}>
           Real brands. Real campaigns. Real numbers. Here's what our clients say about working with DSPHERY.
         </p>
         <div className="testi-grid">
@@ -1103,7 +1128,7 @@ function Home({ navigate }) {
         <div className="cta-bg" />
         <div className="cta-lbl">Ready to Grow?</div>
         <h2 className="cta-title reveal">Let's Build<br /><span>Something</span><br />Great</h2>
-        <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.4)", maxWidth:440, margin:"0 auto 36px", fontWeight:300 }}>
+        <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.4)", maxWidth:440, margin:"0 auto 36px", fontWeight:300 }}>
           Whether you're launching a new brand or scaling an established business, DSPHERY has the strategy, talent, and tools to take you further.
         </p>
         <div style={{ display:"flex", gap:14, justifyContent:"center", flexWrap:"wrap" }}>
@@ -1141,10 +1166,10 @@ function Services({ navigate }) {
   return (
     <div className="page-enter">
       <div style={{ padding:"130px 52px 56px", position:"relative", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 60% 50% at 30% 60%, rgba(124,58,237,0.07) 0%, transparent 60%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 60% 50% at 30% 60%, rgba(20,26,70,0.2) 0%, transparent 60%)", pointerEvents:"none" }} />
         <div className="sec-label reveal">What We Do</div>
         <h1 className="sec-title reveal" style={{ maxWidth:560, marginBottom:18 }}>Comprehensive Digital Services</h1>
-        <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:520, fontWeight:300, marginBottom:32 }}>
+        <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:520, fontWeight:300, marginBottom:32 }}>
           End-to-end digital marketing solutions built around your growth ambitions. Every service is backed by data, powered by creativity, and delivered by specialists who live and breathe their discipline.
         </p>
         <button className="btn-primary reveal" onClick={() => navigate("contact")}>Start a Project ↗</button>
@@ -1160,7 +1185,7 @@ function Services({ navigate }) {
                 <div style={{ fontFamily:"'Syne',sans-serif", fontSize:15, fontWeight:700, color:"#fff", marginBottom:10 }}>{s.title}</div>
                 <div style={{ display:"flex", flexWrap:"wrap", gap:4, marginTop:10 }}>{s.tags.map((t) => <span className="sv-tag" key={t}>{t}</span>)}</div>
               </div>
-              <p style={{ fontSize:13, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300 }}>{s.desc}</p>
+              <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:13, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300 }}>{s.desc}</p>
               <div style={{ textAlign:"center", minWidth:90 }}>
                 <div className="svc-metric-n">{s.metric}</div>
                 <div className="svc-metric-l">{s.metricLabel}</div>
@@ -1216,12 +1241,12 @@ function Services({ navigate }) {
 
 /* ── PORTFOLIO ── */
 const PORTFOLIO_ITEMS = [
-  { cat:["brand","seo"], tag:"Brand Strategy + SEO", name:"Ewolwl", meta:"40% organic growth in 8 months", color:"linear-gradient(135deg,#0a1230 0%,#050a18 100%)", accent:"#7c3aed", desc:"Full brand overhaul and SEO foundation build for a B2B SaaS company. Repositioned brand, built topical authority through content, and restructured technical SEO — resulting in 420% organic traffic growth in 8 months." },
-  { cat:["paid"], tag:"Paid Media", name:"FFDL", meta:"3.2× ROAS at ₹1L/mo ad spend", color:"linear-gradient(135deg,#100d28 0%,#060218 100%)", accent:"#a78bfa", desc:"Scaled a D2C lifestyle brand from ₹1L to ₹5L in monthly paid media spend while maintaining a 4.2× blended ROAS. Achieved through creative testing frameworks, audience segmentation, and full-funnel campaign architecture." },
-  { cat:["social"], tag:"Social Media", name:"Orbit Commerce", meta:"100K community built in 12 months", color:"linear-gradient(135deg,#1a0a20 0%,#0f0015 100%)", accent:"#c4b5fd", desc:"Built a 800K-strong social community across Instagram and YouTube from scratch for a consumer electronics brand. Included influencer partnerships, content strategy, and community-led growth loops that drove direct revenue." },
-  { cat:["seo"], tag:"SEO", name:"Nexgen Platform", meta:"310% traffic increase YOY", color:"linear-gradient(135deg,#0d1828 0%,#060f1a 100%)", accent:"#818cf8", desc:"Comprehensive SEO programme for an ed-tech platform including content hub development, technical SEO fixes, and national link building. Grew organic traffic 310% year-on-year, reducing CAC by 42%." },
-  { cat:["brand"], tag:"Brand Identity", name:"Vanta Labs", meta:"Complete brand system from zero", color:"linear-gradient(135deg,#150a25 0%,#0a0515 100%)", accent:"#a78bfa", desc:"Built the entire brand identity for a biotech startup from naming through to full brand guidelines, website visual design, and pitch deck templates. The brand was instrumental in securing Series A funding." },
-  { cat:["paid","social"], tag:"Paid + Social", name:"Institutes", meta:"4.5× ROI achieved in 6 months", color:"linear-gradient(135deg,#0a1520 0%,#050c14 100%)", accent:"#6d28d9", desc:"Integrated paid social and organic social strategy for a fashion e-commerce brand. Combined TikTok UGC ads with Meta remarketing and Instagram community building to achieve 12× ROI within 6 months of engagement." },
+  { cat:["brand","seo"], tag:"Brand Strategy + SEO", name:"Ewolwl", meta:"40% organic growth in 8 months", color:"linear-gradient(135deg,#0a1230 0%,#050a18 100%)", accent:"#39ff14", desc:"Full brand overhaul and SEO foundation build for a B2B SaaS company. Repositioned brand, built topical authority through content, and restructured technical SEO — resulting in 420% organic traffic growth in 8 months." },
+  { cat:["paid"], tag:"Paid Media", name:"FFDL", meta:"3.2× ROAS at ₹1L/mo ad spend", color:"linear-gradient(135deg,#100d28 0%,#060218 100%)", accent:"#39ff14", desc:"Scaled a D2C lifestyle brand from ₹1L to ₹5L in monthly paid media spend while maintaining a 4.2× blended ROAS. Achieved through creative testing frameworks, audience segmentation, and full-funnel campaign architecture." },
+  { cat:["social"], tag:"Social Media", name:"Orbit Commerce", meta:"100K community built in 12 months", color:"linear-gradient(135deg,#1a0a20 0%,#0f0015 100%)", accent:"#39ff14", desc:"Built a 800K-strong social community across Instagram and YouTube from scratch for a consumer electronics brand. Included influencer partnerships, content strategy, and community-led growth loops that drove direct revenue." },
+  { cat:["seo"], tag:"SEO", name:"Nexgen Platform", meta:"310% traffic increase YOY", color:"linear-gradient(135deg,#0d1828 0%,#060f1a 100%)", accent:"#39ff14", desc:"Comprehensive SEO programme for an ed-tech platform including content hub development, technical SEO fixes, and national link building. Grew organic traffic 310% year-on-year, reducing CAC by 42%." },
+  { cat:["brand"], tag:"Brand Identity", name:"Vanta Labs", meta:"Complete brand system from zero", color:"linear-gradient(135deg,#150a25 0%,#0a0515 100%)", accent:"#39ff14", desc:"Built the entire brand identity for a biotech startup from naming through to full brand guidelines, website visual design, and pitch deck templates. The brand was instrumental in securing Series A funding." },
+  { cat:["paid","social"], tag:"Paid + Social", name:"Institutes", meta:"4.5× ROI achieved in 6 months", color:"linear-gradient(135deg,#0a1520 0%,#050c14 100%)", accent:"#39ff14", desc:"Integrated paid social and organic social strategy for a fashion e-commerce brand. Combined TikTok UGC ads with Meta remarketing and Instagram community building to achieve 12× ROI within 6 months of engagement." },
 ];
 
 function Portfolio({ navigate }) {
@@ -1231,10 +1256,10 @@ function Portfolio({ navigate }) {
   return (
     <div className="page-enter">
       <div style={{ padding:"130px 52px 56px", position:"relative", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 50% 60% at 70% 50%, rgba(124,58,237,0.07) 0%, transparent 60%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 50% 60% at 70% 50%, rgba(20,26,70,0.15) 0%, transparent 60%)", pointerEvents:"none" }} />
         <div className="sec-label reveal">Selected Work</div>
         <h1 className="sec-title reveal">Cases That Speak Volumes</h1>
-        <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginTop:16 }}>
+        <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginTop:16 }}>
           Real results for real brands. Each project represents a unique challenge solved with strategy, creativity, and disciplined execution. The numbers are real.
         </p>
       </div>
@@ -1249,18 +1274,18 @@ function Portfolio({ navigate }) {
             <div key={p.name} className="pf-item reveal">
               <div className="mock-img" style={{ height:260, background:p.color, position:"relative", overflow:"hidden" }}>
                 <svg viewBox="0 0 500 260" xmlns="http://www.w3.org/2000/svg" style={{ position:"absolute", inset:0, width:"100%", height:"100%" }}>
-                  <defs><radialGradient id={`rg${i}`} cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor={p.accent} stopOpacity="0.18" /><stop offset="100%" stopColor={p.accent} stopOpacity="0" /></radialGradient></defs>
+                  <defs><radialGradient id={`rg${i}`} cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor={p.accent} stopOpacity="0.15" /><stop offset="100%" stopColor={p.accent} stopOpacity="0" /></radialGradient></defs>
                   <rect width="100%" height="100%" fill={`url(#rg${i})`} />
-                  <circle cx="250" cy="130" r="90" fill="none" stroke={p.accent} strokeWidth="0.5" opacity="0.25" />
-                  <circle cx="250" cy="130" r="55" fill="none" stroke={p.accent} strokeWidth="0.5" opacity="0.18" />
-                  <text x="250" y="140" textAnchor="middle" fontFamily="Syne" fontSize="30" fill={p.accent} opacity="0.7" fontWeight="800">{p.meta.split(" ")[0]}</text>
+                  <circle cx="250" cy="130" r="90" fill="none" stroke={p.accent} strokeWidth="0.5" opacity="0.2" />
+                  <circle cx="250" cy="130" r="55" fill="none" stroke={p.accent} strokeWidth="0.5" opacity="0.15" />
+                  <text x="250" y="140" textAnchor="middle" fontFamily="Syne" fontSize="30" fill={p.accent} opacity="0.6" fontWeight="800">{p.meta.split(" ")[0]}</text>
                 </svg>
               </div>
               <div style={{ padding:"18px 22px" }}>
                 <div className="pf-tag">{p.tag}</div>
                 <div className="pf-name">{p.name}</div>
                 <div className="pf-meta" style={{ marginBottom:10 }}>{p.meta}</div>
-                <p style={{ fontSize:12, lineHeight:1.72, color:"rgba(255,255,255,0.35)", fontWeight:300 }}>{p.desc}</p>
+                <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:12, lineHeight:1.72, color:"rgba(255,255,255,0.35)", fontWeight:300 }}>{p.desc}</p>
               </div>
             </div>
           ))}
@@ -1268,7 +1293,7 @@ function Portfolio({ navigate }) {
       </section>
       <div style={{ padding:"72px 52px", textAlign:"center", borderTop:"1px solid rgba(255,255,255,0.06)" }}>
         <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(26px,4vw,48px)", fontWeight:800, color:"#fff", marginBottom:16 }}>Ready to be our next success story?</h2>
-        <p style={{ fontSize:14, color:"rgba(255,255,255,0.4)", marginBottom:28, fontWeight:300 }}>Let's talk about your goals and build a plan to get you there.</p>
+        <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, color:"rgba(255,255,255,0.4)", marginBottom:28, fontWeight:300 }}>Let's talk about your goals and build a plan to get you there.</p>
         <button className="btn-primary" onClick={() => navigate("contact")}>Start a Project ↗</button>
       </div>
       <Footer navigate={navigate} />
@@ -1285,7 +1310,7 @@ function About({ navigate }) {
         <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 60% 60% at 50% 50%, rgba(20,26,70,0.3) 0%, transparent 65%)", pointerEvents:"none" }} />
         <div className="sec-label reveal">Our Story</div>
         <h1 className="sec-title reveal">Built for Bold Brands</h1>
-        <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:520, fontWeight:300, marginTop:16 }}>
+        <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:520, fontWeight:300, marginTop:16 }}>
           DSPHERY was founded with one mission: to build a digital marketing agency that treats every client's business like its own — obsessed with results, allergic to vanity metrics.
         </p>
       </div>
@@ -1294,12 +1319,12 @@ function About({ navigate }) {
           <div className="about-img-wrap">
             <div className="about-img-box">
               <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" style={{ width:"80%", opacity:0.7 }}>
-                <defs><radialGradient id="about-rg" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#7c3aed" stopOpacity="0.3" /><stop offset="100%" stopColor="#141a46" stopOpacity="0" /></radialGradient></defs>
+                <defs><radialGradient id="about-rg" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#39ff14" stopOpacity="0.15" /><stop offset="100%" stopColor="#141a46" stopOpacity="0" /></radialGradient></defs>
                 <rect width="400" height="500" fill="url(#about-rg)" />
-                <circle cx="200" cy="250" r="140" fill="none" stroke="#7c3aed" strokeWidth="0.8" opacity="0.3" />
-                <circle cx="200" cy="250" r="100" fill="none" stroke="#a78bfa" strokeWidth="0.6" opacity="0.2" />
-                <circle cx="200" cy="250" r="60" fill="none" stroke="#c4b5fd" strokeWidth="0.5" opacity="0.15" />
-                <text x="200" y="265" textAnchor="middle" fontFamily="Syne" fontSize="48" fill="#7c3aed" opacity="0.5" fontWeight="800">DS</text>
+                <circle cx="200" cy="250" r="140" fill="none" stroke="#39ff14" strokeWidth="0.8" opacity="0.2" />
+                <circle cx="200" cy="250" r="100" fill="none" stroke="#39ff14" strokeWidth="0.6" opacity="0.15" />
+                <circle cx="200" cy="250" r="60" fill="none" stroke="#39ff14" strokeWidth="0.5" opacity="0.1" />
+                <text x="200" y="265" textAnchor="middle" fontFamily="Syne" fontSize="48" fill="#141a46" opacity="0.6" fontWeight="800">DS</text>
               </svg>
               <div className="about-float-stat top-right"><div className="afs-n">120<span>+</span></div><div className="afs-l">Clients Served</div></div>
               <div className="about-float-stat bottom-left"><div className="afs-n">94<span>%</span></div><div className="afs-l">Retention Rate</div></div>
@@ -1308,18 +1333,18 @@ function About({ navigate }) {
           <div className="reveal">
             <div className="sec-label">Who We Are</div>
             <h2 className="sec-title" style={{ fontSize:"clamp(26px,3.5vw,48px)", marginBottom:20 }}>Performance-Obsessed Marketing Partners</h2>
-            <p style={{ fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:16 }}>
+            <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:16 }}>
               Founded in 2026 in Udaipur, Rajasthan, DSPHERY started with a simple but powerful belief: digital marketing should produce real, measurable results — not inflated reports and vanity metrics that don't connect to revenue.
             </p>
-            <p style={{ fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:16 }}>
+            <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:16 }}>
               We've grown from a small team of passionate strategists into a full-service digital agency serving clients across India and internationally. Our edge is that we think like business owners — every strategy is built with a commercial lens, not just a marketing one.
             </p>
-            <p style={{ fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:28 }}>
+            <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:28 }}>
               We work with ambitious startups, growing SMEs, and established brands looking for a sharper, more accountable marketing partner. If you want an agency that will own outcomes alongside you — DSPHERY is that agency.
             </p>
             <div style={{ display:"flex", gap:36, marginBottom:28, flexWrap:"wrap" }}>
               {[["2026","Founded in Udaipur"],["10+","Team Members"],["6","Services Offered"]].map(([n,l]) => (
-                <div key={l}><div style={{ fontFamily:"'Syne',sans-serif", fontSize:28, fontWeight:700, color:"#fff" }}>{n}</div><div style={{ fontSize:9, letterSpacing:2, textTransform:"uppercase", color:"rgba(255,255,255,0.3)", marginTop:4 }}>{l}</div></div>
+                <div key={l}><div style={{ fontFamily:"'Syne',sans-serif", fontSize:28, fontWeight:700, color:"#fff" }}>{n}</div><div style={{ fontFamily:"'Poppins',sans-serif", fontSize:9, letterSpacing:2, textTransform:"uppercase", color:"rgba(255,255,255,0.3)", marginTop:4 }}>{l}</div></div>
               ))}
             </div>
             <button className="btn-primary" onClick={() => navigate("contact")}>Work With Us →</button>
@@ -1346,21 +1371,21 @@ function About({ navigate }) {
         <div style={{ marginTop:72 }}>
           <div className="sec-label reveal">The Team</div>
           <h2 className="sec-title reveal" style={{ marginBottom:8, fontSize:"clamp(24px,3vw,44px)" }}>Meet the Minds Behind DSPHERY</h2>
-          <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginBottom:32 }}>
+          <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginBottom:32 }}>
             A tight-knit team of specialists who are obsessive about their craft and fanatical about client results.
           </p>
           <div className="team-grid">
             {[
-              ["DS","linear-gradient(135deg,#141a46,#7c3aed)","Dhruv Sharma","Founder & CEO"],
-              ["AM","linear-gradient(135deg,#7c3aed,#a78bfa)","Ananya Mehta","Head of Growth"],
-              ["RC","linear-gradient(135deg,#a78bfa,#c4b5fd)","Rahul Chopra","Creative Director"],
-              ["PM","linear-gradient(135deg,#6d28d9,#7c3aed)","Priya Malhotra","Head of Analytics"],
-              ["KS","linear-gradient(135deg,#141a46,#4c1d95)","Karan Singh","SEO Lead"],
-              ["NV","linear-gradient(135deg,#5b21b6,#7c3aed)","Neha Verma","Paid Media Lead"],
-              ["AJ","linear-gradient(135deg,#7c3aed,#8b5cf6)","Aditya Joshi","Content Strategist"],
-              ["RP","linear-gradient(135deg,#4c1d95,#6d28d9)","Riya Patel","Social Media Lead"],
+              ["DS","linear-gradient(135deg,#141a46,#0a0f2e)","Dhruv Sharma","Founder & CEO"],
+              ["AM","linear-gradient(135deg,#0a0f2e,#141a46)","Ananya Mehta","Head of Growth"],
+              ["RC","linear-gradient(135deg,#141a46,#1e2a6e)","Rahul Chopra","Creative Director"],
+              ["PM","linear-gradient(135deg,#0d1540,#141a46)","Priya Malhotra","Head of Analytics"],
+              ["KS","linear-gradient(135deg,#141a46,#0a0f2e)","Karan Singh","SEO Lead"],
+              ["NV","linear-gradient(135deg,#0a0f2e,#141a46)","Neha Verma","Paid Media Lead"],
+              ["AJ","linear-gradient(135deg,#141a46,#1e2a6e)","Aditya Joshi","Content Strategist"],
+              ["RP","linear-gradient(135deg,#0d1540,#141a46)","Riya Patel","Social Media Lead"],
             ].map(([initials,bg,name,role]) => (
-              <div className="team-card reveal" key={name}><div className="team-avatar" style={{ background:bg }}>{initials}</div><div className="team-name">{name}</div><div className="team-role">{role}</div></div>
+              <div className="team-card reveal" key={name}><div className="team-avatar" style={{ background:bg, border:"1px solid rgba(57,255,20,0.2)", color:"#39ff14" }}>{initials}</div><div className="team-name">{name}</div><div className="team-role">{role}</div></div>
             ))}
           </div>
         </div>
@@ -1378,44 +1403,34 @@ function Contact({ navigate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]:e.target.value }));
-// ONLY CHANGE 1: make handleSubmit async and replace setTimeout with W3Forms fetch
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-  setLoading(true);
-
-  try {
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        access_key: "fef347a3-4537-454d-a945-3a372dc4a8bb", // 🔑 Replace with your key from web3forms.com
-        subject: `New enquiry from ${form.name} — DSPHERY`,
-        from_name: "DSPHERY Contact Form",
-        ...form,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      setSubmitted(true);
-    } else {
-      setError(data.message || "Something went wrong. Please try again.");
-    }
-  } catch (err) {
-    setError("Network error. Please check your connection and try again.");
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "fef347a3-4537-454d-a945-3a372dc4a8bb",
+          subject: `New enquiry from ${form.name} — DSPHERY`,
+          from_name: "DSPHERY Contact Form",
+          ...form,
+        }),
+      });
+      const data = await response.json();
+      if (data.success) { setSubmitted(true); } else { setError(data.message || "Something went wrong. Please try again."); }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.");
+    } finally { setLoading(false); }
+  };
   return (
     <div className="page-enter">
       <div style={{ padding:"130px 52px 56px", position:"relative", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 50% 60% at 25% 60%, rgba(124,58,237,0.07) 0%, transparent 60%)", pointerEvents:"none" }} />
+        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 50% 60% at 25% 60%, rgba(20,26,70,0.15) 0%, transparent 60%)", pointerEvents:"none" }} />
         <div className="sec-label reveal">Get In Touch</div>
         <h1 className="sec-title reveal">Let's Build Something Great</h1>
-        <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginTop:16 }}>
+        <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginTop:16 }}>
           Ready to transform your digital presence? Fill in the form and one of our strategists will reach out within 24 hours to discuss your goals and how we can help.
         </p>
       </div>
@@ -1424,7 +1439,7 @@ const handleSubmit = async (e) => {
           <div className="contact-info">
             <div className="sec-label reveal">Contact Info</div>
             <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(22px,3vw,38px)", fontWeight:800, color:"#fff", marginBottom:28, lineHeight:1.1 }} className="reveal">We'd love to hear from you</h2>
-            <p className="reveal" style={{ fontSize:13, lineHeight:1.8, color:"rgba(255,255,255,0.4)", fontWeight:300, marginBottom:24 }}>
+            <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:13, lineHeight:1.8, color:"rgba(255,255,255,0.4)", fontWeight:300, marginBottom:24 }}>
               Whether you're just exploring, ready to start a project, or want to understand how DSPHERY can help your specific business — we're always happy to talk. No hard sell, ever.
             </p>
             {[["📧","Email","hello@dsphery.com"],["📞","Phone","+91 98874 47780"],["📍","Location","Udaipur, Rajasthan — India"],["⏰","Response Time","Within 24 hours (usually faster)"]].map(([icon,label,val]) => (
@@ -1433,9 +1448,9 @@ const handleSubmit = async (e) => {
                 <div><div className="c-info-label">{label}</div><div className="c-info-val">{val}</div></div>
               </div>
             ))}
-            <div style={{ marginTop:28, padding:24, background:"rgba(20,26,70,0.3)", border:"1px solid rgba(124,58,237,0.2)", borderRadius:14 }} className="reveal">
-              <div style={{ fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"#a78bfa", marginBottom:8 }}>Free Strategy Session</div>
-              <p style={{ fontSize:13, lineHeight:1.72, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:14 }}>
+            <div style={{ marginTop:28, padding:24, background:"rgba(20,26,70,0.3)", border:"1px solid rgba(57,255,20,0.15)", borderRadius:14 }} className="reveal">
+              <div style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"#39ff14", marginBottom:8 }}>Free Strategy Session</div>
+              <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:13, lineHeight:1.72, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:14 }}>
                 Book a complimentary 30-minute strategy call with one of our growth experts. We'll audit your current digital presence and identify your biggest opportunities — no strings attached.
               </p>
               <button className="btn-primary" style={{ fontSize:11, padding:"9px 20px" }}>Book a Free Call →</button>
@@ -1480,18 +1495,17 @@ const handleSubmit = async (e) => {
                   <label htmlFor="message">Tell Us About Your Goals *</label>
                   <textarea id="message" name="message" value={form.message} onChange={handleChange} placeholder="Describe your business, current marketing situation, biggest challenges, and what success looks like for you in the next 12 months…" required />
                 </div>
-                {error && <p style={{ color:"#f87171", fontSize:12, marginBottom:10 }}>{error}</p>}
+                {error && <p style={{ fontFamily:"'Poppins',sans-serif", color:"#f87171", fontSize:12, marginBottom:10 }}>{error}</p>}
                 <button className="btn-primary" type="submit" style={{ width:"100%", justifyContent:"center" }} disabled={loading}>
                   {loading ? "Sending…" : "Send Message ↗"}
                 </button>
-                <p style={{ fontSize:11, color:"rgba(255,255,255,0.2)", textAlign:"center", marginTop:12 }}>We respond within 24 hours. No spam, ever.</p>
+                <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:11, color:"rgba(255,255,255,0.2)", textAlign:"center", marginTop:12 }}>We respond within 24 hours. No spam, ever.</p>
               </form>
             )}
           </div>
         </div>
       </section>
 
-      {/* FULL-BACKGROUND MAP — Arawali Complex, Udaipur */}
       <div className="map-hero">
         <iframe
           title="DSPHERY Office — Arawali Complex, Udaipur"

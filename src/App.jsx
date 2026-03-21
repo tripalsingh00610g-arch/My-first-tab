@@ -1378,10 +1378,37 @@ function Contact({ navigate }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]:e.target.value }));
-  const handleSubmit = (e) => {
-    e.preventDefault(); setError(""); setLoading(true);
-    setTimeout(() => { try { setLoading(false); setSubmitted(true); } catch { setLoading(false); setError("Something went wrong. Please try again."); } }, 1400);
-  };
+// ONLY CHANGE 1: make handleSubmit async and replace setTimeout with W3Forms fetch
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setLoading(true);
+
+  try {
+    const response = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: "fef347a3-4537-454d-a945-3a372dc4a8bb", // 🔑 Replace with your key from web3forms.com
+        subject: `New enquiry from ${form.name} — DSPHERY`,
+        from_name: "DSPHERY Contact Form",
+        ...form,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setSubmitted(true);
+    } else {
+      setError(data.message || "Something went wrong. Please try again.");
+    }
+  } catch (err) {
+    setError("Network error. Please check your connection and try again.");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="page-enter">
       <div style={{ padding:"130px 52px 56px", position:"relative", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>

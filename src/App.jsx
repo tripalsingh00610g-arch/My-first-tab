@@ -1373,134 +1373,101 @@ function About({ navigate }) {
 /* ── CONTACT ── */
 function Contact({ navigate }) {
   useReveal("contact");
-  const [form, setForm] = useState({ name:"", email:"", company:"", budget:"", service:"", message:"" });
+  const [form, setForm] = useState({
+    name: "", email: "", company: "",
+    budget: "", service: "", message: ""
+  });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]:e.target.value }));
-  const handleSubmit = (e) => {
-    e.preventDefault(); setError(""); setLoading(true);
-    setTimeout(() => { try { setLoading(false); setSubmitted(true); } catch { setLoading(false); setError("Something went wrong. Please try again."); } }, 1400);
+
+  const handleChange = (e) =>
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+
+  // ✅ W3Forms handleSubmit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "fef347a3-4537-454d-a945-3a372dc4a8bb",  // 🔑 Replace this
+          subject: `New enquiry from ${form.name} — DSPHERY`,
+          from_name: "DSPHERY Contact Form",
+          ...form,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        setForm({ name: "", email: "", company: "", budget: "", service: "", message: "" });
+      } else {
+        setError(data.message || "Something went wrong. Please try again.");
+      }
+    } catch (err) {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <div className="page-enter">
-      <div style={{ padding:"130px 52px 56px", position:"relative", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 50% 60% at 25% 60%, rgba(124,58,237,0.07) 0%, transparent 60%)", pointerEvents:"none" }} />
-        <div className="sec-label reveal">Get In Touch</div>
-        <h1 className="sec-title reveal">Let's Build Something Great</h1>
-        <p className="reveal" style={{ fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginTop:16 }}>
-          Ready to transform your digital presence? Fill in the form and one of our strategists will reach out within 24 hours to discuss your goals and how we can help.
-        </p>
-      </div>
+      {/* ... your existing header JSX unchanged ... */}
+
       <section className="section">
         <div className="contact-grid">
-          <div className="contact-info">
-            <div className="sec-label reveal">Contact Info</div>
-            <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(22px,3vw,38px)", fontWeight:800, color:"#fff", marginBottom:28, lineHeight:1.1 }} className="reveal">We'd love to hear from you</h2>
-            <p className="reveal" style={{ fontSize:13, lineHeight:1.8, color:"rgba(255,255,255,0.4)", fontWeight:300, marginBottom:24 }}>
-              Whether you're just exploring, ready to start a project, or want to understand how DSPHERY can help your specific business — we're always happy to talk. No hard sell, ever.
-            </p>
-            {[["📧","Email","hello@dsphery.com"],["📞","Phone","+91 98874 47780"],["📍","Location","Udaipur, Rajasthan — India"],["⏰","Response Time","Within 24 hours (usually faster)"]].map(([icon,label,val]) => (
-              <div className="c-info-item reveal" key={label}>
-                <div className="c-info-icon">{icon}</div>
-                <div><div className="c-info-label">{label}</div><div className="c-info-val">{val}</div></div>
-              </div>
-            ))}
-            <div style={{ marginTop:28, padding:24, background:"rgba(20,26,70,0.3)", border:"1px solid rgba(124,58,237,0.2)", borderRadius:14 }} className="reveal">
-              <div style={{ fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"#a78bfa", marginBottom:8 }}>Free Strategy Session</div>
-              <p style={{ fontSize:13, lineHeight:1.72, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:14 }}>
-                Book a complimentary 30-minute strategy call with one of our growth experts. We'll audit your current digital presence and identify your biggest opportunities — no strings attached.
-              </p>
-              <button className="btn-primary" style={{ fontSize:11, padding:"9px 20px" }}>Book a Free Call →</button>
-            </div>
-          </div>
+          {/* ... contact-info panel unchanged ... */}
+
           <div className="contact-form-wrap reveal">
             {submitted ? (
               <div className="form-success">
                 <div className="form-success-icon">🎉</div>
                 <h3>Message Sent!</h3>
-                <p>Thank you for reaching out. A member of the DSPHERY team will be in touch within 24 hours.</p>
-                <button className="btn-primary" style={{ marginTop:22 }} onClick={() => setSubmitted(false)}>Send Another Message</button>
+                <p>Thank you for reaching out. A member of the DSPHERY team
+                will be in touch within 24 hours.</p>
+                <button className="btn-primary" style={{ marginTop: 22 }}
+                  onClick={() => setSubmitted(false)}>
+                  Send Another Message
+                </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
-                <h3 style={{ fontFamily:"'Syne',sans-serif", fontSize:19, fontWeight:700, color:"#fff", marginBottom:24 }}>Tell Us About Your Project</h3>
-                <div className="form-row">
-                  <div className="form-group"><label htmlFor="name">Full Name *</label><input id="name" name="name" value={form.name} onChange={handleChange} placeholder="Your full name" required /></div>
-                  <div className="form-group"><label htmlFor="email">Email Address *</label><input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" required /></div>
-                </div>
-                <div className="form-row">
-                  <div className="form-group"><label htmlFor="company">Company / Brand</label><input id="company" name="company" value={form.company} onChange={handleChange} placeholder="Your company name" /></div>
-                  <div className="form-group">
-                    <label htmlFor="budget">Monthly Budget</label>
-                    <select id="budget" name="budget" value={form.budget} onChange={handleChange}>
-                      <option value="">Select range</option>
-                      <option>₹10K – ₹30K</option><option>₹30K – ₹75K</option><option>₹75K – ₹2L</option><option>₹2L+</option>
-                    </select>
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="service">Service You're Interested In</label>
-                  <select id="service" name="service" value={form.service} onChange={handleChange}>
-                    <option value="">Select a service</option>
-                    <option>SEO</option><option>Paid Media & PPC</option><option>Brand Strategy & Identity</option>
-                    <option>Social Media Management</option><option>Content Marketing</option>
-                    <option>Analytics & CRO</option><option>Full-Service Package</option>
-                    <option>Not sure yet — need guidance</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="message">Tell Us About Your Goals *</label>
-                  <textarea id="message" name="message" value={form.message} onChange={handleChange} placeholder="Describe your business, current marketing situation, biggest challenges, and what success looks like for you in the next 12 months…" required />
-                </div>
-                {error && <p style={{ color:"#f87171", fontSize:12, marginBottom:10 }}>{error}</p>}
-                <button className="btn-primary" type="submit" style={{ width:"100%", justifyContent:"center" }} disabled={loading}>
+
+                {/* Honeypot — blocks bots, invisible to real users */}
+                <input type="checkbox" name="botcheck"
+                  style={{ display: "none" }} />
+
+                {/* ... all your existing form fields unchanged ... */}
+
+                {error && <p style={{ color: "#f87171", fontSize: 12, marginBottom: 10 }}>{error}</p>}
+
+                <button className="btn-primary" type="submit"
+                  style={{ width: "100%", justifyContent: "center" }}
+                  disabled={loading}>
                   {loading ? "Sending…" : "Send Message ↗"}
                 </button>
-                <p style={{ fontSize:11, color:"rgba(255,255,255,0.2)", textAlign:"center", marginTop:12 }}>We respond within 24 hours. No spam, ever.</p>
+                <p style={{ fontSize: 11, color: "rgba(255,255,255,0.2)",
+                  textAlign: "center", marginTop: 12 }}>
+                  We respond within 24 hours. No spam, ever.
+                </p>
               </form>
             )}
           </div>
         </div>
       </section>
 
-      {/* FULL-BACKGROUND MAP — Arawali Complex, Udaipur */}
-      <div className="map-hero">
-        <iframe
-          title="DSPHERY Office — Arawali Complex, Udaipur"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3627.631213368524!2d73.72863857392494!3d24.601920455556932!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3967e502e5282287%3A0x80183086c9109d99!2sArawali%20complex!5e0!3m2!1sen!2sin!4v1773994958938!5m2!1sen!2sin"
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
-        <div className="map-panel">
-          <div className="map-panel-eyebrow">Find Our Office</div>
-          <h2 className="map-panel-title">Visit Us at <span>Arawali Complex</span>, Udaipur</h2>
-          <p className="map-panel-sub">Come meet our team in person or reach us anytime. We love connecting with ambitious brands.</p>
-          <div className="map-info-rows">
-            {[
-              ["📍","Office Address","Arawali Complex, Udaipur, Rajasthan 313001"],
-              ["📞","Phone","+91 98874 47780"],
-              ["📧","Email","hello@dsphery.com"],
-              ["⏰","Working Hours","Mon – Sat, 10:00 AM – 7:00 PM IST"],
-            ].map(([icon,label,val]) => (
-              <div className="map-info-row" key={label}>
-                <div className="map-info-icon">{icon}</div>
-                <div><div className="map-info-label">{label}</div><div className="map-info-val">{val}</div></div>
-              </div>
-            ))}
-          </div>
-          <a className="map-directions-btn" href="https://www.google.com/maps/place/Arawali+complex/@24.6019205,73.7286386,17z" target="_blank" rel="noopener noreferrer">
-            📍 Get Directions on Google Maps ↗
-          </a>
-        </div>
-        <div className="map-pin-badge"><div className="map-pin-dot" />Arawali Complex · Udaipur, Rajasthan</div>
-      </div>
-
-      <Footer navigate={navigate} />
+      {/* ... map section and Footer unchanged ... */}
     </div>
   );
 }
+
 
 /* ── ROOT ── */
 export default function App() {

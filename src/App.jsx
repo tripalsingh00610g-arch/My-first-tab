@@ -382,20 +382,30 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .form-success h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .form-success p { font-family: 'Poppins', sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); }
 
-/* AI CHAT */
+/* ── AI CHAT — FIXED POSITION, ALWAYS ON TOP ── */
 .ai-btn {
-  position: fixed; bottom: 28px; right: 28px; z-index: 900;
-  width: 48px; height: 48px; border-radius: 50%;
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9000;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
   background: linear-gradient(135deg, #141a46, #0a0f2e);
-  color: #39ff14; border: 1px solid #39ff14; cursor: none; font-size: 17px;
-  box-shadow: 0 4px 22px rgba(57,255,20,0.25);
-  display: flex; align-items: center; justify-content: center;
+  color: #39ff14;
+  border: 1px solid #39ff14;
+  cursor: none;
+  font-size: 18px;
+  box-shadow: 0 4px 28px rgba(57,255,20,0.3), 0 0 0 0 rgba(57,255,20,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
-.ai-btn:hover { transform: scale(1.1); box-shadow: 0 8px 36px rgba(57,255,20,0.4); }
+.ai-btn:hover { transform: scale(1.1); box-shadow: 0 8px 40px rgba(57,255,20,0.5); }
 .ai-btn-badge {
   position: absolute; top: -3px; right: -3px;
-  width: 13px; height: 13px; border-radius: 50%;
+  width: 14px; height: 14px; border-radius: 50%;
   background: #22c55e; border: 2px solid #060810;
   animation: badgePulse 2s infinite;
 }
@@ -404,26 +414,43 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
   50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}
 }
 .ai-popup {
-  position: fixed; bottom: 88px; right: 28px; z-index: 900;
-  width: 340px; background: rgba(8,10,22,0.98);
-  border: 1px solid rgba(57,255,20,0.2); border-radius: 20px;
+  position: fixed;
+  bottom: 92px;
+  right: 28px;
+  z-index: 8999;
+  width: 360px;
+  background: rgba(8,10,22,0.98);
+  border: 1px solid rgba(57,255,20,0.25);
+  border-radius: 20px;
   box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(57,255,20,0.08);
-  transform: scale(0.85) translateY(20px); transform-origin: bottom right;
-  opacity: 0; pointer-events: none;
+  transform: scale(0.88) translateY(16px);
+  transform-origin: bottom right;
+  opacity: 0;
+  pointer-events: none;
   transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.35s;
-  display: flex; flex-direction: column; max-height: 520px;
+  display: flex;
+  flex-direction: column;
+  max-height: 540px;
   overflow: hidden;
 }
-.ai-popup.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+.ai-popup.open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
 .ai-header {
-  padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex; align-items: center; gap: 9px; flex-shrink: 0;
-  background: linear-gradient(135deg, rgba(20,26,70,0.6), rgba(57,255,20,0.05));
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(20,26,70,0.7), rgba(57,255,20,0.06));
 }
 .ai-avatar {
-  width: 32px; height: 32px; border-radius: 50%;
+  width: 34px; height: 34px; border-radius: 50%;
   background: linear-gradient(135deg, #141a46, #0a0f2e);
-  border: 1px solid #39ff14;
+  border: 1.5px solid #39ff14;
   display: flex; align-items: center; justify-content: center;
   font-size: 14px; flex-shrink: 0; position: relative; color: #39ff14;
 }
@@ -432,19 +459,41 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
   width: 8px; height: 8px; border-radius: 50%;
   background: #22c55e; border: 1.5px solid #080a16;
 }
-.ai-header-info { flex: 1; }
-.ai-header-name { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #fff; }
-.ai-header-status { font-family: 'Poppins', sans-serif; font-size: 9px; color: #39ff14; letter-spacing: 0.5px; margin-top: 1px; display: flex; align-items: center; gap: 4px; }
-.ai-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #39ff14; animation: badgePulse 2s infinite; }
-.ai-close { background: none; border: none; color: rgba(255,255,255,0.3); cursor: none; font-size: 16px; padding: 2px; transition: color 0.2s; line-height: 1; }
-.ai-close:hover { color: #fff; }
+.ai-header-info { flex: 1; min-width: 0; }
+.ai-header-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #fff; }
+.ai-header-status { font-family: 'Poppins', sans-serif; font-size: 9px; color: #39ff14; letter-spacing: 0.5px; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
+.ai-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #39ff14; animation: badgePulse 2s infinite; flex-shrink: 0; }
+/* ── IMPROVED CLOSE BUTTON ── */
+.ai-close {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+  cursor: none;
+  font-size: 14px;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  line-height: 1;
+  font-weight: 600;
+}
+.ai-close:hover {
+  background: rgba(255,60,60,0.2);
+  border-color: rgba(255,60,60,0.4);
+  color: #ff6060;
+}
 .ai-quick-chips {
-  padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
   display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0;
-  background: rgba(20,26,70,0.15);
+  background: rgba(20,26,70,0.2);
 }
 .ai-chip {
-  font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 0.5px; padding: 4px 9px;
+  font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 0.5px; padding: 4px 10px;
   border: 1px solid rgba(57,255,20,0.25); border-radius: 100px;
   color: rgba(57,255,20,0.7); background: rgba(57,255,20,0.05);
   cursor: none; transition: all 0.2s; white-space: nowrap;
@@ -498,7 +547,7 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 }
 .ai-footer {
   padding: 10px 12px; border-top: 1px solid rgba(255,255,255,0.07);
-  flex-shrink: 0; background: rgba(8,10,22,0.5);
+  flex-shrink: 0; background: rgba(8,10,22,0.6);
 }
 .ai-irow { display: flex; gap: 7px; align-items: flex-end; }
 .ai-in {
@@ -596,12 +645,76 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .map-pin-badge { position: absolute; bottom: 20px; right: 20px; z-index: 3; background: rgba(6,8,16,0.92); border: 1px solid rgba(57,255,20,0.2); border-radius: 100px; padding: 6px 14px; backdrop-filter: blur(12px); display: flex; align-items: center; gap: 7px; font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.55); }
 .map-pin-dot { width: 7px; height: 7px; border-radius: 50%; background: #39ff14; animation: orbPulse 2s infinite; flex-shrink: 0; }
 
+/* BLOG */
+.blog-hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-bottom: 64px; }
+.blog-featured { border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); background: rgba(13,17,32,0.9); cursor: none; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s; position: relative; }
+.blog-featured:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
+.blog-featured:hover .blog-feat-img-inner { transform: scale(1.04); }
+.blog-feat-img { height: 280px; overflow: hidden; }
+.blog-feat-img-inner { height: 100%; width: 100%; transition: transform 0.5s cubic-bezier(0.23,1,0.32,1); }
+.blog-feat-body { padding: 28px 30px; }
+.blog-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #39ff14; margin-bottom: 12px; }
+.blog-tag::before { content:''; display:inline-block; width:12px; height:1px; background:#39ff14; }
+.blog-feat-title { font-family: 'Syne', sans-serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 800; color: #fff; line-height: 1.2; margin-bottom: 12px; }
+.blog-feat-excerpt { font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.78; color: rgba(255,255,255,0.45); font-weight: 300; margin-bottom: 20px; }
+.blog-meta-row { display: flex; align-items: center; gap: 14px; font-family: 'Poppins', sans-serif; font-size: 11px; color: rgba(255,255,255,0.3); flex-wrap: wrap; }
+.blog-author-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+.blog-read-more { display: inline-flex; align-items: center; gap: 6px; font-family: 'Poppins', sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #39ff14; margin-top: 18px; cursor: none; transition: gap 0.2s; font-weight: 500; background: none; border: none; padding: 0; }
+.blog-read-more:hover { gap: 10px; }
+.blog-side-list { display: flex; flex-direction: column; gap: 16px; }
+.blog-side-item { border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.07); background: rgba(13,17,32,0.8); cursor: none; transition: background 0.3s, border-color 0.3s; display: flex; flex-direction: column; }
+.blog-side-item:hover { background: rgba(20,26,70,0.4); border-color: rgba(57,255,20,0.2); }
+.blog-side-img { height: 120px; overflow: hidden; }
+.blog-side-img-inner { height: 100%; width: 100%; transition: transform 0.5s; }
+.blog-side-item:hover .blog-side-img-inner { transform: scale(1.05); }
+.blog-side-body { padding: 16px 18px; flex: 1; }
+.blog-side-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 8px; }
+.blog-side-meta { font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.3); }
+.blog-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.blog-card { border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.07); background: rgba(13,17,32,0.9); cursor: none; transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), border-color 0.3s; display: flex; flex-direction: column; }
+.blog-card:hover { transform: translateY(-5px); border-color: rgba(57,255,20,0.2); }
+.blog-card:hover .blog-card-img-inner { transform: scale(1.05); }
+.blog-card-img { height: 180px; overflow: hidden; }
+.blog-card-img-inner { height: 100%; width: 100%; transition: transform 0.5s cubic-bezier(0.23,1,0.32,1); }
+.blog-card-body { padding: 22px 22px; flex: 1; display: flex; flex-direction: column; }
+.blog-card-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #fff; line-height: 1.3; margin-bottom: 10px; flex: 1; }
+.blog-card-excerpt { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.4); font-weight: 300; margin-bottom: 16px; }
+.blog-card-footer { display: flex; align-items: center; justify-content: space-between; }
+
+/* BLOG ARTICLE */
+.blog-article-wrap { max-width: 760px; margin: 0 auto; }
+.blog-article-header { margin-bottom: 48px; }
+.blog-article-title { font-family: 'Syne', sans-serif; font-size: clamp(28px, 4vw, 56px); font-weight: 800; color: #fff; line-height: 1.05; letter-spacing: -0.5px; margin-bottom: 20px; }
+.blog-article-meta { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-family: 'Poppins', sans-serif; font-size: 12px; color: rgba(255,255,255,0.4); padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.blog-article-author { display: flex; align-items: center; gap: 10px; }
+.blog-article-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #141a46, #39ff14); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; color: #060810; }
+.blog-article-sep { width: 3px; height: 3px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+.blog-article-cover { width: 100%; border-radius: 16px; overflow: hidden; margin-bottom: 40px; border: 1px solid rgba(255,255,255,0.07); }
+.blog-article-body { font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.9; color: rgba(255,255,255,0.65); font-weight: 300; }
+.blog-article-body h2 { font-family: 'Syne', sans-serif; font-size: clamp(20px, 2.5vw, 28px); font-weight: 800; color: #fff; margin: 40px 0 16px; line-height: 1.15; }
+.blog-article-body h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin: 28px 0 12px; }
+.blog-article-body p { margin-bottom: 20px; }
+.blog-article-body strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+.blog-article-body ul { margin: 16px 0 20px 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.blog-article-body ul li { display: flex; gap: 10px; align-items: flex-start; }
+.blog-article-body ul li::before { content: '✦'; color: #39ff14; font-size: 9px; flex-shrink: 0; margin-top: 6px; }
+.blog-article-blockquote { margin: 32px 0; padding: 24px 28px; background: rgba(20,26,70,0.4); border-left: 3px solid #39ff14; border-radius: 0 12px 12px 0; font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: #fff; line-height: 1.5; font-style: normal; }
+.blog-article-highlight { background: rgba(57,255,20,0.06); border: 1px solid rgba(57,255,20,0.15); border-radius: 12px; padding: 20px 24px; margin: 28px 0; }
+.blog-article-highlight p { margin: 0; color: rgba(255,255,255,0.7); font-size: 13px; }
+.blog-back-btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Poppins', sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); background: none; border: none; cursor: none; padding: 0; margin-bottom: 32px; transition: color 0.2s; }
+.blog-back-btn:hover { color: #39ff14; }
+.blog-related { margin-top: 72px; padding-top: 48px; border-top: 1px solid rgba(255,255,255,0.08); }
+.blog-related-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; margin-top: 24px; }
+
 @media(max-width:768px){
   .map-hero { height: auto; display: flex; flex-direction: column; }
   .map-hero iframe { position: relative; height: 260px; flex-shrink: 0; }
   .map-hero::after { display: none; }
   .map-panel { position: relative; top: auto; left: auto; transform: none; width: 100%; border-radius: 0; border-left: none; border-right: none; border-bottom: none; padding: 24px 20px; }
   .map-pin-badge { display: none; }
+  .blog-hero-grid { grid-template-columns: 1fr; }
+  .blog-grid { grid-template-columns: 1fr; }
+  .blog-related-grid { grid-template-columns: 1fr; }
 }
 
 @media(max-width:1024px){
@@ -620,6 +733,8 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
   .svc-row > div:last-child{grid-column:1/-1;text-align:left}
   .why-grid{grid-template-columns:repeat(2,1fr)}
   .hero-content{max-width:80%}
+  .blog-grid{grid-template-columns:repeat(2,1fr)}
+  .blog-hero-grid{grid-template-columns:1fr}
 }
 @media(max-width:768px){
   .ds-nav{padding:0 20px}
@@ -654,8 +769,6 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 }
 `;
 
-// ── GLOBE FIX: use ResizeObserver + delayed initial resize so canvas is sized
-// correctly on the very first render (before the wrapper has painted).
 function useHeroGlobe(canvasRef) {
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -663,27 +776,20 @@ function useHeroGlobe(canvasRef) {
     const hCtx = canvas.getContext("2d");
     let animId;
     const dpr = window.devicePixelRatio || 1;
-
     function resize() {
       const wrap = canvas.parentElement;
       if (!wrap) return;
       const w = wrap.clientWidth;
       const h = wrap.clientHeight;
-      if (w === 0 || h === 0) return; // guard against 0-size on first paint
+      if (w === 0 || h === 0) return;
       canvas.width = w * dpr;
       canvas.height = h * dpr;
     }
-
-    // Initial size — try immediately, then again after a frame to handle
-    // cases where the wrapper hasn't laid out yet on first mount.
     resize();
     const rafId = requestAnimationFrame(() => { resize(); });
-
-    // Also watch for any future size changes (page resize, etc.)
     const ro = new ResizeObserver(() => resize());
     if (canvas.parentElement) ro.observe(canvas.parentElement);
     window.addEventListener("resize", resize);
-
     const pts = [];
     for (let i = 0; i < 280; i++) {
       pts.push({ phi: Math.acos(2 * Math.random() - 1), theta: Math.random() * 2 * Math.PI, size: Math.random() * 2.2 + 0.4, alpha: Math.random() * 0.7 + 0.3 });
@@ -698,7 +804,6 @@ function useHeroGlobe(canvasRef) {
       tiltY += ((e.clientX / window.innerWidth - 0.5) * 0.2 - tiltY) * 0.05;
     };
     window.addEventListener("mousemove", onMouse);
-
     function proj(phi, theta, r, cx, cy) {
       let x = Math.sin(phi) * Math.cos(theta + rot);
       let y = Math.cos(phi);
@@ -709,10 +814,8 @@ function useHeroGlobe(canvasRef) {
       const x3 = x * cosY + z2 * sinY, y3 = y2, z3 = -x * sinY + z2 * cosY;
       return { sx: cx + x3 * r, sy: cy - y3 * r, visible: z3 > -0.15, depth: z3 };
     }
-
     function draw() {
       const W = canvas.width / dpr, H = canvas.height / dpr;
-      // If canvas still has no size, skip this frame
       if (W === 0 || H === 0) { rot += 0.0015; animId = requestAnimationFrame(draw); return; }
       hCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
       hCtx.clearRect(0, 0, W, H);
@@ -790,7 +893,7 @@ function useCursor() {
     };
     document.addEventListener("mousemove", onMove);
     const t = setTimeout(() => {
-      document.querySelectorAll("a,button,.sv-card,.pf-item,.testi-card,.step-item,.ftab,.team-card,.val-card,.cl-logo,.svc-row,.why-card,.faq-item").forEach((el) => {
+      document.querySelectorAll("a,button,.sv-card,.pf-item,.testi-card,.step-item,.ftab,.team-card,.val-card,.cl-logo,.svc-row,.why-card,.faq-item,.blog-card,.blog-featured,.blog-side-item").forEach((el) => {
         el.addEventListener("mouseenter", () => document.body.classList.add("hovered"));
         el.addEventListener("mouseleave", () => document.body.classList.remove("hovered"));
       });
@@ -835,6 +938,7 @@ function Marquee() {
   );
 }
 
+// ── FIX 3: Removed "Crafted with ✦ precision" from ft-bottom ──
 function Footer({ navigate }) {
   const year = new Date().getFullYear();
   return (
@@ -849,13 +953,12 @@ function Footer({ navigate }) {
         </div>
         <div className="ft-links-grid">
           <div className="ft-col"><h4>Services</h4><ul>{["SEO","Paid Media","Social Media","Content","Analytics"].map((s) => <li key={s} onClick={() => navigate("services")} style={{ cursor:"none" }}>{s}</li>)}</ul></div>
-          <div className="ft-col"><h4>Company</h4><ul>{["About","Portfolio","Contact"].map((s) => <li key={s} onClick={() => navigate(s.toLowerCase())} style={{ cursor:"none" }}>{s}</li>)}</ul></div>
+          <div className="ft-col"><h4>Company</h4><ul>{[["About","about"],["Portfolio","portfolio"],["Blog","blog"],["Contact","contact"]].map(([s,id]) => <li key={s} onClick={() => navigate(id)} style={{ cursor:"none" }}>{s}</li>)}</ul></div>
           <div className="ft-col"><h4>Contact</h4><ul><li>hello@dsphery.com</li><li>+91 98874 47780</li><li>Udaipur, Rajasthan</li></ul></div>
         </div>
       </div>
       <div className="ft-bottom">
         <p className="ft-copy">© {year} DSPHERY. All rights reserved.</p>
-        <p className="ft-copy">Crafted with ✦ precision</p>
       </div>
     </footer>
   );
@@ -864,7 +967,14 @@ function Footer({ navigate }) {
 function Nav({ page, navigate }) {
   const [mob, setMob] = useState(false);
   useEffect(() => { document.body.style.overflow = mob ? "hidden" : ""; return () => { document.body.style.overflow = ""; }; }, [mob]);
-  const pages = [{ id:"home",label:"Home" },{ id:"services",label:"Services" },{ id:"portfolio",label:"Work" },{ id:"about",label:"About" },{ id:"contact",label:"Contact" }];
+  const pages = [
+    { id:"home",label:"Home" },
+    { id:"services",label:"Services" },
+    { id:"portfolio",label:"Work" },
+    { id:"blog",label:"Blog" },
+    { id:"about",label:"About" },
+    { id:"contact",label:"Contact" },
+  ];
   const handleNav = (id) => { navigate(id); setMob(false); };
   return (
     <>
@@ -901,10 +1011,11 @@ Process: Market Research & Digital Audit → Strategy & Campaign Planning → La
 
 Personality: Expert, confident, helpful, concise. Give actionable digital marketing advice. Keep responses under 120 words — be punchy and direct. When someone wants to start a project, encourage them to fill the contact form or book a call. Never be salesy — be genuinely helpful first.`;
 
-const QUICK_CHIPS = ["How does SEO work?","What's a good ROAS?","Social media tips","Content strategy","Budget for ads?","Improve conversions"];
+const QUICK_CHIPS = ["How does SEO work?","What's a good ROAS?","Social media tips","Content strategy","Improve conversions"];
 
 function getTime() { return new Date().toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" }); }
 
+// ── FIX 1 & 2: AIChat with improved close button visibility + proper fixed positioning ──
 function AIChat() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState([{ bot:true, text:"Hey! 👋 I'm DSPHERY's AI marketing assistant. Ask me anything about SEO, paid ads, social media, content strategy, or how we can grow your brand.", time:getTime() }]);
@@ -938,10 +1049,13 @@ function AIChat() {
 
   return (
     <>
-      <button className="ai-btn" onClick={() => setOpen((o) => !o)} aria-label="Toggle chat" style={{ position:"relative" }}>
-        <span>{open ? "✕" : "💬"}</span>
+      {/* Toggle button — always fixed, always on top */}
+      <button className="ai-btn" onClick={() => setOpen((o) => !o)} aria-label="Toggle chat">
+        <span style={{ lineHeight:1 }}>{open ? "✕" : "💬"}</span>
         {!open && <div className="ai-btn-badge" />}
       </button>
+
+      {/* Chat popup — fixed position, slides up from button */}
       <div className={`ai-popup${open ? " open" : ""}`}>
         <div className="ai-header">
           <div className="ai-avatar">✦<div className="ai-avatar-dot" /></div>
@@ -949,7 +1063,8 @@ function AIChat() {
             <div className="ai-header-name">DSPHERY Assistant</div>
             <div className="ai-header-status"><div className="ai-status-dot" />AI-powered · Always online</div>
           </div>
-          <button className="ai-close" onClick={() => setOpen(false)}>✕</button>
+          {/* Improved close button — clearly visible with border + background */}
+          <button className="ai-close" onClick={() => setOpen(false)} aria-label="Close chat">✕</button>
         </div>
         <div className="ai-quick-chips">
           {QUICK_CHIPS.map((chip) => <button key={chip} className="ai-chip" onClick={() => sendMessage(chip)}>{chip}</button>)}
@@ -977,6 +1092,382 @@ function AIChat() {
         </div>
       </div>
     </>
+  );
+}
+
+/* ── BLOG DATA ── */
+const BLOG_POSTS = [
+  {
+    id: 1,
+    slug: "seo-mistakes-killing-your-rankings",
+    tag: "SEO",
+    title: "7 SEO Mistakes That Are Quietly Killing Your Google Rankings",
+    excerpt: "Most businesses investing in SEO are unknowingly making a handful of critical errors that cancel out everything good they're doing. Here's how to spot them and fix them before they cost you more traffic.",
+    author: "Karan Singh",
+    authorInitials: "KS",
+    date: "March 14, 2026",
+    readTime: "8 min read",
+    color: "linear-gradient(135deg, #0a1230 0%, #050a18 100%)",
+    accent: "#39ff14",
+    featured: true,
+    body: `
+      <p>If you've been doing SEO for a few months and you're not seeing results, it's not because SEO doesn't work. It almost certainly means one of these seven mistakes is eating your progress from the inside. We've audited over a hundred websites at DSPHERY, and these are the errors that come up again and again — even on sites managed by "experienced" teams.</p>
+
+      <h2>1. Targeting Keywords Nobody Actually Searches</h2>
+      <p>This is still the most common mistake in 2026. Business owners and even some agencies pick keywords based on what sounds right rather than what people are actually typing into Google. The result? You rank well for a term with forty monthly searches and wonder why nothing is happening.</p>
+      <p>The fix is straightforward: do proper keyword research using real tools. Look at search volume, competition, and — most importantly — search intent. A keyword with 800 monthly searches that matches exactly what your service page offers will always outperform a broader keyword with 8,000 searches that doesn't align with what users want to find.</p>
+
+      <blockquote class="blog-article-blockquote">Ranking for the wrong keywords is worse than not ranking at all — it wastes your crawl budget, dilutes your authority, and generates traffic that doesn't convert.</blockquote>
+
+      <h2>2. Ignoring Core Web Vitals</h2>
+      <p>Google made page experience a ranking signal, and most businesses are still treating it as a checkbox item rather than a genuine priority. Core Web Vitals — Largest Contentful Paint, Interaction to Next Paint, and Cumulative Layout Shift — are metrics that measure how your site actually feels to a real user.</p>
+      <p>A slow site doesn't just frustrate users. It signals to Google that your page delivers a poor experience, which directly suppresses your rankings. Run your site through Google's PageSpeed Insights right now. If your LCP is above 2.5 seconds, that's your biggest SEO problem — bigger than your content, your backlinks, or your meta tags.</p>
+
+      <h2>3. Publishing Content Without a Strategy</h2>
+      <p>Random blogging — writing about whatever feels topical that week — almost never works for SEO. What works is building topical authority: covering a subject area so thoroughly that Google considers you the go-to source. This means planning a content architecture where each article supports a broader topic cluster, not just chasing individual keywords in isolation.</p>
+
+      <div class="blog-article-highlight"><p>✦ Quick tip: before publishing a new blog post, ask yourself: does this article link naturally to at least three other pages on my site? If not, it's probably an isolated piece that won't build authority effectively.</p></div>
+
+      <h2>4. Not Building Internal Links Deliberately</h2>
+      <p>Internal linking is one of the most underrated SEO levers available to you, and it costs nothing. Every time you publish a new page, you should be going back through your existing content and adding contextual links pointing to it. This distributes PageRank across your site, helps Google discover new content faster, and dramatically improves the rankings of pages that aren't getting external backlinks.</p>
+
+      <h2>5. Treating Technical SEO as a One-Time Task</h2>
+      <p>Your site is not static. Every time you add new pages, change URLs, update templates, or integrate new plugins, you risk introducing technical issues that hurt your crawlability and indexation. Broken internal links, duplicate content, orphaned pages, slow-loading resources — these things accumulate over time and gradually drag your rankings down.</p>
+      <p>Schedule a proper technical audit every quarter. It doesn't need to take days. A focused two-hour crawl with a tool like Screaming Frog will surface 90% of the issues that matter.</p>
+
+      <h2>6. Giving Up After Three Months</h2>
+      <p>SEO is a long game. This is genuinely not a platitude — it's a mechanical reality of how Google works. The algorithm needs time to recrawl your site, reassess your authority, and compare you against competitors. For new sites or pages, three to six months is often the minimum before you see meaningful movement. For competitive keywords, a year of consistent effort is not unusual.</p>
+      <p>The businesses that win at SEO are the ones that treat it as infrastructure, not as a campaign. They publish consistently, fix issues as they arise, and build links gradually over time. The compounding effect of that sustained effort is what produces the 3–5× traffic growth numbers you see in case studies.</p>
+
+      <h2>7. Neglecting Backlink Quality Over Quantity</h2>
+      <p>In 2026, one genuinely relevant, authoritative backlink from a respected industry publication is worth more than a hundred directory listings and guest post placements on low-quality sites. Google's link evaluation has become sophisticated enough to identify link schemes, and the latter can actively harm your domain authority rather than helping it.</p>
+      <p>Focus your link building on digital PR, original research that journalists want to cite, and genuine relationship-building with complementary businesses. It's slower, but the links you earn this way actually move the needle — and they don't put your site at risk of a manual penalty.</p>
+
+      <h2>The Bottom Line</h2>
+      <p>SEO failures are almost always diagnosable. If your rankings are stagnant, run through this list methodically. Chances are you'll find at least two or three of these issues actively working against you. Fix them, give Google time to re-evaluate, and you'll start to see movement.</p>
+      <p>If you want a professional pair of eyes on your site, our SEO team at DSPHERY offers a comprehensive digital audit as part of any new engagement. We'll tell you exactly what's holding you back and build a plan to fix it.</p>
+    `
+  },
+  {
+    id: 2,
+    slug: "meta-ads-roas-2026",
+    tag: "Paid Media",
+    title: "Why Your Meta Ads ROAS Is Dropping — and How to Actually Fix It",
+    excerpt: "Meta's ad platform has changed dramatically. The strategies that worked in 2023 are failing brands in 2026. Here's what's actually driving performance now, and how to adapt before your competitors do.",
+    author: "Neha Verma",
+    authorInitials: "NV",
+    date: "March 8, 2026",
+    readTime: "10 min read",
+    color: "linear-gradient(135deg, #100d28 0%, #060218 100%)",
+    accent: "#39ff14",
+    featured: false,
+    body: `
+      <p>If you've been running Meta ads for a few years, you've noticed something uncomfortable: what used to deliver 4× ROAS now barely clears 1.8×. Costs are up. Reach is messier. And the "proven" playbooks that dominated conversations in Facebook marketing groups are quietly being abandoned.</p>
+      <p>This isn't bad luck. Meta's ad ecosystem has undergone fundamental changes, and most advertisers are still running 2022 playbooks in a 2026 environment. Here's what's actually happening and what you can do about it.</p>
+
+      <h2>The Landscape Has Shifted</h2>
+      <p>Three things happened simultaneously that changed Meta advertising. First, Apple's ATT framework significantly degraded the targeting data that made Meta ads so effective. Second, the platform shifted heavily toward Advantage+ automation, which means the algorithm now controls far more of your campaign than it used to. Third, competition for attention has intensified — users are consuming more content across more platforms, which means your creative has to work harder than ever to earn a stop-scroll moment.</p>
+
+      <blockquote class="blog-article-blockquote">The single biggest driver of Meta ad performance in 2026 is creative quality. Not targeting. Not bidding strategy. Creative.</blockquote>
+
+      <h2>Stop Fighting the Algorithm, Work With It</h2>
+      <p>Many advertisers are still trying to "outsmart" Meta's machine learning by using granular manual targeting and rigid campaign structures. This approach consistently underperforms against Advantage+ Shopping Campaigns and broad audience strategies, because you simply cannot outmaneuver a system trained on trillions of data points.</p>
+      <p>The shift in mindset required is this: instead of telling Meta who to show your ads to, focus on creating ads that naturally attract your best customers. Give the algorithm broad permission to find people, and let the creative do the qualification work.</p>
+
+      <h2>The Creative Testing Framework That Actually Works</h2>
+      <p>High-performing Meta advertisers in 2026 treat creative production like a manufacturing operation. They're constantly generating new variations — different hooks, different formats, different angles — and letting Meta determine which combinations win. The specific things worth testing:</p>
+      <ul>
+        <li>Hook format: text overlay vs. spoken hook vs. visual pattern interrupt</li>
+        <li>Content style: UGC-style vs. polished brand content vs. direct response</li>
+        <li>Offer framing: discount vs. value proposition vs. social proof lead</li>
+        <li>Video length: 6-second vs. 15-second vs. 30-second for different funnel stages</li>
+      </ul>
+
+      <h2>Attribution Is Lying to You (And What to Do About It)</h2>
+      <p>With degraded pixel data, Meta's reported ROAS has become an increasingly unreliable measure of true campaign performance. We've seen accounts where Meta claims 4× ROAS but actual revenue attribution through CRM data shows the true contribution is closer to 2×. And we've seen the opposite — campaigns that look weak in Meta's dashboard but are actually significant contributors to brand search and direct conversion.</p>
+      <p>The solution is triangulated measurement: Meta data plus GA4 plus your backend revenue data. Run conversion lift studies when you have sufficient budget to get statistically valid results. And always track incrementality, not just last-click or even view-through attribution.</p>
+
+      <div class="blog-article-highlight"><p>✦ Practical tip: if you're spending more than ₹3L/month on Meta ads and you're only using Meta's native reporting to evaluate performance, you're making decisions on incomplete information.</p></div>
+
+      <h2>Building Sustainable ROAS</h2>
+      <p>The brands consistently achieving 3.5–5× ROAS on Meta in 2026 share a few characteristics. They have a deep library of creative content that they're constantly refreshing. They use broad targeting with strong creative as their primary acquisition approach. They have robust email and retargeting infrastructure that converts warmed audiences efficiently. And they measure performance holistically rather than relying on any single attribution model.</p>
+      <p>None of this is particularly glamorous. But consistent, sustainable ROAS comes from systems and creative rigor — not from finding some clever audience targeting hack that'll stop working the moment everyone else discovers it.</p>
+    `
+  },
+  {
+    id: 3,
+    slug: "brand-strategy-small-business",
+    tag: "Brand Strategy",
+    title: "Brand Strategy for Small Businesses: What Actually Matters and What's Just Noise",
+    excerpt: "Most brand strategy advice is written for companies with crores in budget and entire departments dedicated to brand management. Here's what actually moves the needle when you're a growing business with real constraints.",
+    author: "Rahul Chopra",
+    authorInitials: "RC",
+    date: "February 28, 2026",
+    readTime: "7 min read",
+    color: "linear-gradient(135deg, #1a0a20 0%, #0f0015 100%)",
+    accent: "#39ff14",
+    featured: false,
+  },
+  {
+    id: 4,
+    slug: "instagram-organic-growth-2026",
+    tag: "Social Media",
+    title: "How We Grew an Instagram Account from 0 to 100K in 11 Months Without Paid Ads",
+    excerpt: "The tactics that built us a 100K engaged community on Instagram with zero ad spend — including the three decisions that made the biggest difference and the one mistake we almost made.",
+    author: "Riya Patel",
+    authorInitials: "RP",
+    date: "February 19, 2026",
+    readTime: "9 min read",
+    color: "linear-gradient(135deg, #0d1828 0%, #060f1a 100%)",
+    accent: "#39ff14",
+    featured: false,
+  },
+  {
+    id: 5,
+    slug: "content-marketing-roi",
+    tag: "Content Marketing",
+    title: "Why Most Content Marketing Fails to Generate ROI (And the Framework That Changes That)",
+    excerpt: "Content marketing has a credibility problem. Too many businesses have published consistently for years and have almost nothing to show for it commercially. Here's why — and the strategic shift that fixes it.",
+    author: "Aditya Joshi",
+    authorInitials: "AJ",
+    date: "February 10, 2026",
+    readTime: "11 min read",
+    color: "linear-gradient(135deg, #0a1520 0%, #050c14 100%)",
+    accent: "#39ff14",
+    featured: false,
+  },
+  {
+    id: 6,
+    slug: "google-ads-quality-score",
+    tag: "Paid Media",
+    title: "Quality Score Deep Dive: The Hidden Lever That Controls Your Google Ads Cost",
+    excerpt: "Quality Score might be the most misunderstood metric in Google Ads. A 10-point Quality Score can mean paying half what your competitors pay for the same click. Here's exactly how it works and how to improve it.",
+    author: "Neha Verma",
+    authorInitials: "NV",
+    date: "January 30, 2026",
+    readTime: "8 min read",
+    color: "linear-gradient(135deg, #150a25 0%, #0a0515 100%)",
+    accent: "#39ff14",
+    featured: false,
+  },
+];
+
+function BlogIllustration({ color, accent, idx }) {
+  return (
+    <div style={{ width:"100%", height:"100%", background:color, position:"relative", overflow:"hidden", display:"flex", alignItems:"center", justifyContent:"center" }}>
+      <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" style={{ position:"absolute", inset:0, width:"100%", height:"100%" }}>
+        <defs>
+          <radialGradient id={`bg${idx}`} cx="60%" cy="40%" r="60%">
+            <stop offset="0%" stopColor={accent} stopOpacity="0.12" />
+            <stop offset="100%" stopColor={accent} stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <rect width="600" height="340" fill={`url(#bg${idx})`} />
+        <circle cx="300" cy="170" r="130" fill="none" stroke={accent} strokeWidth="0.6" opacity="0.15" />
+        <circle cx="300" cy="170" r="85" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.1" />
+        <circle cx="300" cy="170" r="40" fill="none" stroke={accent} strokeWidth="0.5" opacity="0.08" />
+        {[0,60,120,180,240,300].map((deg,i) => (
+          <line key={i} x1="300" y1="170"
+            x2={300 + Math.cos(deg * Math.PI/180) * 130}
+            y2={170 + Math.sin(deg * Math.PI/180) * 130}
+            stroke={accent} strokeWidth="0.4" opacity="0.08" />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+function Blog({ navigate }) {
+  const [filter, setFilter] = useState("All");
+  const [activePost, setActivePost] = useState(null);
+  useReveal(`blog-${filter}-${activePost}`);
+  useScrollProgress();
+
+  const categories = ["All", "SEO", "Paid Media", "Social Media", "Brand Strategy", "Content Marketing"];
+  const featuredPost = BLOG_POSTS.find(p => p.featured);
+  const sidePosts = BLOG_POSTS.filter(p => !p.featured).slice(0, 3);
+  const allPosts = filter === "All" ? BLOG_POSTS.filter(p => !p.featured) : BLOG_POSTS.filter(p => p.tag === filter && !p.featured);
+
+  if (activePost) {
+    const post = BLOG_POSTS.find(p => p.id === activePost);
+    const related = BLOG_POSTS.filter(p => p.id !== activePost).slice(0, 2);
+    return (
+      <div className="page-enter">
+        <div className="section" style={{ paddingTop:130 }}>
+          <div className="blog-article-wrap">
+            <button className="blog-back-btn reveal" onClick={() => setActivePost(null)}>← Back to Blog</button>
+            <div className="blog-article-header reveal">
+              <div className="blog-tag">{post.tag}</div>
+              <h1 className="blog-article-title">{post.title}</h1>
+              <div className="blog-article-meta">
+                <div className="blog-article-author">
+                  <div className="blog-article-avatar">{post.authorInitials}</div>
+                  <span>{post.author}</span>
+                </div>
+                <div className="blog-article-sep" />
+                <span>{post.date}</span>
+                <div className="blog-article-sep" />
+                <span>{post.readTime}</span>
+              </div>
+            </div>
+            <div className="blog-article-cover reveal">
+              <div style={{ height:340 }}>
+                <BlogIllustration color={post.color} accent={post.accent} idx={`art-${post.id}`} />
+              </div>
+            </div>
+            {post.body ? (
+              <div className="blog-article-body reveal" dangerouslySetInnerHTML={{ __html: post.body }} />
+            ) : (
+              <div className="blog-article-body reveal">
+                <p>This is the full article for <strong>{post.title}</strong>. The complete content is coming soon — check back shortly or reach out to our team directly at hello@dsphery.com for more insights on {post.tag.toLowerCase()}.</p>
+              </div>
+            )}
+            <div className="blog-related reveal">
+              <div className="sec-label">Keep Reading</div>
+              <h3 style={{ fontFamily:"'Syne',sans-serif", fontSize:22, fontWeight:800, color:"#fff", marginBottom:24 }}>Related Articles</h3>
+              <div className="blog-related-grid">
+                {related.map(rp => (
+                  <div key={rp.id} className="blog-card" onClick={() => { setActivePost(rp.id); window.scrollTo({top:0,behavior:"smooth"}); }}>
+                    <div className="blog-card-img">
+                      <div className="blog-card-img-inner">
+                        <BlogIllustration color={rp.color} accent={rp.accent} idx={`rel-${rp.id}`} />
+                      </div>
+                    </div>
+                    <div className="blog-card-body">
+                      <div className="blog-tag">{rp.tag}</div>
+                      <div className="blog-card-title">{rp.title}</div>
+                      <div className="blog-card-footer">
+                        <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:"rgba(255,255,255,0.3)" }}>{rp.readTime}</span>
+                        <span style={{ color:"#39ff14", fontSize:12 }}>→</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer navigate={navigate} />
+      </div>
+    );
+  }
+
+  return (
+    <div className="page-enter">
+      <div style={{ padding:"130px 52px 56px", position:"relative", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 60% 55% at 40% 60%, rgba(20,26,70,0.18) 0%, transparent 60%)", pointerEvents:"none" }} />
+        <div className="sec-label reveal">Insights & Perspectives</div>
+        <h1 className="sec-title reveal" style={{ maxWidth:600 }}>The DSPHERY Blog</h1>
+        <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:520, fontWeight:300, marginTop:16 }}>
+          Practical, no-fluff thinking on SEO, paid media, brand strategy, and everything in between. Written by the people actually running campaigns — not content farms.
+        </p>
+      </div>
+
+      <section className="section">
+        <div className="blog-hero-grid reveal">
+          <div className="blog-featured" onClick={() => setActivePost(featuredPost.id)}>
+            <div className="blog-feat-img">
+              <div className="blog-feat-img-inner">
+                <BlogIllustration color={featuredPost.color} accent={featuredPost.accent} idx="feat" />
+              </div>
+            </div>
+            <div className="blog-feat-body">
+              <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14 }}>
+                <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:9, letterSpacing:2, textTransform:"uppercase", background:"rgba(57,255,20,0.12)", color:"#39ff14", border:"1px solid rgba(57,255,20,0.25)", padding:"3px 10px", borderRadius:100 }}>Featured</span>
+                <div className="blog-tag">{featuredPost.tag}</div>
+              </div>
+              <h2 className="blog-feat-title">{featuredPost.title}</h2>
+              <p className="blog-feat-excerpt">{featuredPost.excerpt}</p>
+              <div className="blog-meta-row">
+                <span>{featuredPost.author}</span>
+                <div className="blog-author-dot" />
+                <span>{featuredPost.date}</span>
+                <div className="blog-author-dot" />
+                <span>{featuredPost.readTime}</span>
+              </div>
+              <button className="blog-read-more">Read Article <span>→</span></button>
+            </div>
+          </div>
+          <div className="blog-side-list">
+            {sidePosts.map(p => (
+              <div key={p.id} className="blog-side-item" onClick={() => setActivePost(p.id)}>
+                <div className="blog-side-img">
+                  <div className="blog-side-img-inner">
+                    <BlogIllustration color={p.color} accent={p.accent} idx={`side-${p.id}`} />
+                  </div>
+                </div>
+                <div className="blog-side-body">
+                  <div className="blog-tag">{p.tag}</div>
+                  <div className="blog-side-title">{p.title}</div>
+                  <div className="blog-side-meta">{p.author} · {p.date} · {p.readTime}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ borderTop:"1px solid rgba(255,255,255,0.07)", paddingTop:48 }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:28, flexWrap:"wrap", gap:16 }}>
+            <h2 className="sec-title reveal" style={{ fontSize:"clamp(22px,3vw,38px)" }}>All Articles</h2>
+            <div className="ftabs" style={{ margin:0 }}>
+              {categories.map(c => (
+                <button key={c} className={`ftab${filter === c ? " active" : ""}`} onClick={() => setFilter(c)}>{c}</button>
+              ))}
+            </div>
+          </div>
+          <div className="blog-grid">
+            {allPosts.map((p) => (
+              <div key={p.id} className="blog-card reveal" onClick={() => setActivePost(p.id)}>
+                <div className="blog-card-img">
+                  <div className="blog-card-img-inner">
+                    <BlogIllustration color={p.color} accent={p.accent} idx={`card-${p.id}`} />
+                  </div>
+                </div>
+                <div className="blog-card-body">
+                  <div className="blog-tag">{p.tag}</div>
+                  <div className="blog-card-title">{p.title}</div>
+                  <p className="blog-card-excerpt">{p.excerpt}</p>
+                  <div className="blog-card-footer">
+                    <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:"rgba(255,255,255,0.3)" }}>{p.author} · {p.readTime}</span>
+                    <span style={{ color:"#39ff14", fontSize:14, transition:"transform 0.2s" }}>→</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div style={{ padding:"64px 52px", background:"rgba(20,26,70,0.2)", borderTop:"1px solid rgba(255,255,255,0.06)", borderBottom:"1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:52, alignItems:"center" }} className="reveal">
+          <div>
+            <div className="sec-label">Stay Sharp</div>
+            <h2 style={{ fontFamily:"'Syne',sans-serif", fontSize:"clamp(22px,3vw,40px)", fontWeight:800, color:"#fff", lineHeight:1.1, marginBottom:12 }}>
+              Marketing insights,<br />straight to your inbox
+            </h2>
+            <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:13, lineHeight:1.8, color:"rgba(255,255,255,0.4)", fontWeight:300 }}>
+              Every two weeks, one deep-dive on SEO, paid media, or brand strategy. No fluff. Unsubscribe any time.
+            </p>
+          </div>
+          <div style={{ display:"flex", gap:10 }}>
+            <input
+              type="email"
+              placeholder="your@email.com"
+              style={{
+                flex:1, background:"rgba(6,8,16,0.7)", border:"1px solid rgba(255,255,255,0.12)",
+                color:"#fff", borderRadius:100, padding:"12px 20px", fontSize:13,
+                fontFamily:"'Poppins',sans-serif", outline:"none"
+              }}
+              onFocus={e => e.target.style.borderColor = "#39ff14"}
+              onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
+            />
+            <button className="btn-primary" style={{ whiteSpace:"nowrap" }}>Subscribe ↗</button>
+          </div>
+        </div>
+      </div>
+
+      <Footer navigate={navigate} />
+    </div>
   );
 }
 
@@ -1124,6 +1615,36 @@ function Home({ navigate }) {
         </div>
       </section>
 
+      <section className="section" style={{ borderTop:"1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-end", marginBottom:36, flexWrap:"wrap", gap:16 }}>
+          <div className="reveal">
+            <div className="sec-label">From the Blog</div>
+            <h2 className="sec-title" style={{ fontSize:"clamp(24px,3.5vw,44px)" }}>Latest Thinking</h2>
+          </div>
+          <button className="btn-ghost reveal" onClick={() => navigate("blog")} style={{ alignSelf:"flex-end" }}>View All Posts →</button>
+        </div>
+        <div className="blog-grid">
+          {BLOG_POSTS.slice(0,3).map((p) => (
+            <div key={p.id} className="blog-card reveal" onClick={() => navigate("blog")}>
+              <div className="blog-card-img">
+                <div className="blog-card-img-inner">
+                  <BlogIllustration color={p.color} accent={p.accent} idx={`home-${p.id}`} />
+                </div>
+              </div>
+              <div className="blog-card-body">
+                <div className="blog-tag">{p.tag}</div>
+                <div className="blog-card-title">{p.title}</div>
+                <p className="blog-card-excerpt">{p.excerpt}</p>
+                <div className="blog-card-footer">
+                  <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:"rgba(255,255,255,0.3)" }}>{p.author} · {p.readTime}</span>
+                  <span style={{ color:"#39ff14", fontSize:14 }}>→</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="cta-section">
         <div className="cta-bg" />
         <div className="cta-lbl">Ready to Grow?</div>
@@ -1201,16 +1722,16 @@ function Services({ navigate }) {
             <div className="sec-label reveal">Our Approach</div>
             <h2 className="sec-title reveal">How We Grow Your Brand</h2>
             <p className="proc-body reveal">
-              We don't believe in one-size-fits-all marketing strategies. Every business is unique and deserves a customised digital growth plan built on real data, market research, and creative execution. Our approach focuses on helping brands attract the right audience, increase engagement, and convert traffic into measurable business results.
+              We don't believe in one-size-fits-all marketing strategies. Every business is unique and deserves a customised digital growth plan built on real data, market research, and creative execution.
             </p>
             <button className="btn-primary reveal" onClick={() => navigate("contact")}>Work With Us →</button>
           </div>
           <ul style={{ listStyle:"none" }}>
             {[
-              ["01","Market Research & Digital Audit","We analyse your digital presence, competitors, target audience, and current marketing performance to identify opportunities for growth across SEO, social media, and paid advertising."],
-              ["02","Strategy & Campaign Planning","We create a customised digital marketing strategy with clear objectives, channel selection, content direction, and campaign planning designed to maximise reach, engagement, and conversions."],
-              ["03","Launch, Test & Optimise","Our team launches campaigns across search engines, social media platforms, and digital channels while continuously testing creatives, audiences, and strategies to improve performance."],
-              ["04","Analyse, Scale & Report","Through performance tracking and detailed analytics, we identify what works best and scale winning campaigns while providing clear reports on traffic, leads, and growth."],
+              ["01","Market Research & Digital Audit","We analyse your digital presence, competitors, target audience, and current marketing performance to identify opportunities for growth."],
+              ["02","Strategy & Campaign Planning","We create a customised digital marketing strategy with clear objectives, channel selection, content direction, and campaign planning."],
+              ["03","Launch, Test & Optimise","Our team launches campaigns while continuously testing creatives, audiences, and strategies to improve performance."],
+              ["04","Analyse, Scale & Report","Through performance tracking and detailed analytics, we identify what works best and scale winning campaigns."],
             ].map(([n,t,d]) => (
               <li key={n} className="step-item reveal">
                 <div className="step-num">{n}</div>
@@ -1246,7 +1767,7 @@ const PORTFOLIO_ITEMS = [
   { cat:["social"], tag:"Social Media", name:"Orbit Commerce", meta:"100K community built in 12 months", color:"linear-gradient(135deg,#1a0a20 0%,#0f0015 100%)", accent:"#39ff14", desc:"Built a 800K-strong social community across Instagram and YouTube from scratch for a consumer electronics brand. Included influencer partnerships, content strategy, and community-led growth loops that drove direct revenue." },
   { cat:["seo"], tag:"SEO", name:"Nexgen Platform", meta:"310% traffic increase YOY", color:"linear-gradient(135deg,#0d1828 0%,#060f1a 100%)", accent:"#39ff14", desc:"Comprehensive SEO programme for an ed-tech platform including content hub development, technical SEO fixes, and national link building. Grew organic traffic 310% year-on-year, reducing CAC by 42%." },
   { cat:["brand"], tag:"Brand Identity", name:"Vanta Labs", meta:"Complete brand system from zero", color:"linear-gradient(135deg,#150a25 0%,#0a0515 100%)", accent:"#39ff14", desc:"Built the entire brand identity for a biotech startup from naming through to full brand guidelines, website visual design, and pitch deck templates. The brand was instrumental in securing Series A funding." },
-  { cat:["paid","social"], tag:"Paid + Social", name:"Institutes", meta:"4.5× ROI achieved in 6 months", color:"linear-gradient(135deg,#0a1520 0%,#050c14 100%)", accent:"#39ff14", desc:"Integrated paid social and organic social strategy for a fashion e-commerce brand. Combined TikTok UGC ads with Meta remarketing and Instagram community building to achieve 12× ROI within 6 months of engagement." },
+  { cat:["paid","social"], tag:"Paid + Social", name:"Institutes", meta:"4.5× ROI achieved in 6 months", color:"linear-gradient(135deg,#0a1520 0%,#050c14 100%)", accent:"#39ff14", desc:"Integrated paid social and organic social strategy for a fashion e-commerce brand. Combined TikTok UGC ads with Meta remarketing and Instagram community building to achieve 12× ROI within 6 months." },
 ];
 
 function Portfolio({ navigate }) {
@@ -1260,7 +1781,7 @@ function Portfolio({ navigate }) {
         <div className="sec-label reveal">Selected Work</div>
         <h1 className="sec-title reveal">Cases That Speak Volumes</h1>
         <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginTop:16 }}>
-          Real results for real brands. Each project represents a unique challenge solved with strategy, creativity, and disciplined execution. The numbers are real.
+          Real results for real brands. Each project represents a unique challenge solved with strategy, creativity, and disciplined execution.
         </p>
       </div>
       <section className="section">
@@ -1336,9 +1857,6 @@ function About({ navigate }) {
             <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:16 }}>
               Founded in 2026 in Udaipur, Rajasthan, DSPHERY started with a simple but powerful belief: digital marketing should produce real, measurable results — not inflated reports and vanity metrics that don't connect to revenue.
             </p>
-            <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:16 }}>
-              We've grown from a small team of passionate strategists into a full-service digital agency serving clients across India and internationally. Our edge is that we think like business owners — every strategy is built with a commercial lens, not just a marketing one.
-            </p>
             <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.82, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:28 }}>
               We work with ambitious startups, growing SMEs, and established brands looking for a sharper, more accountable marketing partner. If you want an agency that will own outcomes alongside you — DSPHERY is that agency.
             </p>
@@ -1356,12 +1874,12 @@ function About({ navigate }) {
           <h2 className="sec-title reveal" style={{ marginBottom:32, fontSize:"clamp(24px,3vw,44px)" }}>What Drives Us</h2>
           <div className="values-grid">
             {[
-              ["🎯","Results First","Every decision is filtered through one question: does this drive measurable growth? We don't spend your budget on activities that can't be tracked back to revenue."],
-              ["🔬","Data-Driven Thinking","We build hypotheses, run structured tests, measure outcomes, and iterate relentlessly. Gut feel gets you started; data gets you scaled."],
-              ["🤝","True Partnership","We embed ourselves in your business. Your wins are our wins, your challenges are our challenges. We don't just report metrics — we own outcomes with you."],
-              ["💡","Creative Courage","We take bold creative swings backed by strategic thinking. In a world of noise, safe is the riskiest thing you can be."],
-              ["⚡","Speed & Agility","Markets shift fast. Opportunities close fast. We're built to move quickly — from strategy to execution without the agency bloat."],
-              ["📈","Compounding Growth","We build systems designed to compound. Short-term campaign spikes are nice; durable, accelerating growth is what we're actually building."],
+              ["🎯","Results First","Every decision is filtered through one question: does this drive measurable growth?"],
+              ["🔬","Data-Driven Thinking","We build hypotheses, run structured tests, measure outcomes, and iterate relentlessly."],
+              ["🤝","True Partnership","We embed ourselves in your business. Your wins are our wins, your challenges are our challenges."],
+              ["💡","Creative Courage","We take bold creative swings backed by strategic thinking. Safe is the riskiest thing you can be."],
+              ["⚡","Speed & Agility","Markets shift fast. We're built to move quickly — from strategy to execution without the bloat."],
+              ["📈","Compounding Growth","We build systems designed to compound. Durable, accelerating growth is what we're actually building."],
             ].map(([icon,title,desc]) => (
               <div className="val-card reveal" key={title}><div className="val-icon">{icon}</div><div className="val-title">{title}</div><div className="val-desc">{desc}</div></div>
             ))}
@@ -1398,7 +1916,7 @@ function About({ navigate }) {
 /* ── CONTACT ── */
 function Contact({ navigate }) {
   useReveal("contact");
-  const [form, setForm] = useState({ name:"", email:"", company:"", budget:"", service:"", message:"" });
+  const [form, setForm] = useState({ name:"", email:"", company:"", service:"", message:"" });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -1431,7 +1949,7 @@ function Contact({ navigate }) {
         <div className="sec-label reveal">Get In Touch</div>
         <h1 className="sec-title reveal">Let's Build Something Great</h1>
         <p className="reveal" style={{ fontFamily:"'Poppins',sans-serif", fontSize:14, lineHeight:1.8, color:"rgba(255,255,255,0.45)", maxWidth:480, fontWeight:300, marginTop:16 }}>
-          Ready to transform your digital presence? Fill in the form and one of our strategists will reach out within 24 hours to discuss your goals and how we can help.
+          Ready to transform your digital presence? Fill in the form and one of our strategists will reach out within 24 hours to discuss your goals.
         </p>
       </div>
       <section className="section">
@@ -1451,7 +1969,7 @@ function Contact({ navigate }) {
             <div style={{ marginTop:28, padding:24, background:"rgba(20,26,70,0.3)", border:"1px solid rgba(57,255,20,0.15)", borderRadius:14 }} className="reveal">
               <div style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, letterSpacing:3, textTransform:"uppercase", color:"#39ff14", marginBottom:8 }}>Free Strategy Session</div>
               <p style={{ fontFamily:"'Poppins',sans-serif", fontSize:13, lineHeight:1.72, color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:14 }}>
-                Book a complimentary 30-minute strategy call with one of our growth experts. We'll audit your current digital presence and identify your biggest opportunities — no strings attached.
+                Book a complimentary 30-minute strategy call. We'll audit your current digital presence and identify your biggest opportunities — no strings attached.
               </p>
               <button className="btn-primary" style={{ fontSize:11, padding:"9px 20px" }}>Book a Free Call →</button>
             </div>
@@ -1471,16 +1989,7 @@ function Contact({ navigate }) {
                   <div className="form-group"><label htmlFor="name">Full Name *</label><input id="name" name="name" value={form.name} onChange={handleChange} placeholder="Your full name" required /></div>
                   <div className="form-group"><label htmlFor="email">Email Address *</label><input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="your@email.com" required /></div>
                 </div>
-                <div className="form-row">
-                  <div className="form-group"><label htmlFor="company">Company / Brand</label><input id="company" name="company" value={form.company} onChange={handleChange} placeholder="Your company name" /></div>
-                  <div className="form-group">
-                    <label htmlFor="budget">Monthly Budget</label>
-                    <select id="budget" name="budget" value={form.budget} onChange={handleChange}>
-                      <option value="">Select range</option>
-                      <option>₹10K – ₹30K</option><option>₹30K – ₹75K</option><option>₹75K – ₹2L</option><option>₹2L+</option>
-                    </select>
-                  </div>
-                </div>
+                <div className="form-group"><label htmlFor="company">Company / Brand</label><input id="company" name="company" value={form.company} onChange={handleChange} placeholder="Your company name" /></div>
                 <div className="form-group">
                   <label htmlFor="service">Service You're Interested In</label>
                   <select id="service" name="service" value={form.service} onChange={handleChange}>
@@ -1517,7 +2026,7 @@ function Contact({ navigate }) {
         <div className="map-panel">
           <div className="map-panel-eyebrow">Find Our Office</div>
           <h2 className="map-panel-title">Visit Us at <span>Arawali Complex</span>, Udaipur</h2>
-          <p className="map-panel-sub">Come meet our team in person or reach us anytime. We love connecting with ambitious brands.</p>
+          <p className="map-panel-sub">Come meet our team in person or reach us anytime.</p>
           <div className="map-info-rows">
             {[
               ["📍","Office Address","Arawali Complex, Udaipur, Rajasthan 313001"],
@@ -1543,7 +2052,7 @@ function Contact({ navigate }) {
   );
 }
 
-/* ── ROOT ── */
+/* ── ROOT — AIChat moved OUTSIDE <main> so it's always fixed on screen ── */
 export default function App() {
   const [page, setPage] = useState("home");
   const [loaded, setLoaded] = useState(false);
@@ -1579,14 +2088,16 @@ export default function App() {
         <div className="ld-pct">{pct}%</div>
       </div>
       <Nav page={page} navigate={navigate} />
+      {/* AIChat is outside <main> — renders as a true fixed overlay on every page */}
+      <AIChat />
       <main style={{ paddingTop:70 }}>
         {page === "home"      && <Home      navigate={navigate} />}
         {page === "services"  && <Services  navigate={navigate} />}
         {page === "portfolio" && <Portfolio navigate={navigate} />}
+        {page === "blog"      && <Blog      navigate={navigate} />}
         {page === "about"     && <About     navigate={navigate} />}
         {page === "contact"   && <Contact   navigate={navigate} />}
       </main>
-      <AIChat />
     </>
   );
 }

@@ -382,24 +382,14 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .form-success h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .form-success p { font-family: 'Poppins', sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); }
 
-/* ── AI CHAT — FIXED POSITION, ALWAYS ON TOP ── */
+/* AI CHAT */
 .ai-btn {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 9000;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+  position: fixed; bottom: 28px; right: 28px; z-index: 9000;
+  width: 52px; height: 52px; border-radius: 50%;
   background: linear-gradient(135deg, #141a46, #0a0f2e);
-  color: #39ff14;
-  border: 1px solid #39ff14;
-  cursor: none;
-  font-size: 18px;
+  color: #39ff14; border: 1px solid #39ff14; cursor: none; font-size: 18px;
   box-shadow: 0 4px 28px rgba(57,255,20,0.3), 0 0 0 0 rgba(57,255,20,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .ai-btn:hover { transform: scale(1.1); box-shadow: 0 8px 40px rgba(57,255,20,0.5); }
@@ -414,37 +404,19 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
   50%{box-shadow:0 0 0 6px rgba(34,197,94,0)}
 }
 .ai-popup {
-  position: fixed;
-  bottom: 92px;
-  right: 28px;
-  z-index: 8999;
-  width: 360px;
-  background: rgba(8,10,22,0.98);
-  border: 1px solid rgba(57,255,20,0.25);
-  border-radius: 20px;
+  position: fixed; bottom: 92px; right: 28px; z-index: 8999;
+  width: 360px; background: rgba(8,10,22,0.98);
+  border: 1px solid rgba(57,255,20,0.25); border-radius: 20px;
   box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(57,255,20,0.08);
-  transform: scale(0.88) translateY(16px);
-  transform-origin: bottom right;
-  opacity: 0;
-  pointer-events: none;
+  transform: scale(0.88) translateY(16px); transform-origin: bottom right;
+  opacity: 0; pointer-events: none;
   transition: transform 0.35s cubic-bezier(0.23,1,0.32,1), opacity 0.35s;
-  display: flex;
-  flex-direction: column;
-  max-height: 540px;
-  overflow: hidden;
+  display: flex; flex-direction: column; max-height: 540px; overflow: hidden;
 }
-.ai-popup.open {
-  transform: scale(1) translateY(0);
-  opacity: 1;
-  pointer-events: all;
-}
+.ai-popup.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
 .ai-header {
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
+  padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
   background: linear-gradient(135deg, rgba(20,26,70,0.7), rgba(57,255,20,0.06));
 }
 .ai-avatar {
@@ -463,30 +435,14 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .ai-header-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #fff; }
 .ai-header-status { font-family: 'Poppins', sans-serif; font-size: 9px; color: #39ff14; letter-spacing: 0.5px; margin-top: 2px; display: flex; align-items: center; gap: 4px; }
 .ai-status-dot { width: 5px; height: 5px; border-radius: 50%; background: #39ff14; animation: badgePulse 2s infinite; flex-shrink: 0; }
-/* ── IMPROVED CLOSE BUTTON ── */
 .ai-close {
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(255,255,255,0.7);
-  cursor: none;
-  font-size: 14px;
-  padding: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-  line-height: 1;
-  font-weight: 600;
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7); cursor: none; font-size: 14px; padding: 0;
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background 0.2s, color 0.2s, border-color 0.2s; line-height: 1; font-weight: 600;
 }
-.ai-close:hover {
-  background: rgba(255,60,60,0.2);
-  border-color: rgba(255,60,60,0.4);
-  color: #ff6060;
-}
+.ai-close:hover { background: rgba(255,60,60,0.2); border-color: rgba(255,60,60,0.4); color: #ff6060; }
 .ai-quick-chips {
   padding: 9px 12px; border-bottom: 1px solid rgba(255,255,255,0.06);
   display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0;
@@ -521,8 +477,7 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 }
 .ai-msg.bot {
   background: rgba(20,26,70,0.6); color: rgba(255,255,255,0.9);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 13px 13px 13px 3px;
+  border: 1px solid rgba(255,255,255,0.07); border-radius: 13px 13px 13px 3px;
 }
 .ai-msg.user {
   background: linear-gradient(135deg, #141a46, #0a0f2e);
@@ -556,8 +511,7 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
   color: #fff; border-radius: 9px; padding: 9px 12px;
   font-size: 12px; font-family: 'Poppins', sans-serif; outline: none;
   resize: none; min-height: 36px; max-height: 80px;
-  transition: border-color 0.2s; line-height: 1.4;
-  scrollbar-width: none;
+  transition: border-color 0.2s; line-height: 1.4; scrollbar-width: none;
 }
 .ai-in:focus { border-color: rgba(57,255,20,0.4); }
 .ai-in::placeholder { color: rgba(255,255,255,0.2); }
@@ -592,7 +546,6 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .svc-metric-n { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #39ff14; }
 .svc-metric-l { font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
 
-/* FAQ */
 .faq-list { display: grid; gap: 12px; }
 .faq-item { border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; overflow: hidden; background: rgba(20,26,70,0.12); transition: border-color 0.3s; }
 .faq-item.open { border-color: rgba(57,255,20,0.25); }
@@ -601,7 +554,6 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .faq-item.open .faq-icon { transform: rotate(45deg); }
 .faq-a { font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.78; color: rgba(255,255,255,0.5); padding: 0 22px 20px; font-weight: 300; }
 
-/* WHY US */
 .why-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
 .why-card { padding: 26px 22px; border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; background: rgba(20,26,70,0.15); text-align: center; transition: border-color 0.3s, transform 0.3s; }
 .why-card:hover { border-color: rgba(57,255,20,0.35); transform: translateY(-4px); }
@@ -609,7 +561,6 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .why-label { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 5px; }
 .why-desc { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.7; color: rgba(255,255,255,0.45); margin-top: 10px; font-weight: 300; }
 
-/* MAP HERO */
 .map-hero {
   position: relative; width: 100%; height: 580px; overflow: hidden;
   border-top: 1px solid rgba(255,255,255,0.06);
@@ -645,7 +596,6 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .map-pin-badge { position: absolute; bottom: 20px; right: 20px; z-index: 3; background: rgba(6,8,16,0.92); border: 1px solid rgba(57,255,20,0.2); border-radius: 100px; padding: 6px 14px; backdrop-filter: blur(12px); display: flex; align-items: center; gap: 7px; font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.55); }
 .map-pin-dot { width: 7px; height: 7px; border-radius: 50%; background: #39ff14; animation: orbPulse 2s infinite; flex-shrink: 0; }
 
-/* BLOG */
 .blog-hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-bottom: 64px; }
 .blog-featured { border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); background: rgba(13,17,32,0.9); cursor: none; transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s; position: relative; }
 .blog-featured:hover { transform: translateY(-6px); box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
@@ -681,7 +631,6 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
 .blog-card-excerpt { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.4); font-weight: 300; margin-bottom: 16px; }
 .blog-card-footer { display: flex; align-items: center; justify-content: space-between; }
 
-/* BLOG ARTICLE */
 .blog-article-wrap { max-width: 760px; margin: 0 auto; }
 .blog-article-header { margin-bottom: 48px; }
 .blog-article-title { font-family: 'Syne', sans-serif; font-size: clamp(28px, 4vw, 56px); font-weight: 800; color: #fff; line-height: 1.05; letter-spacing: -0.5px; margin-bottom: 20px; }
@@ -768,6 +717,48 @@ body.hovered #ds-cursor-ring { width: 56px; height: 56px; border-color: rgba(57,
   .hero-title{font-size:clamp(32px,9vw,56px)}
 }
 `;
+
+/* ── URL ROUTING ── */
+const PAGE_ROUTES = {
+  home:      "/",
+  services:  "/services",
+  portfolio: "/portfolio",
+  blog:      "/blog",
+  about:     "/about",
+  contact:   "/contact",
+};
+
+const ROUTE_TO_PAGE = Object.fromEntries(
+  Object.entries(PAGE_ROUTES).map(([page, path]) => [path, page])
+);
+
+function getPageFromUrl() {
+  const path = window.location.pathname.replace(/\/$/, "") || "/";
+  return ROUTE_TO_PAGE[path] || ROUTE_TO_PAGE[path + "/"] || "home";
+}
+
+function useRouter() {
+  const [page, setPage] = useState(getPageFromUrl);
+
+  useEffect(() => {
+    const onPop = () => setPage(getPageFromUrl());
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+
+  const navigate = useCallback((newPage, replace = false) => {
+    const path = PAGE_ROUTES[newPage] || "/";
+    if (replace) {
+      window.history.replaceState({ page: newPage }, "", path);
+    } else {
+      window.history.pushState({ page: newPage }, "", path);
+    }
+    setPage(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  return { page, navigate };
+}
 
 function useHeroGlobe(canvasRef) {
   useEffect(() => {
@@ -938,7 +929,6 @@ function Marquee() {
   );
 }
 
-// ── FIX 3: Removed "Crafted with ✦ precision" from ft-bottom ──
 function Footer({ navigate }) {
   const year = new Date().getFullYear();
   return (
@@ -1015,7 +1005,6 @@ const QUICK_CHIPS = ["How does SEO work?","What's a good ROAS?","Social media ti
 
 function getTime() { return new Date().toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" }); }
 
-// ── FIX 1 & 2: AIChat with improved close button visibility + proper fixed positioning ──
 function AIChat() {
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState([{ bot:true, text:"Hey! 👋 I'm DSPHERY's AI marketing assistant. Ask me anything about SEO, paid ads, social media, content strategy, or how we can grow your brand.", time:getTime() }]);
@@ -1049,13 +1038,10 @@ function AIChat() {
 
   return (
     <>
-      {/* Toggle button — always fixed, always on top */}
       <button className="ai-btn" onClick={() => setOpen((o) => !o)} aria-label="Toggle chat">
         <span style={{ lineHeight:1 }}>{open ? "✕" : "💬"}</span>
         {!open && <div className="ai-btn-badge" />}
       </button>
-
-      {/* Chat popup — fixed position, slides up from button */}
       <div className={`ai-popup${open ? " open" : ""}`}>
         <div className="ai-header">
           <div className="ai-avatar">✦<div className="ai-avatar-dot" /></div>
@@ -1063,7 +1049,6 @@ function AIChat() {
             <div className="ai-header-name">DSPHERY Assistant</div>
             <div className="ai-header-status"><div className="ai-status-dot" />AI-powered · Always online</div>
           </div>
-          {/* Improved close button — clearly visible with border + background */}
           <button className="ai-close" onClick={() => setOpen(false)} aria-label="Close chat">✕</button>
         </div>
         <div className="ai-quick-chips">
@@ -1112,40 +1097,25 @@ const BLOG_POSTS = [
     featured: true,
     body: `
       <p>If you've been doing SEO for a few months and you're not seeing results, it's not because SEO doesn't work. It almost certainly means one of these seven mistakes is eating your progress from the inside. We've audited over a hundred websites at DSPHERY, and these are the errors that come up again and again — even on sites managed by "experienced" teams.</p>
-
       <h2>1. Targeting Keywords Nobody Actually Searches</h2>
       <p>This is still the most common mistake in 2026. Business owners and even some agencies pick keywords based on what sounds right rather than what people are actually typing into Google. The result? You rank well for a term with forty monthly searches and wonder why nothing is happening.</p>
       <p>The fix is straightforward: do proper keyword research using real tools. Look at search volume, competition, and — most importantly — search intent. A keyword with 800 monthly searches that matches exactly what your service page offers will always outperform a broader keyword with 8,000 searches that doesn't align with what users want to find.</p>
-
       <blockquote class="blog-article-blockquote">Ranking for the wrong keywords is worse than not ranking at all — it wastes your crawl budget, dilutes your authority, and generates traffic that doesn't convert.</blockquote>
-
       <h2>2. Ignoring Core Web Vitals</h2>
       <p>Google made page experience a ranking signal, and most businesses are still treating it as a checkbox item rather than a genuine priority. Core Web Vitals — Largest Contentful Paint, Interaction to Next Paint, and Cumulative Layout Shift — are metrics that measure how your site actually feels to a real user.</p>
       <p>A slow site doesn't just frustrate users. It signals to Google that your page delivers a poor experience, which directly suppresses your rankings. Run your site through Google's PageSpeed Insights right now. If your LCP is above 2.5 seconds, that's your biggest SEO problem — bigger than your content, your backlinks, or your meta tags.</p>
-
       <h2>3. Publishing Content Without a Strategy</h2>
       <p>Random blogging — writing about whatever feels topical that week — almost never works for SEO. What works is building topical authority: covering a subject area so thoroughly that Google considers you the go-to source. This means planning a content architecture where each article supports a broader topic cluster, not just chasing individual keywords in isolation.</p>
-
       <div class="blog-article-highlight"><p>✦ Quick tip: before publishing a new blog post, ask yourself: does this article link naturally to at least three other pages on my site? If not, it's probably an isolated piece that won't build authority effectively.</p></div>
-
       <h2>4. Not Building Internal Links Deliberately</h2>
       <p>Internal linking is one of the most underrated SEO levers available to you, and it costs nothing. Every time you publish a new page, you should be going back through your existing content and adding contextual links pointing to it. This distributes PageRank across your site, helps Google discover new content faster, and dramatically improves the rankings of pages that aren't getting external backlinks.</p>
-
       <h2>5. Treating Technical SEO as a One-Time Task</h2>
       <p>Your site is not static. Every time you add new pages, change URLs, update templates, or integrate new plugins, you risk introducing technical issues that hurt your crawlability and indexation. Broken internal links, duplicate content, orphaned pages, slow-loading resources — these things accumulate over time and gradually drag your rankings down.</p>
       <p>Schedule a proper technical audit every quarter. It doesn't need to take days. A focused two-hour crawl with a tool like Screaming Frog will surface 90% of the issues that matter.</p>
-
       <h2>6. Giving Up After Three Months</h2>
       <p>SEO is a long game. This is genuinely not a platitude — it's a mechanical reality of how Google works. The algorithm needs time to recrawl your site, reassess your authority, and compare you against competitors. For new sites or pages, three to six months is often the minimum before you see meaningful movement. For competitive keywords, a year of consistent effort is not unusual.</p>
-      <p>The businesses that win at SEO are the ones that treat it as infrastructure, not as a campaign. They publish consistently, fix issues as they arise, and build links gradually over time. The compounding effect of that sustained effort is what produces the 3–5× traffic growth numbers you see in case studies.</p>
-
       <h2>7. Neglecting Backlink Quality Over Quantity</h2>
-      <p>In 2026, one genuinely relevant, authoritative backlink from a respected industry publication is worth more than a hundred directory listings and guest post placements on low-quality sites. Google's link evaluation has become sophisticated enough to identify link schemes, and the latter can actively harm your domain authority rather than helping it.</p>
-      <p>Focus your link building on digital PR, original research that journalists want to cite, and genuine relationship-building with complementary businesses. It's slower, but the links you earn this way actually move the needle — and they don't put your site at risk of a manual penalty.</p>
-
-      <h2>The Bottom Line</h2>
-      <p>SEO failures are almost always diagnosable. If your rankings are stagnant, run through this list methodically. Chances are you'll find at least two or three of these issues actively working against you. Fix them, give Google time to re-evaluate, and you'll start to see movement.</p>
-      <p>If you want a professional pair of eyes on your site, our SEO team at DSPHERY offers a comprehensive digital audit as part of any new engagement. We'll tell you exactly what's holding you back and build a plan to fix it.</p>
+      <p>In 2026, one genuinely relevant, authoritative backlink from a respected industry publication is worth more than a hundred directory listings and guest post placements on low-quality sites. Focus your link building on digital PR, original research that journalists want to cite, and genuine relationship-building with complementary businesses.</p>
     `
   },
   {
@@ -1162,36 +1132,15 @@ const BLOG_POSTS = [
     accent: "#39ff14",
     featured: false,
     body: `
-      <p>If you've been running Meta ads for a few years, you've noticed something uncomfortable: what used to deliver 4× ROAS now barely clears 1.8×. Costs are up. Reach is messier. And the "proven" playbooks that dominated conversations in Facebook marketing groups are quietly being abandoned.</p>
-      <p>This isn't bad luck. Meta's ad ecosystem has undergone fundamental changes, and most advertisers are still running 2022 playbooks in a 2026 environment. Here's what's actually happening and what you can do about it.</p>
-
+      <p>If you've been running Meta ads for a few years, you've noticed something uncomfortable: what used to deliver 4× ROAS now barely clears 1.8×. Costs are up. Reach is messier. And the "proven" playbooks are quietly being abandoned.</p>
       <h2>The Landscape Has Shifted</h2>
-      <p>Three things happened simultaneously that changed Meta advertising. First, Apple's ATT framework significantly degraded the targeting data that made Meta ads so effective. Second, the platform shifted heavily toward Advantage+ automation, which means the algorithm now controls far more of your campaign than it used to. Third, competition for attention has intensified — users are consuming more content across more platforms, which means your creative has to work harder than ever to earn a stop-scroll moment.</p>
-
+      <p>Three things happened simultaneously that changed Meta advertising. First, Apple's ATT framework significantly degraded the targeting data that made Meta ads so effective. Second, the platform shifted heavily toward Advantage+ automation. Third, competition for attention has intensified.</p>
       <blockquote class="blog-article-blockquote">The single biggest driver of Meta ad performance in 2026 is creative quality. Not targeting. Not bidding strategy. Creative.</blockquote>
-
       <h2>Stop Fighting the Algorithm, Work With It</h2>
-      <p>Many advertisers are still trying to "outsmart" Meta's machine learning by using granular manual targeting and rigid campaign structures. This approach consistently underperforms against Advantage+ Shopping Campaigns and broad audience strategies, because you simply cannot outmaneuver a system trained on trillions of data points.</p>
-      <p>The shift in mindset required is this: instead of telling Meta who to show your ads to, focus on creating ads that naturally attract your best customers. Give the algorithm broad permission to find people, and let the creative do the qualification work.</p>
-
+      <p>Many advertisers are still trying to "outsmart" Meta's machine learning by using granular manual targeting and rigid campaign structures. This approach consistently underperforms against Advantage+ Shopping Campaigns and broad audience strategies.</p>
       <h2>The Creative Testing Framework That Actually Works</h2>
-      <p>High-performing Meta advertisers in 2026 treat creative production like a manufacturing operation. They're constantly generating new variations — different hooks, different formats, different angles — and letting Meta determine which combinations win. The specific things worth testing:</p>
-      <ul>
-        <li>Hook format: text overlay vs. spoken hook vs. visual pattern interrupt</li>
-        <li>Content style: UGC-style vs. polished brand content vs. direct response</li>
-        <li>Offer framing: discount vs. value proposition vs. social proof lead</li>
-        <li>Video length: 6-second vs. 15-second vs. 30-second for different funnel stages</li>
-      </ul>
-
-      <h2>Attribution Is Lying to You (And What to Do About It)</h2>
-      <p>With degraded pixel data, Meta's reported ROAS has become an increasingly unreliable measure of true campaign performance. We've seen accounts where Meta claims 4× ROAS but actual revenue attribution through CRM data shows the true contribution is closer to 2×. And we've seen the opposite — campaigns that look weak in Meta's dashboard but are actually significant contributors to brand search and direct conversion.</p>
-      <p>The solution is triangulated measurement: Meta data plus GA4 plus your backend revenue data. Run conversion lift studies when you have sufficient budget to get statistically valid results. And always track incrementality, not just last-click or even view-through attribution.</p>
-
+      <p>High-performing Meta advertisers in 2026 treat creative production like a manufacturing operation. They're constantly generating new variations — different hooks, different formats, different angles — and letting Meta determine which combinations win.</p>
       <div class="blog-article-highlight"><p>✦ Practical tip: if you're spending more than ₹3L/month on Meta ads and you're only using Meta's native reporting to evaluate performance, you're making decisions on incomplete information.</p></div>
-
-      <h2>Building Sustainable ROAS</h2>
-      <p>The brands consistently achieving 3.5–5× ROAS on Meta in 2026 share a few characteristics. They have a deep library of creative content that they're constantly refreshing. They use broad targeting with strong creative as their primary acquisition approach. They have robust email and retargeting infrastructure that converts warmed audiences efficiently. And they measure performance holistically rather than relying on any single attribution model.</p>
-      <p>None of this is particularly glamorous. But consistent, sustainable ROAS comes from systems and creative rigor — not from finding some clever audience targeting hack that'll stop working the moment everyone else discovers it.</p>
     `
   },
   {
@@ -1199,7 +1148,7 @@ const BLOG_POSTS = [
     slug: "brand-strategy-small-business",
     tag: "Brand Strategy",
     title: "Brand Strategy for Small Businesses: What Actually Matters and What's Just Noise",
-    excerpt: "Most brand strategy advice is written for companies with crores in budget and entire departments dedicated to brand management. Here's what actually moves the needle when you're a growing business with real constraints.",
+    excerpt: "Most brand strategy advice is written for companies with crores in budget. Here's what actually moves the needle when you're a growing business with real constraints.",
     author: "Rahul Chopra",
     authorInitials: "RC",
     date: "February 28, 2026",
@@ -1213,7 +1162,7 @@ const BLOG_POSTS = [
     slug: "instagram-organic-growth-2026",
     tag: "Social Media",
     title: "How We Grew an Instagram Account from 0 to 100K in 11 Months Without Paid Ads",
-    excerpt: "The tactics that built us a 100K engaged community on Instagram with zero ad spend — including the three decisions that made the biggest difference and the one mistake we almost made.",
+    excerpt: "The tactics that built us a 100K engaged community on Instagram with zero ad spend — including the three decisions that made the biggest difference.",
     author: "Riya Patel",
     authorInitials: "RP",
     date: "February 19, 2026",
@@ -1227,7 +1176,7 @@ const BLOG_POSTS = [
     slug: "content-marketing-roi",
     tag: "Content Marketing",
     title: "Why Most Content Marketing Fails to Generate ROI (And the Framework That Changes That)",
-    excerpt: "Content marketing has a credibility problem. Too many businesses have published consistently for years and have almost nothing to show for it commercially. Here's why — and the strategic shift that fixes it.",
+    excerpt: "Content marketing has a credibility problem. Too many businesses have published consistently for years and have almost nothing to show for it commercially.",
     author: "Aditya Joshi",
     authorInitials: "AJ",
     date: "February 10, 2026",
@@ -1241,7 +1190,7 @@ const BLOG_POSTS = [
     slug: "google-ads-quality-score",
     tag: "Paid Media",
     title: "Quality Score Deep Dive: The Hidden Lever That Controls Your Google Ads Cost",
-    excerpt: "Quality Score might be the most misunderstood metric in Google Ads. A 10-point Quality Score can mean paying half what your competitors pay for the same click. Here's exactly how it works and how to improve it.",
+    excerpt: "Quality Score might be the most misunderstood metric in Google Ads. A 10-point Quality Score can mean paying half what your competitors pay for the same click.",
     author: "Neha Verma",
     authorInitials: "NV",
     date: "January 30, 2026",
@@ -1429,7 +1378,7 @@ function Blog({ navigate }) {
                   <p className="blog-card-excerpt">{p.excerpt}</p>
                   <div className="blog-card-footer">
                     <span style={{ fontFamily:"'Poppins',sans-serif", fontSize:10, color:"rgba(255,255,255,0.3)" }}>{p.author} · {p.readTime}</span>
-                    <span style={{ color:"#39ff14", fontSize:14, transition:"transform 0.2s" }}>→</span>
+                    <span style={{ color:"#39ff14", fontSize:14 }}>→</span>
                   </div>
                 </div>
               </div>
@@ -1453,11 +1402,7 @@ function Blog({ navigate }) {
             <input
               type="email"
               placeholder="your@email.com"
-              style={{
-                flex:1, background:"rgba(6,8,16,0.7)", border:"1px solid rgba(255,255,255,0.12)",
-                color:"#fff", borderRadius:100, padding:"12px 20px", fontSize:13,
-                fontFamily:"'Poppins',sans-serif", outline:"none"
-              }}
+              style={{ flex:1, background:"rgba(6,8,16,0.7)", border:"1px solid rgba(255,255,255,0.12)", color:"#fff", borderRadius:100, padding:"12px 20px", fontSize:13, fontFamily:"'Poppins',sans-serif", outline:"none" }}
               onFocus={e => e.target.style.borderColor = "#39ff14"}
               onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.12)"}
             />
@@ -1721,9 +1666,7 @@ function Services({ navigate }) {
           <div>
             <div className="sec-label reveal">Our Approach</div>
             <h2 className="sec-title reveal">How We Grow Your Brand</h2>
-            <p className="proc-body reveal">
-              We don't believe in one-size-fits-all marketing strategies. Every business is unique and deserves a customised digital growth plan built on real data, market research, and creative execution.
-            </p>
+            <p className="proc-body reveal">We don't believe in one-size-fits-all marketing strategies. Every business is unique and deserves a customised digital growth plan built on real data, market research, and creative execution.</p>
             <button className="btn-primary reveal" onClick={() => navigate("contact")}>Work With Us →</button>
           </div>
           <ul style={{ listStyle:"none" }}>
@@ -1929,18 +1872,12 @@ function Contact({ navigate }) {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          access_key: "fef347a3-4537-454d-a945-3a372dc4a8bb",
-          subject: `New enquiry from ${form.name} — DSPHERY`,
-          from_name: "DSPHERY Contact Form",
-          ...form,
-        }),
+        body: JSON.stringify({ access_key: "fef347a3-4537-454d-a945-3a372dc4a8bb", subject: `New enquiry from ${form.name} — DSPHERY`, from_name: "DSPHERY Contact Form", ...form }),
       });
       const data = await response.json();
       if (data.success) { setSubmitted(true); } else { setError(data.message || "Something went wrong. Please try again."); }
-    } catch (err) {
-      setError("Network error. Please check your connection and try again.");
-    } finally { setLoading(false); }
+    } catch { setError("Network error. Please check your connection and try again."); }
+    finally { setLoading(false); }
   };
   return (
     <div className="page-enter">
@@ -2052,9 +1989,9 @@ function Contact({ navigate }) {
   );
 }
 
-/* ── ROOT — AIChat moved OUTSIDE <main> so it's always fixed on screen ── */
+/* ── ROOT ── */
 export default function App() {
-  const [page, setPage] = useState("home");
+  const { page, navigate } = useRouter();
   const [loaded, setLoaded] = useState(false);
   const [pct, setPct] = useState(0);
 
@@ -2075,8 +2012,6 @@ export default function App() {
 
   useCursor();
 
-  const navigate = useCallback((p) => { setPage(p); window.scrollTo({ top:0, behavior:"smooth" }); }, []);
-
   return (
     <>
       <div id="ds-cursor" />
@@ -2088,7 +2023,6 @@ export default function App() {
         <div className="ld-pct">{pct}%</div>
       </div>
       <Nav page={page} navigate={navigate} />
-      {/* AIChat is outside <main> — renders as a true fixed overlay on every page */}
       <AIChat />
       <main style={{ paddingTop:70 }}>
         {page === "home"      && <Home      navigate={navigate} />}

@@ -19,9 +19,6 @@ ul { list-style: none; }
 ::-webkit-scrollbar-track { background: #060810; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
 
-/* ═══════════════════════════════════════
-   FEATURE 2: CUSTOM CURSOR WITH TRAILS
-═══════════════════════════════════════ */
 #ds-cursor {
   position: fixed; top: 0; left: 0;
   width: 12px; height: 12px;
@@ -55,7 +52,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
   mix-blend-mode: screen; transition: opacity 0.3s;
 }
 
-/* Magnetic buttons */
 .btn-primary, .btn-ghost, .nav-cta-btn, .ai-send {
   transition: transform 0.15s cubic-bezier(0.23,1,0.32,1), box-shadow 0.2s !important;
 }
@@ -63,9 +59,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 #scroll-prog { position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 1001; background: transparent; }
 #scroll-prog-bar { height: 100%; background: linear-gradient(90deg, #141a46, #39ff14, #fff); width: 0%; transition: width 0.1s; }
 
-/* ═══════════════════════════════════════
-   FEATURE 8: ENHANCED LOADER
-═══════════════════════════════════════ */
 #ds-loader {
   position: fixed; inset: 0; background: #060810; z-index: 99997;
   display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 20px;
@@ -99,9 +92,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 @keyframes orbSpin { to { transform: rotate(360deg); } }
 .ld-pct { font-family: 'Poppins', sans-serif; font-size: 11px; letter-spacing: 4px; color: rgba(255,255,255,0.3); font-weight: 300; }
 
-/* ═══════════════════════════════════════
-   FEATURE 8: LOADER STEPS
-═══════════════════════════════════════ */
 .ld-steps { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
 .ld-step {
   font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 3px;
@@ -163,9 +153,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
   letter-spacing: 3px; color: #fff; background: none; border: none; cursor: none; text-align: left;
 }
 
-/* ═══════════════════════════════════════
-   PAGE & REVEAL ANIMATIONS
-═══════════════════════════════════════ */
 .page-enter { animation: pageIn 0.5s cubic-bezier(0.23,1,0.32,1) both; }
 @keyframes pageIn { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
@@ -173,9 +160,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .reveal.visible { opacity: 1; transform: translateY(0); }
 .rd1{transition-delay:0.1s}.rd2{transition-delay:0.2s}.rd3{transition-delay:0.3s}.rd4{transition-delay:0.4s}
 
-/* ═══════════════════════════════════════
-   FEATURE 10: MICRO INTERACTIONS - BUTTONS
-═══════════════════════════════════════ */
 .btn-primary {
   display: inline-flex; align-items: center; gap: 10px;
   background: linear-gradient(135deg, #141a46, #0a0f2e);
@@ -264,9 +248,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
   mask-image: linear-gradient(to bottom, transparent, rgba(0,0,0,0.2) 25%, rgba(0,0,0,0.08) 70%, transparent);
 }
 
-/* ═══════════════════════════════════════
-   FEATURE 7: PARALLAX LAYERS
-═══════════════════════════════════════ */
 .parallax-layer { will-change: transform; transition: transform 0.1s linear; }
 
 .globe-wrap {
@@ -320,9 +301,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .scroll-ln::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:#39ff14; animation: sln 2s ease-in-out infinite; }
 @keyframes sln { to { left: 100%; } }
 
-/* ═══════════════════════════════════════
-   FEATURE 1: SCROLL STORY SECTION
-═══════════════════════════════════════ */
 .scroll-story {
   position: relative; min-height: 400vh;
   background: #060810;
@@ -362,7 +340,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
   font-family: 'Poppins', sans-serif; font-size: 15px; line-height: 1.8;
   color: rgba(255,255,255,0.5); font-weight: 300; max-width: 480px; margin: 0 auto 28px;
 }
-/* Scene 1: Broken state */
 .scene-broken .story-title { color: rgba(255,255,255,0.4); }
 .scene-broken .story-title span { -webkit-text-stroke: 1px rgba(255,80,80,0.6); color: transparent; }
 .scene-broken-glitch {
@@ -375,7 +352,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 }
 .broken-bars { display: flex; align-items: flex-end; gap: 6px; justify-content: center; margin-bottom: 20px; }
 .broken-bar { width: 16px; border-radius: 4px 4px 0 0; background: rgba(255,80,80,0.4); }
-/* Scene 2: Strategy */
 .strategy-grid { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 20px; }
 .strategy-chip {
   font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px;
@@ -384,11 +360,9 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
   animation: chipAppear 0.5s both;
 }
 @keyframes chipAppear {from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
-/* Scene 3: Growth */
 .growth-bars { display: flex; align-items: flex-end; gap: 8px; justify-content: center; height: 80px; margin-top: 24px; }
 .growth-bar { width: 20px; border-radius: 4px 4px 0 0; background: linear-gradient(to top, #141a46, #39ff14); animation: barGrow 1s cubic-bezier(0.23,1,0.32,1) both; }
 @keyframes barGrow { from{height:0} to{height:var(--h)} }
-/* Scene 4: Convert */
 .convert-ring {
   width: 120px; height: 120px; border-radius: 50%;
   border: 2px solid rgba(57,255,20,0.3);
@@ -400,7 +374,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
   0%,100%{box-shadow:0 0 0 0 rgba(57,255,20,0.2)}
   50%{box-shadow:0 0 0 24px rgba(57,255,20,0)}
 }
-/* Progress dots */
 .story-dots {
   position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
   display: flex; gap: 8px; z-index: 10;
@@ -411,7 +384,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 }
 .story-dot.active { background: #39ff14; width: 24px; }
 
-/* Scroll progress label */
 .story-progress-label {
   position: absolute; top: 40px; right: 52px;
   font-family: 'Poppins', sans-serif; font-size: 9px; letter-spacing: 3px;
@@ -421,15 +393,11 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .story-progress-bar-wrap { width: 60px; height: 1px; background: rgba(255,255,255,0.1); border-radius: 1px; overflow: hidden; }
 .story-progress-bar { height: 100%; background: #39ff14; border-radius: 1px; transition: width 0.3s; }
 
-/* COUNTER STRIP */
 .counter-strip { padding: 48px 52px; background: rgba(20,26,70,0.2); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); display: grid; grid-template-columns: repeat(4,1fr); gap: 32px; text-align: center; }
 .counter-n { font-family: 'Syne', sans-serif; font-size: clamp(28px, 3.5vw, 48px); font-weight: 700; color: #fff; letter-spacing: 1px; }
 .counter-n span { color: #39ff14; }
 .counter-l { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 6px; }
 
-/* ═══════════════════════════════════════
-   FEATURE 5: INTERACTIVE SERVICE CARDS
-═══════════════════════════════════════ */
 .sv-grid { display: grid; grid-template-columns: repeat(3,1fr); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; overflow: hidden; }
 .sv-card {
   padding: 32px 28px; border-right: 1px solid rgba(255,255,255,0.07); border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -474,7 +442,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .sv-tag { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 100px; color: rgba(255,255,255,0.3); transition: border-color 0.3s, color 0.3s; }
 .sv-card:hover .sv-tag { border-color: rgba(57,255,20,0.2); color: rgba(57,255,20,0.5); }
 
-/* PORTFOLIO */
 .pf-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
 .pf-item { position: relative; overflow: hidden; border-radius: 12px; cursor: none; background: rgba(13,17,32,0.9); border: 1px solid rgba(255,255,255,0.07); transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s, border-color 0.3s; }
 .pf-item:hover { transform: translateY(-8px); box-shadow: 0 28px 64px rgba(0,0,0,0.5); border-color: rgba(57,255,20,0.2); }
@@ -488,9 +455,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .ftab { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 6px 16px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); cursor: none; background: transparent; transition: all 0.2s; font-family: 'DM Sans', sans-serif; }
 .ftab.active,.ftab:hover { background: #141a46; color: #39ff14; border-color: #39ff14; }
 
-/* ═══════════════════════════════════════
-   FEATURE 9: ANIMATED PROCESS TIMELINE
-═══════════════════════════════════════ */
 .proc-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
 .proc-body { font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.45); margin: 18px 0 28px; font-weight: 300; }
 .step-item {
@@ -510,9 +474,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .step-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; color: #fff; font-family: 'Syne', sans-serif; }
 .step-desc { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
 
-/* ═══════════════════════════════════════
-   FEATURE 9: ANIMATED TIMELINE (STANDALONE)
-═══════════════════════════════════════ */
 .process-timeline { padding: 80px 52px; background: rgba(20,26,70,0.1); border-top: 1px solid rgba(255,255,255,0.06); }
 .timeline-header { text-align: center; margin-bottom: 64px; }
 .timeline-steps { display: flex; align-items: flex-start; justify-content: center; gap: 0; position: relative; }
@@ -551,7 +512,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .ts-sub { font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.25); margin-top: 4px; letter-spacing: 1px; transition: color 0.5s; }
 .timeline-step.activated .ts-sub { color: #39ff14; }
 
-/* TESTIMONIALS */
 .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 40px; }
 .testi-card { background: rgba(20,26,70,0.25); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 32px 26px; position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
 .testi-card:hover { transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
@@ -568,14 +528,12 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .t-role { font-family: 'Poppins', sans-serif; font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
 .stars { color: #39ff14; font-size: 10px; margin-bottom: 8px; letter-spacing: 2px; }
 
-/* CTA */
 .cta-section { padding: 110px 52px; text-align: center; position: relative; overflow: hidden; }
 .cta-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 65% 65% at 50% 50%, rgba(20,26,70,0.2) 0%, transparent 70%); pointer-events: none; }
 .cta-lbl { font-family: 'Poppins', sans-serif; font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: #39ff14; margin-bottom: 20px; }
 .cta-title { font-family: 'Syne', sans-serif; font-size: clamp(40px, 7vw, 100px); font-weight: 800; letter-spacing: -1.5px; line-height: 0.95; color: #fff; margin-bottom: 40px; }
 .cta-title span { -webkit-text-stroke: 2px #fff; color: transparent; }
 
-/* ABOUT */
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; margin-bottom: 80px; }
 .about-img-wrap { position: relative; }
 .about-img-box { width: 100%; aspect-ratio: 4/5; border-radius: 16px; background: linear-gradient(135deg, rgba(20,26,70,0.8), rgba(57,255,20,0.08)); border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
@@ -598,7 +556,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .val-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 7px; }
 .val-desc { font-family: 'Poppins', sans-serif; font-size: 12px; line-height: 1.72; color: rgba(255,255,255,0.45); font-weight: 300; }
 
-/* CONTACT */
 .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 72px; align-items: start; }
 .contact-info { position: sticky; top: 100px; }
 .c-info-item { display: flex; gap: 14px; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
@@ -627,9 +584,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .form-success h3 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 8px; }
 .form-success p { font-family: 'Poppins', sans-serif; font-size: 13px; color: rgba(255,255,255,0.45); }
 
-/* ═══════════════════════════════════════
-   FEATURE 4: SCROLL-BASED GRAPH (WHY SECTION)
-═══════════════════════════════════════ */
 .animated-graph-wrap {
   position: relative; background: rgba(20,26,70,0.25); border: 1px solid rgba(255,255,255,0.07);
   border-radius: 14px; padding: 24px; overflow: hidden;
@@ -646,9 +600,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .graph-value { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; color: #39ff14; }
 .graph-x-label { font-family: 'Poppins', sans-serif; font-size: 9px; color: rgba(255,255,255,0.2); text-align: center; margin-top: 8px; letter-spacing: 1px; }
 
-/* ═══════════════════════════════════════
-   FEATURE 6: BEFORE / AFTER SLIDER
-═══════════════════════════════════════ */
 .before-after-section { padding: 96px 52px; background: rgba(20,26,70,0.1); border-top: 1px solid rgba(255,255,255,0.06); }
 .before-after-wrap { position: relative; border-radius: 18px; overflow: hidden; cursor: col-resize; border: 1px solid rgba(255,255,255,0.1); max-width: 900px; margin: 40px auto 0; height: 400px; user-select: none; }
 .ba-side { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; }
@@ -668,7 +619,6 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 .ba-item { font-family: 'Poppins', sans-serif; font-size: 11px; color: rgba(255,80,80,0.7); display: flex; align-items: center; gap: 6px; }
 .ba-after-content .ba-item { color: rgba(57,255,20,0.8); }
 
-/* AI CHAT */
 .ai-btn {
   position: fixed; bottom: 28px; right: 28px; z-index: 9000;
   width: 52px; height: 52px; border-radius: 50%;
@@ -846,6 +796,118 @@ body.cursor-spotlight #ds-cursor { background: #39ff14; box-shadow: 0 0 20px #39
 }
 `;
 
+// ── SEO META MANAGER ──
+const SEO_META = {
+  home: {
+    title: "Best Digital Marketing Agency in Udaipur for Business Growth | Dsphery",
+    description: "Grow your business with our expert digital marketing agency offering SEO, social media marketing, PPC advertising, and result-driven marketing services.",
+    canonical: "https://dsphery.com/",
+  },
+  services: {
+    title: "Digital Marketing Services — SEO, PPC, Social Media | Dsphery",
+    description: "Explore DSPHERY's full suite of digital marketing services: SEO, paid media, brand strategy, social media management, content marketing, and analytics.",
+    canonical: "https://dsphery.com/services",
+  },
+  portfolio: {
+    title: "Our Work & Case Studies | Dsphery Digital Marketing Agency",
+    description: "See how DSPHERY has helped brands achieve 420% organic growth, 4.2× ROAS, and ₹8Cr+ in revenue. Browse our portfolio of real results.",
+    canonical: "https://dsphery.com/portfolio",
+  },
+  blog: {
+    title: "Digital Marketing Blog — Insights & Tips | Dsphery",
+    description: "Practical, no-fluff articles on SEO, paid media, brand strategy, and social media marketing from the DSPHERY team.",
+    canonical: "https://dsphery.com/blog",
+  },
+  about: {
+    title: "About Us — Performance-Driven Marketing Agency | Dsphery",
+    description: "Learn about DSPHERY, a digital marketing agency founded in Udaipur in 2026 that's helped 120+ brands grow online with measurable results.",
+    canonical: "https://dsphery.com/about",
+  },
+  contact: {
+    title: "Contact Us — Start Your Digital Marketing Project | Dsphery",
+    description: "Get in touch with DSPHERY's marketing experts. We're based in Udaipur, Rajasthan. Reach us at hello@dsphery.com or call +91 98874 47780.",
+    canonical: "https://dsphery.com/contact",
+  },
+};
+
+function useSeoMeta(page) {
+  useEffect(() => {
+    const meta = SEO_META[page] || SEO_META.home;
+
+    // Title
+    document.title = meta.title;
+
+    // Meta description
+    let descTag = document.querySelector('meta[name="description"]');
+    if (!descTag) {
+      descTag = document.createElement("meta");
+      descTag.setAttribute("name", "description");
+      document.head.appendChild(descTag);
+    }
+    descTag.setAttribute("content", meta.description);
+
+    // Canonical
+    let canonicalTag = document.querySelector('link[rel="canonical"]');
+    if (!canonicalTag) {
+      canonicalTag = document.createElement("link");
+      canonicalTag.setAttribute("rel", "canonical");
+      document.head.appendChild(canonicalTag);
+    }
+    canonicalTag.setAttribute("href", meta.canonical);
+
+    // OG Title
+    let ogTitle = document.querySelector('meta[property="og:title"]');
+    if (!ogTitle) {
+      ogTitle = document.createElement("meta");
+      ogTitle.setAttribute("property", "og:title");
+      document.head.appendChild(ogTitle);
+    }
+    ogTitle.setAttribute("content", meta.title);
+
+    // OG Description
+    let ogDesc = document.querySelector('meta[property="og:description"]');
+    if (!ogDesc) {
+      ogDesc = document.createElement("meta");
+      ogDesc.setAttribute("property", "og:description");
+      document.head.appendChild(ogDesc);
+    }
+    ogDesc.setAttribute("content", meta.description);
+
+    // OG URL
+    let ogUrl = document.querySelector('meta[property="og:url"]');
+    if (!ogUrl) {
+      ogUrl = document.createElement("meta");
+      ogUrl.setAttribute("property", "og:url");
+      document.head.appendChild(ogUrl);
+    }
+    ogUrl.setAttribute("content", meta.canonical);
+
+    // Twitter card
+    let twCard = document.querySelector('meta[name="twitter:card"]');
+    if (!twCard) {
+      twCard = document.createElement("meta");
+      twCard.setAttribute("name", "twitter:card");
+      twCard.setAttribute("content", "summary_large_image");
+      document.head.appendChild(twCard);
+    }
+    let twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (!twTitle) {
+      twTitle = document.createElement("meta");
+      twTitle.setAttribute("name", "twitter:title");
+      document.head.appendChild(twTitle);
+    }
+    twTitle.setAttribute("content", meta.title);
+
+    let twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (!twDesc) {
+      twDesc = document.createElement("meta");
+      twDesc.setAttribute("name", "twitter:description");
+      document.head.appendChild(twDesc);
+    }
+    twDesc.setAttribute("content", meta.description);
+  }, [page]);
+}
+
 const PAGE_ROUTES = { home:"/", services:"/services", portfolio:"/portfolio", blog:"/blog", about:"/about", contact:"/contact" };
 const ROUTE_TO_PAGE = Object.fromEntries(Object.entries(PAGE_ROUTES).map(([p,path]) => [path, p]));
 function getPageFromUrl() { const path = window.location.pathname.replace(/\/$/, "") || "/"; return ROUTE_TO_PAGE[path] || ROUTE_TO_PAGE[path+"/"] || "home"; }
@@ -899,7 +961,6 @@ function useHeroGlobe(canvasRef) {
   }, [canvasRef]);
 }
 
-/* ── FEATURE 2: ENHANCED CURSOR WITH PARTICLE TRAILS ── */
 function useCursor() {
   useEffect(() => {
     const dot = document.getElementById("ds-cursor");
@@ -943,7 +1004,6 @@ function useCursor() {
         el.addEventListener("mouseenter", () => document.body.classList.add("hovered"));
         el.addEventListener("mouseleave", () => document.body.classList.remove("hovered"));
       });
-      // Spotlight sections
       document.querySelectorAll(".hero-section,.scroll-story-sticky").forEach(el => {
         el.addEventListener("mouseenter", () => document.body.classList.add("cursor-spotlight"));
         el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-spotlight"));
@@ -958,7 +1018,6 @@ function useCursor() {
   }, []);
 }
 
-/* ── FEATURE 10: MAGNETIC BUTTONS ── */
 function useMagneticButtons() {
   useEffect(() => {
     const t = setTimeout(() => {
@@ -969,9 +1028,7 @@ function useMagneticButtons() {
           const y = e.clientY - r.top - r.height/2;
           btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
         });
-        btn.addEventListener("mouseleave", () => {
-          btn.style.transform = "";
-        });
+        btn.addEventListener("mouseleave", () => { btn.style.transform = ""; });
       });
     }, 500);
     return () => clearTimeout(t);
@@ -997,7 +1054,6 @@ function useScrollProgress() {
   }, []);
 }
 
-/* ── FEATURE 7: PARALLAX HOOK ── */
 function useParallax(ref, speed = 0.3) {
   useEffect(() => {
     const el = ref?.current; if (!el) return;
@@ -1011,7 +1067,6 @@ function useParallax(ref, speed = 0.3) {
   }, [ref, speed]);
 }
 
-/* ── FEATURE 1: SCROLL STORY HOOK ── */
 function useScrollStory(containerRef, sceneCount) {
   const [activeScene, setActiveScene] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -1031,7 +1086,6 @@ function useScrollStory(containerRef, sceneCount) {
   return { activeScene, progress };
 }
 
-/* ── FEATURE 4: ANIMATED GRAPH ── */
 function AnimatedGraph({ visible }) {
   const bars = [
     { label: "Mo", pct: 25, val: "2K" }, { label: "Tu", pct: 38, val: "3.1K" },
@@ -1058,7 +1112,6 @@ function AnimatedGraph({ visible }) {
   );
 }
 
-/* ── FEATURE 9: TIMELINE COMPONENT ── */
 function AnimatedTimeline({ visible }) {
   const steps = [
     { icon: "🔍", label: "Research", sub: "Market Analysis" },
@@ -1090,7 +1143,6 @@ function AnimatedTimeline({ visible }) {
   );
 }
 
-/* ── FEATURE 6: BEFORE/AFTER SLIDER ── */
 function BeforeAfterSlider() {
   const [pct, setPct] = useState(50);
   const wrapRef = useRef(null);
@@ -1130,7 +1182,6 @@ function BeforeAfterSlider() {
         onTouchStart={() => { dragging.current = true; }}
         onClick={(e) => handleMove(e.clientX)}
       >
-        {/* BEFORE */}
         <div className="ba-side ba-before">
           <div className="ba-before-content">
             <span className="ba-icon">😟</span>
@@ -1143,7 +1194,6 @@ function BeforeAfterSlider() {
           </div>
           <div className="ba-label">BEFORE</div>
         </div>
-        {/* AFTER */}
         <div className="ba-side ba-after" style={{ clipPath: `inset(0 0 0 ${pct}%)` }}>
           <div className="ba-after-content">
             <span className="ba-icon">🚀</span>
@@ -1156,7 +1206,6 @@ function BeforeAfterSlider() {
           </div>
           <div className="ba-label">AFTER</div>
         </div>
-        {/* Divider */}
         <div className="ba-divider" style={{ left: `${pct}%` }}>
           <div className="ba-handle">⇔</div>
         </div>
@@ -1165,7 +1214,6 @@ function BeforeAfterSlider() {
   );
 }
 
-/* ── FEATURE 1: SCROLL STORY ── */
 function ScrollStory() {
   const containerRef = useRef(null);
   const { activeScene, progress } = useScrollStory(containerRef, 4);
@@ -1233,9 +1281,7 @@ function ScrollStory() {
   return (
     <div ref={containerRef} className="scroll-story">
       <div className="scroll-story-sticky">
-        {/* BG glow that shifts with scene */}
         <div style={{ position:"absolute", inset:0, background:`radial-gradient(ellipse 60% 60% at 50% 50%, rgba(${activeScene===0?"80,20,20":activeScene===1?"20,26,70":activeScene===2?"10,40,10":"20,60,10"},0.15) 0%, transparent 65%)`, transition:"background 0.8s", pointerEvents:"none" }} />
-
         {scenes.map((scene, i) => (
           <div key={scene.id} className={`story-scene ${scene.className}${activeScene === i ? " active" : ""}`}>
             <div className="story-content">
@@ -1250,15 +1296,11 @@ function ScrollStory() {
             </div>
           </div>
         ))}
-
-        {/* Progress dots */}
         <div className="story-dots">
           {scenes.map((_, i) => (
             <div key={i} className={`story-dot${activeScene === i ? " active" : ""}`} />
           ))}
         </div>
-
-        {/* Progress label */}
         <div className="story-progress-label">
           Scroll to explore
           <div className="story-progress-bar-wrap">
@@ -1300,7 +1342,7 @@ function Footer({ navigate }) {
         </div>
         <div className="ft-links-grid">
           <div className="ft-col"><h4>Services</h4><ul>{["SEO","Paid Media","Social Media","Content","Analytics"].map(s=><li key={s} onClick={()=>navigate("services")} style={{cursor:"none"}}>{s}</li>)}</ul></div>
-          <div className="ft-col"><h4>Company</h4><ul>{[["About","about"],["Portfolio","portfolio"],["Blog","blog"],["Contact","contact"]].map(([s,id])=><li key={s} onClick={()=>navigate(id)} style={{cursor:"none"}}>{s}</li>)}</ul></div>
+          <div className="ft-col"><h4>Company</h4><ul>{[["About Us","about"],["Portfolio","portfolio"],["Blog","blog"],["Contact Us","contact"]].map(([s,id])=><li key={s} onClick={()=>navigate(id)} style={{cursor:"none"}}>{s}</li>)}</ul></div>
           <div className="ft-col"><h4>Contact</h4><ul><li>hello@dsphery.com</li><li>+91 98874 47780</li><li>Udaipur, Rajasthan</li></ul></div>
         </div>
       </div>
@@ -1311,10 +1353,18 @@ function Footer({ navigate }) {
   );
 }
 
+// ── NAV — updated labels: "About Us" and "Contact Us" ──
 function Nav({ page, navigate }) {
   const [mob, setMob] = useState(false);
   useEffect(()=>{document.body.style.overflow=mob?"hidden":"";return()=>{document.body.style.overflow="";};},[mob]);
-  const pages=[{id:"home",label:"Home"},{id:"services",label:"Services"},{id:"portfolio",label:"Work"},{id:"blog",label:"Blog"},{id:"about",label:"About"},{id:"contact",label:"Contact"}];
+  const pages=[
+    {id:"home",label:"Home"},
+    {id:"services",label:"Services"},
+    {id:"portfolio",label:"Work"},
+    {id:"blog",label:"Blog"},
+    {id:"about",label:"About Us"},
+    {id:"contact",label:"Contact Us"},
+  ];
   const handleNav=(id)=>{navigate(id);setMob(false);};
   return (
     <>
@@ -1403,7 +1453,6 @@ function AIChat() {
   );
 }
 
-/* ── BLOG DATA ── */
 const BLOG_POSTS = [
   {id:1,slug:"seo-mistakes-killing-your-rankings",tag:"SEO",title:"7 SEO Mistakes That Are Quietly Killing Your Google Rankings",excerpt:"Most businesses investing in SEO are unknowingly making a handful of critical errors that cancel out everything good they're doing. Here's how to spot them and fix them before they cost you more traffic.",author:"Karan Singh",authorInitials:"KS",date:"March 14, 2026",readTime:"8 min read",color:"linear-gradient(135deg, #0a1230 0%, #050a18 100%)",accent:"#39ff14",featured:true,body:`<p>If you've been doing SEO for a few months and you're not seeing results, it's not because SEO doesn't work. It almost certainly means one of these seven mistakes is eating your progress from the inside.</p><h2>1. Targeting Keywords Nobody Actually Searches</h2><p>This is still the most common mistake in 2026. Business owners and even some agencies pick keywords based on what sounds right rather than what people are actually typing into Google. The result? You rank well for a term with forty monthly searches and wonder why nothing is happening.</p><blockquote class="blog-article-blockquote">Ranking for the wrong keywords is worse than not ranking at all — it wastes your crawl budget, dilutes your authority, and generates traffic that doesn't convert.</blockquote><h2>2. Ignoring Core Web Vitals</h2><p>Google made page experience a ranking signal, and most businesses are still treating it as a checkbox item rather than a genuine priority. Core Web Vitals measure how your site actually feels to a real user. A slow site doesn't just frustrate users — it signals to Google that your page delivers a poor experience.</p><div class="blog-article-highlight"><p>✦ Quick tip: Run your site through Google's PageSpeed Insights right now. If your LCP is above 2.5 seconds, that's your biggest SEO problem.</p></div><h2>3. Publishing Content Without a Strategy</h2><p>Random blogging almost never works for SEO. What works is building topical authority: covering a subject area so thoroughly that Google considers you the go-to source. This means planning a content architecture where each article supports a broader topic cluster.</p>`},
   {id:2,slug:"meta-ads-roas-2026",tag:"Paid Media",title:"Why Your Meta Ads ROAS Is Dropping — and How to Actually Fix It",excerpt:"Meta's ad platform has changed dramatically. The strategies that worked in 2023 are failing brands in 2026.",author:"Neha Verma",authorInitials:"NV",date:"March 8, 2026",readTime:"10 min read",color:"linear-gradient(135deg, #100d28 0%, #060218 100%)",accent:"#39ff14",featured:false,body:`<p>If you've been running Meta ads for a few years, you've noticed something uncomfortable: what used to deliver 4× ROAS now barely clears 1.8×.</p><h2>The Landscape Has Shifted</h2><p>Three things happened simultaneously that changed Meta advertising. First, Apple's ATT framework significantly degraded targeting data. Second, the platform shifted heavily toward Advantage+ automation. Third, competition for attention has intensified.</p><blockquote class="blog-article-blockquote">The single biggest driver of Meta ad performance in 2026 is creative quality. Not targeting. Not bidding strategy. Creative.</blockquote>`},
@@ -1517,7 +1566,6 @@ function Blog({ navigate }) {
   );
 }
 
-/* ── HOME ── */
 function Home({ navigate }) {
   const globeRef = useRef(null);
   const graphRef = useRef(null);
@@ -1530,7 +1578,6 @@ function Home({ navigate }) {
   useScrollProgress();
   useMagneticButtons();
 
-  // Feature 4 & 9: Intersection for graph + timeline
   useEffect(() => {
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -1554,7 +1601,6 @@ function Home({ navigate }) {
 
   return (
     <div className="page-enter">
-      {/* HERO */}
       <section className="hero-section">
         <div className="hero-bg">
           <div className="hero-noise"/><div className="hero-glow"/><div className="hero-grid"/>
@@ -1592,18 +1638,14 @@ function Home({ navigate }) {
       </section>
 
       <Marquee/>
-
-      {/* FEATURE 1: SCROLL STORY */}
       <ScrollStory/>
 
-      {/* COUNTERS */}
       <div className="counter-strip">
         {[["120+","Clients Served"],["₹8Cr+","Revenue Generated"],["94%","Client Retention"],["1+","Year in Business"]].map(([n,l],i)=>(
           <div key={i} className={`reveal rd${i+1}`}><div className="counter-n">{n}</div><div className="counter-l">{l}</div></div>
         ))}
       </div>
 
-      {/* WHY CHOOSE US + FEATURE 4: ANIMATED GRAPH */}
       <section className="section" style={{borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:64,alignItems:"start"}}>
           <div>
@@ -1636,7 +1678,6 @@ function Home({ navigate }) {
         </div>
       </section>
 
-      {/* SERVICES with Feature 5 hover */}
       <section className="section">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:44,flexWrap:"wrap",gap:20}}>
           <div className="reveal">
@@ -1655,7 +1696,6 @@ function Home({ navigate }) {
               <div className="sv-desc">{desc}</div>
               <div className="sv-tags">{tags.map(t=><span className="sv-tag" key={t}>{t}</span>)}</div>
               <span className="sv-arrow">↗</span>
-              {/* Feature 5: hover overlay */}
               <div className="sv-card-hover-overlay">
                 <div className="sv-card-mini-anim">
                   {[60,80,50,90,70,100].map((h,i)=><div key={i} className="sv-mini-bar" style={{height:h*0.5}}/>)}
@@ -1668,15 +1708,12 @@ function Home({ navigate }) {
         </div>
       </section>
 
-      {/* FEATURE 6: BEFORE / AFTER */}
       <BeforeAfterSlider/>
 
-      {/* FEATURE 9: ANIMATED TIMELINE */}
       <div ref={timelineRef}>
         <AnimatedTimeline visible={timelineVisible}/>
       </div>
 
-      {/* CLIENTS */}
       <div style={{padding:"40px 52px",overflow:"hidden",borderTop:"1px solid rgba(255,255,255,0.06)"}}>
         <div style={{fontFamily:"'Poppins',sans-serif",fontSize:10,letterSpacing:3,textTransform:"uppercase",color:"rgba(255,255,255,0.2)",textAlign:"center",marginBottom:24}} className="reveal">Trusted By Forward-Thinking Brands</div>
         <div style={{overflow:"hidden"}}>
@@ -1686,7 +1723,6 @@ function Home({ navigate }) {
         </div>
       </div>
 
-      {/* TESTIMONIALS */}
       <section className="section" style={{background:"rgba(20,26,70,0.1)"}}>
         <div className="sec-label reveal">Client Success Stories</div>
         <h2 className="sec-title reveal" style={{marginBottom:8}}>Results That Speak</h2>
@@ -1698,7 +1734,6 @@ function Home({ navigate }) {
         </div>
       </section>
 
-      {/* BLOG PREVIEW */}
       <section className="section" style={{borderTop:"1px solid rgba(255,255,255,0.06)"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:36,flexWrap:"wrap",gap:16}}>
           <div className="reveal"><div className="sec-label">From the Blog</div><h2 className="sec-title" style={{fontSize:"clamp(24px,3.5vw,44px)"}}>Latest Thinking</h2></div>
@@ -1714,7 +1749,6 @@ function Home({ navigate }) {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="cta-section">
         <div className="cta-bg"/>
         <div className="cta-lbl">Ready to Grow?</div>
@@ -1731,14 +1765,13 @@ function Home({ navigate }) {
   );
 }
 
-/* ── SERVICES ── */
 const SERVICES_DATA = [
-  {num:"01",icon:"🔍",title:"Search Engine Optimization",desc:"We take a full-funnel approach to SEO — combining rigorous technical audits, keyword research, on-page optimisation, and strategic link acquisition. Our content-led SEO methodology ensures your brand appears for every query that matters to your audience. We've consistently driven 3–5× organic traffic growth for clients across e-commerce, SaaS, and local businesses.",tags:["On-Page","Technical","Link Building","Local SEO","E-commerce SEO"],metric:"40%",metricLabel:"Avg. Organic Growth"},
-  {num:"02",icon:"🎯",title:"Paid Media & PPC",desc:"From Google Search and Shopping to Meta, LinkedIn, TikTok, and programmatic display — our paid media team manages every rupee with precision. We build full-funnel campaign architectures, develop creative testing frameworks, and use AI-assisted bidding to maximise your returns.",tags:["Google Ads","Meta Ads","TikTok Ads","LinkedIn Ads","Programmatic"],metric:"3.2×",metricLabel:"Average ROAS"},
+  {num:"01",icon:"🔍",title:"Search Engine Optimization",desc:"We take a full-funnel approach to SEO — combining rigorous technical audits, keyword research, on-page optimisation, and strategic link acquisition. Our content-led SEO methodology ensures your brand appears for every query that matters to your audience.",tags:["On-Page","Technical","Link Building","Local SEO","E-commerce SEO"],metric:"40%",metricLabel:"Avg. Organic Growth"},
+  {num:"02",icon:"🎯",title:"Paid Media & PPC",desc:"From Google Search and Shopping to Meta, LinkedIn, TikTok, and programmatic display — our paid media team manages every rupee with precision. We build full-funnel campaign architectures and use AI-assisted bidding to maximise your returns.",tags:["Google Ads","Meta Ads","TikTok Ads","LinkedIn Ads","Programmatic"],metric:"3.2×",metricLabel:"Average ROAS"},
   {num:"03",icon:"💡",title:"Brand Strategy & Identity",desc:"A strong brand is your most durable competitive advantage. We help businesses define their positioning, develop a distinctive visual identity, and build a brand voice that resonates authentically with target audiences.",tags:["Brand Identity","Positioning","Voice & Tone","Visual Systems","Guidelines"],metric:"98%",metricLabel:"Client Satisfaction"},
-  {num:"04",icon:"📱",title:"Social Media Management",desc:"We manage your social presence end-to-end — content strategy, creative production, community management, influencer partnerships, and performance analysis. Our platform-native approach means we speak the language of each channel.",tags:["Content Creation","Community Management","Influencer Marketing","Growth Strategy"],metric:"400K+",metricLabel:"Community Built"},
+  {num:"04",icon:"📱",title:"Social Media Management",desc:"We manage your social presence end-to-end — content strategy, creative production, community management, influencer partnerships, and performance analysis.",tags:["Content Creation","Community Management","Influencer Marketing","Growth Strategy"],metric:"400K+",metricLabel:"Community Built"},
   {num:"05",icon:"✍️",title:"Content Marketing",desc:"Content is the engine behind long-term organic growth. We build editorial strategies rooted in audience research and search intent, then produce high-quality blog posts, video scripts, email sequences, lead magnets, and social content at scale.",tags:["Blog & Articles","Video Scripts","Email Marketing","Lead Magnets","Podcast Content"],metric:"3.8×",metricLabel:"Avg. Engagement Lift"},
-  {num:"06",icon:"📊",title:"Graphic Designing and Editing",desc:"We create visually compelling designs and high-quality edits that help brands communicate clearly and stand out across digital platforms. From social media creatives to brand visuals and promotional designs, we focus on creativity, consistency, and brand identity.",tags:["Social Media Design","Ad Creative Design","Brand Visuals","Image Editing","Marketing Graphics"],metric:"120+",metricLabel:"Creatives Designed"},
+  {num:"06",icon:"📊",title:"Graphic Designing and Editing",desc:"We create visually compelling designs and high-quality edits that help brands communicate clearly and stand out across digital platforms. From social media creatives to brand visuals and promotional designs.",tags:["Social Media Design","Ad Creative Design","Brand Visuals","Image Editing","Marketing Graphics"],metric:"120+",metricLabel:"Creatives Designed"},
 ];
 const FAQ_DATA = [
   ["How long does it take to see results from SEO?","SEO is a long-term investment. Most clients begin to see measurable improvements in rankings and organic traffic within 3–4 months, with significant growth typically visible at the 6–8 month mark."],
@@ -1808,7 +1841,6 @@ function Services({ navigate }) {
   );
 }
 
-/* ── PORTFOLIO ── */
 const PORTFOLIO_ITEMS = [
   {cat:["brand","seo"],tag:"Brand Strategy + SEO",name:"Ewolwl",meta:"40% organic growth in 8 months",color:"linear-gradient(135deg,#0a1230 0%,#050a18 100%)",accent:"#39ff14",desc:"Full brand overhaul and SEO foundation build for a B2B SaaS company. 420% organic traffic growth in 8 months."},
   {cat:["paid"],tag:"Paid Media",name:"FFDL",meta:"3.2× ROAS at ₹1L/mo ad spend",color:"linear-gradient(135deg,#100d28 0%,#060218 100%)",accent:"#39ff14",desc:"Scaled a D2C lifestyle brand from ₹1L to ₹5L in monthly paid media spend while maintaining a 4.2× blended ROAS."},
@@ -1868,7 +1900,7 @@ function Portfolio({ navigate }) {
   );
 }
 
-/* ── ABOUT ── */
+// ── ABOUT US (renamed) ──
 function About({ navigate }) {
   useReveal("about");
   return (
@@ -1876,7 +1908,7 @@ function About({ navigate }) {
       <div style={{padding:"130px 52px 56px",position:"relative",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 60% 60% at 50% 50%, rgba(20,26,70,0.3) 0%, transparent 65%)",pointerEvents:"none"}}/>
         <div className="sec-label reveal">Our Story</div>
-        <h1 className="sec-title reveal">Built for Bold Brands</h1>
+        <h1 className="sec-title reveal">About Us</h1>
         <p className="reveal" style={{fontFamily:"'Poppins',sans-serif",fontSize:14,lineHeight:1.8,color:"rgba(255,255,255,0.45)",maxWidth:520,fontWeight:300,marginTop:16}}>DSPHERY was founded with one mission: to build a digital marketing agency that treats every client's business like its own.</p>
       </div>
       <section className="section">
@@ -1933,7 +1965,7 @@ function About({ navigate }) {
   );
 }
 
-/* ── CONTACT ── */
+// ── CONTACT US (renamed) ──
 function Contact({ navigate }) {
   useReveal("contact");
   const [form,setForm]=useState({name:"",email:"",company:"",service:"",message:""});
@@ -1953,7 +1985,7 @@ function Contact({ navigate }) {
       <div style={{padding:"130px 52px 56px",position:"relative",borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 50% 60% at 25% 60%, rgba(20,26,70,0.15) 0%, transparent 60%)",pointerEvents:"none"}}/>
         <div className="sec-label reveal">Get In Touch</div>
-        <h1 className="sec-title reveal">Let's Build Something Great</h1>
+        <h1 className="sec-title reveal">Contact Us</h1>
         <p className="reveal" style={{fontFamily:"'Poppins',sans-serif",fontSize:14,lineHeight:1.8,color:"rgba(255,255,255,0.45)",maxWidth:480,fontWeight:300,marginTop:16}}>Ready to transform your digital presence? Fill in the form and one of our strategists will reach out within 24 hours.</p>
       </div>
       <section className="section">
@@ -2020,21 +2052,22 @@ function Contact({ navigate }) {
   );
 }
 
-/* ── ROOT ── */
+// ── ROOT ──
 export default function App() {
   const { page, navigate } = useRouter();
   const [loaded, setLoaded] = useState(false);
   const [pct, setPct] = useState(0);
   const [ldStep, setLdStep] = useState(0);
-
   const LD_STEPS = ["Research","Strategy","Launch","Growth"];
 
+  // Inject global CSS once
   useEffect(() => {
     if (!document.getElementById("ds-global-css")) {
       const style = document.createElement("style");
       style.id = "ds-global-css"; style.textContent = GLOBAL_CSS;
       document.head.appendChild(style);
     }
+    // Loader
     let p = 0;
     const iv = setInterval(() => { p = Math.min(p + Math.random() * 14, 99); setPct(Math.floor(p)); setLdStep(Math.floor(p / 25)); }, 100);
     const done = () => { clearInterval(iv); setPct(100); setLdStep(4); setTimeout(() => setLoaded(true), 350); };
@@ -2043,6 +2076,8 @@ export default function App() {
     return () => { clearInterval(iv); clearTimeout(fallback); window.removeEventListener("load", done); };
   }, []);
 
+  // SEO meta — runs on every page change
+  useSeoMeta(page);
   useCursor();
 
   return (
@@ -2051,7 +2086,6 @@ export default function App() {
       <div id="ds-cursor-ring"/>
       <div id="scroll-prog"><div id="scroll-prog-bar"/></div>
 
-      {/* FEATURE 8: ENHANCED LOADER */}
       <div id="ds-loader" className={loaded?"hidden":""}>
         <div className="ld-word">{"DSPHERY".split("").map((c,i)=><span key={i}>{c}</span>)}</div>
         <div className="ld-orb"/>
@@ -2078,4 +2112,3 @@ export default function App() {
     </>
   );
 }
-
